@@ -1,0 +1,70 @@
+---
+title: "r4d earth"
+output: 
+  flexdashboard::flex_dashboard:
+    theme: cerulean
+    self_contained: false
+    social: menu
+    source_code: https://git.io/vNmxt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+library(here)
+library(glue)
+library(leaflet)
+```
+
+
+```{r, echo = FALSE}
+
+# Read -----
+r4d <- read_rds(here("data", "r4d-in-p3.Rds")) # p3 project data on r4d
+affil <- read_rds(here("data", "partner-affil.Rds")) #  p3 people data on r4d
+df_gm <- read_rds(here("data", "gm-data.Rds")) # google maps coordinate data
+
+# Logic -----
+
+# grant details
+details <- r4d %>%
+  mutate(
+    p3 = glue("http://p3.snf.ch/project-{project_number}"),
+    start_date = dmy(start_date),
+    start_date = format(start_date, "%b %Y"),
+    end_date = dmy(end_date),
+    end_date = format(end_date, "%b %Y")) %>%
+  select(project_number, p3, project_title, keywords, start_date, end_date)
+
+# list of participants
+institutes_in_project <- affil %>%
+  group_by(project_number) %>%
+  summarise(institute_list = str_c(institute, collapse = "</li><br/><li>"),
+            .groups = "drop")
+
+# data denormalization
+denorm <- affil %>% 
+  left_join(df_gm, by = c("institute_urlenc" = "enc_str")) %>%
+  left_join(institutes_in_project, by = "project_number") %>%
+  left_join(details, by = "project_number") %>%
+  distinct(gm_id, .keep_all = TRUE) %>%
+  filter(!is.na(gm_id)) %>%
+  mutate(
+    content = glue(
+      "<b>{institute}</b><br/>",
+      "<a href='{p3}'>{project_title}</a><br/>",
+      "{start_date} to {end_date}<br/><br/>",
+      "<u>All Participants</u><br/><br/>",
+      "<ul><li>",
+      "{institute_list}",
+      "</li></ul>"))
+
+# Display ------ 
+
+leaflet(data = denorm, width = "100%") %>%
+  addTiles() %>%
+  addMarkers(~gm_lng, ~gm_lat, popup = ~content) %>%
+  addProviderTiles(providers$Esri.WorldImagery) # alt. Esri.NatGeoWorldMap
+```
+

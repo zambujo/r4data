@@ -1,0 +1,157 @@
+---
+title: "Gathering r4d data"
+author: "jma"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+library(yaml)
+p3_files <- read_yaml(here("inst", "extdata", "p3-tables.yml"))
+```
+
+
+## Read data from P3
+
+We downloaded the three datasets from [P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx) into [data-raw](./data-raw/).
+
+```{r to-be-tested, eval=FALSE}
+download_table_from_p3 <- function(csv_table, dest_folder = "data-raw") {
+  url_table <- glue("http://p3.snf.ch/P3Export/{table}") %>%
+    download.file(here(dest_folder, csv_table))
+}
+
+walk(p3_files, download_table_from_p3)
+```
+
+## Read local P3 files
+
+```{r, eval=FALSE}
+read_p3_file <- function(file_name, loc = "data-raw") {
+  here(loc, file_name) %>% 
+  read_delim(";", escape_double = FALSE, col_types = cols(.default = "c")) %>%
+  clean_names()
+}
+
+grants <- read_p3_file(pluck(p3_files, 1))
+people <- read_p3_file(pluck(p3_files, 2))
+```
+
+## Logic
+
+Finding 77 projects, more than the 20 more than the 57 found in [r4d.ch](http://www.r4d.ch/r4d-programme/all-projects).
+
+```{r, eval=FALSE}
+r4d_grants <- grants %>% 
+  filter(str_detect(funding_instrument, "r4d"))
+
+r4d_ppl <-
+  people %>%
+  pivot_longer(
+    starts_with("projects"), 
+    names_to = "role", 
+    values_to = "project_number",
+    values_drop_na = TRUE) %>%
+  semi_join(r4d_grants, "project_number")
+
+affil <- ppl %>%
+  mutate(institute = glue("{institute_name}, {institute_place}"),
+         institute = str_squish(institute)) %>%
+  distinct(institute, .keep_all = TRUE) %>%
+  filter(!is.na(institute_place)) %>%
+  mutate(institute_urlenc = map_chr(institute, URLencode)) %>%
+  # does not work yet but keeping for future reference
+  mutate(institute_ascii = str_replace_all(institute, "[[:punct:]]", " "),
+         institute_ascii = stringi::stri_trans_general(institute_ascii, "Latin-ASCII"),
+         institute_ascii = str_squish(institute_ascii))
+# 161 unique affiliations
+write_rds(r4d, here("data", "r4d-in-p3.Rds"))
+write_rds(affil, here("data", "partner-affil.Rds"))
+```
+
+```{r, eval=FALSE}
+# for completeness
+collab <- read_p3_file(pluck(p3_files, 3))
+
+# 771 more collaborations...
+more <- semi_join(collab, r4d, "project_number")
+# more %>% count(group_person, sort = TRUE) %>% print(n = 50)
+# more %>% filter(str_detect(group_person, "CO-APPLICANT"))
+```
+
+## Query Google Maps 
+
+```{r, eval=FALSE}
+api_key <- Sys.getenv("GMAPS_API")
+# https://developers.google.com/maps/documentation/places/web-service/overview
+```
+
+### Places Search
+
+```{r, eval=FALSE}
+df_gm_extra <- tibble(
+  gm_status = as.character(),
+  gm_icon = as.character(),
+  gm_lat = as.integer(),
+  gm_lng = as.integer(),
+  gm_addr = as.character(),
+  gm_name = as.character(),
+  gm_id = as.character(),
+  gm_types = as.character(),
+  enc_str = as.character())
+
+for(k in 1:nrow(affil)) {
+  message(k)
+  Sys.sleep(.75) # 500ms
+  url_enc <- affil %>%
+    pull(institute_urlenc) %>% 
+    purrr::pluck(k)
+  url_api <- glue("https://maps.googleapis.com/maps/api/",
+                  "place/findplacefromtext/json?input={url_enc}&",
+                  "inputtype=textquery&",
+                  "fields=business_status,icon,plus_code,",
+                  "formatted_address,geometry,name,place_id,types&",
+                  "key={api_key}")
+  # api call
+  gm_res <- jsonlite::fromJSON(url_api)
+  if (purrr::pluck(gm_res, "status") == "OK") {
+    row_status <-  gm_res %>%
+      purrr::pluck("candidates", "business_status", 1)
+    row_icon <-  gm_res %>%
+      purrr::pluck("candidates", "icon", 1)
+    row_lat <-  gm_res %>%
+      purrr::pluck("candidates", "geometry", "location", "lat", 1)
+    row_lng <-  gm_res %>%
+      purrr::pluck("candidates", "geometry", "location", "lng", 1)
+    row_addr <-  gm_res %>%
+      purrr::pluck("candidates", "formatted_address", 1)
+    row_name <-  gm_res %>%
+      purrr::pluck("candidates", "name", 1)
+    row_id <- gm_res %>%
+      purrr::pluck("candidates", "place_id", 1)
+    row_types <-  gm_res %>%
+      purrr::pluck("candidates", "types", 1) %>% 
+      str_c(collapse = ",")
+    df_gm_extra <- df_gm_extra %>%
+      add_row(
+        gm_status = if_else(is_null(row_status), NA_character_, row_status),
+        gm_icon = if_else(is_null(row_icon), NA_character_, row_icon),
+        gm_lat = if_else(is_null(row_lat), NA_real_, row_lat),
+        gm_lng = if_else(is_null(row_lng), NA_real_, row_lng),
+        gm_addr = if_else(is_null(row_addr), NA_character_, row_addr),
+        gm_name = if_else(is_null(row_name), NA_character_, row_name),
+        gm_id = if_else(is_null(row_id), NA_character_, row_id),
+        gm_types = if_else(is_null(row_types), NA_character_, row_types),
+        enc_str = url_enc)
+    }
+}
+
+# 10 missing values: add by hand?
+affil %>% anti_join(df_gm, by = c("institute_urlenc" = "enc_str"))
+write_rds(df_gm, here("data", "gm-data.Rds"))
+```

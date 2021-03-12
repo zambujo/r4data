@@ -1,0 +1,30 @@
+Type: Compendium
+Package: r4data
+Title: Locating r4d projects around the globe.
+Version: 0.0.1
+Authors@R: 
+    person(given = "João",
+           family = "Martins",
+           role = c("aut", "cre"),
+           email = "joao.martins@gmx.net",
+           comment = c(ORCID = "0000-0001-7961-4280"))
+Description: A compendium for enriching SNSF P3 data on r4d projects. 
+License: MIT
+Depends: 
+    yaml,
+    glue,
+    here,
+    jsonlite,
+    tidyverse,
+    lubridate,
+    flexdashboard,
+    leaflet
+Suggests:
+    magrittr,
+    usethis,
+    rmarkdown,
+    knitr
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/zambujo/r4data
+BugReports: https://github.com/zambujo/r4data/issues
