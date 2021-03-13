@@ -1,9 +1,5 @@
 ---
 title: "Gathering r4d data"
-author: "jma"
-output: html_document
-editor_options: 
-  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -12,6 +8,7 @@ library(tidyverse)
 library(here)
 library(janitor)
 library(yaml)
+library(glue)
 p3_files <- read_yaml(here("inst", "extdata", "p3-tables.yml"))
 ```
 
@@ -22,7 +19,7 @@ We downloaded the three datasets from [P3](http://p3.snf.ch/Pages/DataAndDocumen
 
 ```{r to-be-tested, eval=FALSE}
 download_table_from_p3 <- function(csv_table, dest_folder = "data-raw") {
-  url_table <- glue("http://p3.snf.ch/P3Export/{table}") %>%
+  url_table <- glue("http://p3.snf.ch/P3Export/{csv_table}") %>%
     download.file(here(dest_folder, csv_table))
 }
 
@@ -59,7 +56,7 @@ r4d_ppl <-
     values_drop_na = TRUE) %>%
   semi_join(r4d_grants, "project_number")
 
-affil <- ppl %>%
+affil <- r4d_ppl %>%
   mutate(institute = glue("{institute_name}, {institute_place}"),
          institute = str_squish(institute)) %>%
   distinct(institute, .keep_all = TRUE) %>%
@@ -69,9 +66,16 @@ affil <- ppl %>%
   mutate(institute_ascii = str_replace_all(institute, "[[:punct:]]", " "),
          institute_ascii = stringi::stri_trans_general(institute_ascii, "Latin-ASCII"),
          institute_ascii = str_squish(institute_ascii))
-# 161 unique affiliations
-write_rds(r4d, here("data", "r4d-in-p3.Rds"))
-write_rds(affil, here("data", "partner-affil.Rds"))
+
+# Write 
+
+write_rds(r4d_grants, here("data", "r4d-grants-in-p3.Rds"))
+write_rds(r4d_ppl, here("data", "r4d-people-in-p3.Rds"))
+write_rds(affil, here("data", "r4d-affiliations.Rds")) # 161 unique affiliations
+
+write_csv(r4d_grants, here("data", "r4d-grants-in-p3.csv"))
+write_csv(r4d_ppl, here("data", "r4d-people-in-p3.csv"))
+write_csv(affil, here("data", "r4d-affiliations.csv"))
 ```
 
 ```{r, eval=FALSE}
@@ -153,5 +157,7 @@ for(k in 1:nrow(affil)) {
 
 # 10 missing values: add by hand?
 affil %>% anti_join(df_gm, by = c("institute_urlenc" = "enc_str"))
+
 write_rds(df_gm, here("data", "gm-data.Rds"))
+write_csv(df_gm, here("data", "gm-data.csv"))
 ```
