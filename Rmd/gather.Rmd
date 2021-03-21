@@ -9,6 +9,7 @@ library(here)
 library(janitor)
 library(yaml)
 library(glue)
+library(readxl)
 p3_files <- read_yaml(here("inst", "extdata", "p3-tables.yml"))
 ```
 
@@ -161,3 +162,64 @@ affil %>% anti_join(df_gm, by = c("institute_urlenc" = "enc_str"))
 write_rds(df_gm, here("data", "gm-data.Rds"))
 write_csv(df_gm, here("data", "gm-data.csv"))
 ```
+
+
+## DAC Country List
+
+```{r}
+# https://www.oecd.org/development/financing-sustainable-development/development-finance-standards/dacandcrscodelists.htm
+# https://www.oecd.org/dac/financing-sustainable-development/development-finance-standards/DAC-CRS-CODES.xls
+
+```
+
+
+
+```{r, eval=FALSE}
+file_name <- here("data-raw", 
+                  "r4d_researchers_institutions_countries.xlsx")
+sheets <- excel_sheets(path = file_name)
+dfs <- sheets %>%
+  map_df(function(x)
+    readxl::read_excel(file_name, sheet = x) %>% select(1:6)) %>%
+  clean_names()
+# only 45 projects
+```
+
+
+```{r}
+file_name <- here("about", "r4d.html")
+html <- read_lines(file_name)
+html <- str_subset(html, "DocId")
+docid <- str_extract_all(html, '(?<=\\"DocId\\":)[[:digit:]]{4}') %>%
+  flatten_chr()
+
+data_list <- html %>% 
+  str_split(',"') %>%
+  map(~ str_replace_all(.x, '\\\\u002f', '/')) %>%
+  map(~ str_remove_all(.x, '\\"')) %>%
+  map(str_split_fixed, pattern = ":", n = 2) %>%
+  map(~ .x[2:4, 2])
+
+data_df <- tibble(
+  doc_id = map_chr(data_list, ~ .x[1]),
+  title = map_chr(data_list, ~ .x[2]),
+  url = map_chr(data_list, ~ .x[3])
+)
+
+
+data_df <- data_df %>% 
+  mutate(title_simple = str_to_lower(title))
+
+grants <- grants %>% 
+  mutate(title_simple = str_to_lower(project_title))
+
+data_df %>% left_join(grants, "title_simple")
+
+grants %>% filter(project_number == "160906") %>%
+  pull(title_simple)
+
+data_df %>% head(1) %>%
+  pull(title_simple)
+
+```
+
