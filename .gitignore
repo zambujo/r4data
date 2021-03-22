@@ -3,5 +3,6 @@
 .Rhistory
 .RData
 .Ruserdata
+README.Rmd
 data-raw/
 about/

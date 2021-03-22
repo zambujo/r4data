@@ -11,9 +11,77 @@ knitr::opts_chunk$set(
 )
 ```
 
-# r4data
+# Research for development
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of this project is to try to locate [r4d](http://www.r4d.ch/) projects.
+The goal of this project is to try to map the institutes involved in [r4d](http://www.r4d.ch/) projects on a world map.
+
+### Data dictionary 🚧
+
+#### grant-selection
+
+|Variable           |Type      |Description                       |
+|:------------------|:---------|:---------------------------------|
+|project_number     |character |P3 grant id                       |
+|project_title      |character |P3 grant title                    |
+|funding_instrument |factor    |`r4d`, `SPIRIT`, etc.             |
+|start_date         |date      |`%b %Y`                           |
+|end_date           |date      |`%b %Y`                           |
+|approved_amount    |integer   |Grant size in CHF                 |
+
+#### affiliation-lookup
+
+|Variable        |Type      |Description                         |
+|:---------------|:---------|:-----------------------------------|
+|project_number  |character |P3 grant id                         |
+|person_id_snsf  |character |P3 person id                        |
+|role            |factor    |[Project as](role)                  |
+|institute_number|character | 🚧                                 |
+|institute_name  |character |[Details](instname)                 |
+|institute_place |character |[Details](instpalce)                |
+
+[role]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Projects%20as%20responsible%20Applicant "Example"
+[instname]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Institute%20Name "Institute name"
+[instplace]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Institute%20Place "Institute place"
+
+#### r4d-people-in-p3
+
+🚧 
+
+#### gm-data
+
+🚧 
+
+## Simplified Tree
+ 
+```
+.
+├── DESCRIPTION
+├── LICENSE
+├── install.R
+├── data-raw
+│   ├── gm-data.csv
+│   ├── r4d-affiliations.csv
+│   ├── r4d-grants-in-p3.csv
+│   └── r4d-people-in-p3.csv
+├── docs
+│   └── index.html
+├── inst
+│   └── extdata
+│       └── p3-tables.yml
+├── README.md
+└── Rmd
+    ├── explore.Rmd
+    └── gather.Rmd
+
+```
+
+## License
+
+Distributed under the MIT License.
+
+## Acknowledgments
+
+See list of packages in [DESCRIPTION file](./DESCRIPTION).
