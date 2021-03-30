@@ -11,51 +11,76 @@ library(yaml)
 library(glue)
 library(readxl)
 p3_files <- read_yaml(here("inst", "extdata", "p3-tables.yml"))
+download_table_from_p3 <- function(csv_table, dest_folder = "data-raw") {
+  url_table <- glue("http://p3.snf.ch/P3Export/{csv_table}") %>%
+    download.file(here(dest_folder, csv_table))
+}
+read_p3_file <- function(file_name, loc = "data-raw") {
+  here(loc, file_name) %>% 
+  read_delim(";", escape_double = FALSE, col_types = cols(.default = "c")) %>%
+  clean_names()
+}
 ```
 
 
 ## Read data from P3
 
-We downloaded the three datasets from [P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx) into [data-raw](./data-raw/).
+Downloading raw data from [P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx) into [data-raw](./data-raw/).
 
 ```{r to-be-tested, eval=FALSE}
-download_table_from_p3 <- function(csv_table, dest_folder = "data-raw") {
-  url_table <- glue("http://p3.snf.ch/P3Export/{csv_table}") %>%
-    download.file(here(dest_folder, csv_table))
-}
-
 walk(p3_files, download_table_from_p3)
 ```
 
 ## Read local P3 files
 
 ```{r, eval=FALSE}
-read_p3_file <- function(file_name, loc = "data-raw") {
-  here(loc, file_name) %>% 
-  read_delim(";", escape_double = FALSE, col_types = cols(.default = "c")) %>%
-  clean_names()
-}
-
-grants <- read_p3_file(pluck(p3_files, 1))
-people <- read_p3_file(pluck(p3_files, 2))
+grants_raw <- read_p3_file(pluck(p3_files, 1))
+people_raw <- read_p3_file(pluck(p3_files, 2))
 ```
 
 ## Logic
 
 Finding 77 projects, more than the 20 more than the 57 found in [r4d.ch](http://www.r4d.ch/r4d-programme/all-projects).
 
-```{r, eval=FALSE}
-r4d_grants <- grants %>% 
-  filter(str_detect(funding_instrument, "r4d"))
+```{r grants, eval=FALSE}
+grants <- grants_raw %>% 
+  filter(str_detect(funding_instrument, "r4d|SPIRIT")) %>% # MVP
+  select(project_number, 
+         project_title,
+         funding_instrument,
+         start_date,
+         end_date,
+         approved_amount) %>%
+  mutate(
+    start_date = dmy(start_date),
+    end_date = dmy(end_date),
+    running = today() %within% interval(start_date, end_date),
+    start_date = round_date(start_date, unit = "months"),
+    end_date = round_date(end_date, unit = "months"),
+    start_date = format(start_date, "%b %Y"),
+    end_date = format(end_date, "%b %Y"),
+    approved_amount = as.numeric(approved_amount),
+    approved_amount = round(approved_amount),
+    approved_amount = as.integer(approved_amount))
+```
 
-r4d_ppl <-
-  people %>%
+
+```{r roles, eval=FALSE}
+people <- people_raw %>%
   pivot_longer(
     starts_with("projects"), 
     names_to = "role", 
     values_to = "project_number",
     values_drop_na = TRUE) %>%
-  semi_join(r4d_grants, "project_number")
+  semi_join(grants, "project_number") %>%
+  select(project_number,
+         person_id_snsf,
+         role,
+         institute_name,
+         institute_place)
+
+# institute_number missing
+  
 
 affil <- r4d_ppl %>%
   mutate(institute = glue("{institute_name}, {institute_place}"),
