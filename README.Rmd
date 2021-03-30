@@ -11,16 +11,19 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Research for development
+# Research programmes for development
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of this project is to try to map the institutes involved in [r4d](http://www.r4d.ch/) projects on a world map.
+The goal of this project is to try to map the institutes involved in the Swiss Programme for Research on Global Issues for Development ([r4d](http://www.r4d.ch/)) on the world map.
+
 
 ### Data dictionary 🚧
 
-#### grant-selection
+#### `grants`
+
+> Subset of `P3_GrantExport.csv` from [P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx).
 
 |Variable           |Type      |Description                       |
 |:------------------|:---------|:---------------------------------|
@@ -30,29 +33,37 @@ The goal of this project is to try to map the institutes involved in [r4d](http:
 |start_date         |date      |`%b %Y`                           |
 |end_date           |date      |`%b %Y`                           |
 |approved_amount    |integer   |Grant size in CHF                 |
+|running           |boolean   |Inform whether grant is running |
 
-#### affiliation-lookup
+#### affiliation-role
 
-|Variable        |Type      |Description                         |
-|:---------------|:---------|:-----------------------------------|
-|project_number  |character |P3 grant id                         |
-|person_id_snsf  |character |P3 person id                        |
-|role            |factor    |[Project as](role)                  |
-|institute_number|character | 🚧                                 |
-|institute_name  |character |[Details](instname)                 |
-|institute_place |character |[Details](instpalce)                |
+|Variable         |Type      |Description                         |
+|:----------------|:---------|:-----------------------------------|
+|project_number   |character |P3 grant id                         |
+|person_id_snsf   |character |P3 person id                        |
+|role             |factor    |[Project as](role)                  |
+|institute_number |character |P3 institute number                 |
+|institute_name   |character |[Details](instname)                 |
+|institute_place  |character |[Details](instpalce)                |
 
 [role]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Projects%20as%20responsible%20Applicant "Example"
 [instname]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Institute%20Name "Institute name"
 [instplace]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Institute%20Place "Institute place"
 
-#### r4d-people-in-p3
+#### affiliation-gmaps
 
-🚧 
-
-#### gm-data
-
-🚧 
+|Variable          |Type      |Description                         |
+|:-----------------|:---------|:-----------------------------------|
+|institute_number  |character |P3 institute number                |
+|institute_address |character |P3 institute address               |
+|gmaps_id          |character |Google maps id                     |
+|gmaps_lat         |numeric   |Latitude               |
+|gmaps_lng         |numeric   |Longitude              |
+|gmaps_plus         |character   |Google maps plus code |
+|gmaps_addr         |character   |Address on google maps |
+|gmaps_name         |character   |Name on google maps  |
+|gmaps_types         |character   |Types on google maps  |
+|gmaps_status         |character   |Status on google maps  |
 
 ## Simplified Tree
  
