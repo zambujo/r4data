@@ -18,7 +18,9 @@ Depends:
     tidyverse,
     lubridate,
     flexdashboard,
-    leaflet
+    leaflet,
+    rvest,
+    xml2
 Suggests:
     magrittr,
     usethis,

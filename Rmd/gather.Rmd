@@ -61,9 +61,82 @@ grants <- grants_raw %>%
     end_date = format(end_date, "%b %Y"),
     approved_amount = as.numeric(approved_amount),
     approved_amount = round(approved_amount),
-    approved_amount = as.integer(approved_amount))
+    approved_amount = as.integer(approved_amount),
+    p3 = glue("http://p3.snf.ch/project-{project_number}"))
 ```
 
+Add detailed institute data missing from the CSV data dumps by scrapping P3.
+
+```{r project-details, eval=FALSE}
+scrape_p3_project <- function(project_number) {
+  message(glue("* Scrapping {project_number}"))
+  Sys.sleep(.25)
+  
+  p3_url <- glue("http://p3.snf.ch/project-{project_number}")
+  html_page <- xml2::read_html(p3_url)
+  project_people <- html_page %>%
+    rvest::html_nodes(".person-field-0 a") %>%
+    rvest::html_attr("href")
+  
+  project_people <- html_page %>%
+    rvest::html_nodes(".person-field-0 a") %>%
+    rvest::html_attr("href")
+  project_institutes <- html_page %>%
+    rvest::html_nodes(".person-field-1 a") %>%
+    rvest::html_attr("href")
+
+  tibble(
+    people_p3slug = project_people,
+    institute_p3slug = project_institutes) %>%
+    extract(people_p3slug, 
+            "person_id_p3", 
+            regex = "(\\d+)", 
+            remove=FALSE) %>%
+    extract(institute_p3slug, 
+            "institute_id_p3", 
+            regex = "(\\d+)", 
+            remove=FALSE) %>%
+    mutate(project_id = project_number) %>%
+    select(project_id, everything())
+}
+
+p3_grant_details <- grants %>% 
+  pull(project_number) %>% 
+  map_df(scrape_p3_project)
+
+write_csv(p3_grant_details, here("data-raw", "p3-grant-details.csv"))
+```
+
+```{r institute-details}
+scrape_p3_institute <- function(institute_number) {
+  message(glue("* Scrapping /institute-{institute_number}"))
+  Sys.sleep(.25)
+  
+  p3_url <- glue("http://p3.snf.ch/institute-{institute_number}")
+  html_page <- xml2::read_html(p3_url)
+  institute_details <- 
+    html_page %>%
+    rvest::html_nodes(".institute td") %>%
+    rvest::html_text() %>%
+    str_squish() %>%
+    head(2)
+
+  tibble(
+    institute_p3_name = pluck(institute_details, 1),
+    institute_p3_addr = pluck(institute_details, 2)
+  ) %>%
+    mutate(institute_id = institute_number) %>%
+    select(institute_id, everything())
+}
+
+p3_institute_details <- p3_grant_details %>%
+  filter(institute_id_p3 != "0") %>%
+  distinct(institute_id_p3) %>%
+  pull(institute_id_p3) %>%
+  map_df(scrape_p3_institute)
+
+write_csv(p3_institute_details, here("data-raw", "p3-institute-details.csv"))
+```
 
 ```{r roles, eval=FALSE}
 people <- people_raw %>%
@@ -211,7 +284,10 @@ dfs <- sheets %>%
 ```
 
 
-```{r}
+
+
+
+```{r, eval=FALSE}
 file_name <- here("about", "r4d.html")
 html <- read_lines(file_name)
 html <- str_subset(html, "DocId")
