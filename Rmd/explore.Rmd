@@ -20,54 +20,59 @@ library(leaflet)
 
 ```{r, echo = FALSE}
 
-# Read -----
-r4d <- read_rds(here("data", "r4d-grants-in-p3.Rds")) # p3 project data on r4d
-affil <- read_rds(here("data", "r4d-affiliations.Rds")) #  p3 people data on r4d
-df_gm <- read_rds(here("data", "gm-data.Rds")) # google maps coordinate data
+# read -----
 
-# Logic -----
+projects <- read_csv(here("data", "projects.csv")) # p3 project data on r4d
+people <- read_csv(here("data", "people.csv")) #  p3 people data on r4d
+gmaps <- read_csv(here("data", "gmaps.csv")) # google maps coordinate data
 
-# grant details
-details <- r4d %>%
+
+# logic -----
+
+projects <- projects %>%
   mutate(
-    p3 = glue("http://p3.snf.ch/project-{project_number}"),
-    start_date = dmy(start_date),
-    end_date = dmy(end_date),
-    running = today() %within% interval(start_date, end_date),
-    start_date = format(start_date, "%b %Y"),
-    end_date = format(end_date, "%b %Y"),
-    col_label = ifelse(running, "#5c636e", "#5c636e")) %>%
-  select(project_number, p3, project_title, keywords, start_date, end_date, col_label)
+    status = if_else(running,
+                     "<a href='#' title='running'>🚩</a>",
+                     "<a href='#' title='finished'>🏁</a>"),
+    project_slug = glue("http://p3.snf.ch/project-{project_number}"))
+
+people <- people %>%
+  mutate(institute_slug = glue("http://p3.snf.ch/institute-{institute_id_p3}"))
 
 # list of participants
-institutes_in_project <- affil %>%
+institutes_in_project <- people %>%
+  filter(!is.na(institute_id_p3)) %>%
+  mutate(
+    p3_link = glue("<a href='{institute_slug}'>{institute_name}</a>")) %>%
   group_by(project_number) %>%
-  summarise(institute_list = str_c(institute, collapse = "</li><br/><li>"),
-            .groups = "drop")
+  summarise(
+    institute_list = str_c(unique(p3_link), collapse = "</li><br/><li>"),
+    .groups = "drop")
 
 # data denormalization
-denorm <- affil %>% 
-  left_join(df_gm, by = c("institute_urlenc" = "enc_str")) %>%
+denorm <- people %>% 
+  left_join(projects, by = "project_number") %>%
+  left_join(gmaps, by = c("institute_id_p3" = "institute_id")) %>%
   left_join(institutes_in_project, by = "project_number") %>%
-  left_join(details, by = "project_number") %>%
-  distinct(gm_id, .keep_all = TRUE) %>%
-  filter(!is.na(gm_id)) %>%
+  filter(!is.na(gmaps_id)) %>%
+  distinct(gmaps_id, .keep_all = TRUE) %>%
   mutate(
     content = glue(
-      "<b>{institute}</b><br/>",
-      "<a href='{p3}'>{project_title}</a><br/>",
-      "{start_date} to {end_date}<br/><br/>",
-      "<u>All Participants</u><br/><br/>",
+      "📍 <b>{gmaps_name}</b><br/>",
+      "<a href='{project_slug}'>{project_title}</a><br/>",
+      "{status} {start_date}-{end_date}<br/><br/>",
+      "Participants<br/><br/>",
       "<ul><li>",
       "{institute_list}",
       "</li></ul>"))
 
-# Display ------ 
+# display ------ 
 
 leaflet(data = denorm, width = "100%") %>%
-  setView(8.5, 47, 7) %>%
+  # setView(8.5, 47, 7) %>%
+  setView(2, 20, 3) %>%
   addTiles() %>%
-  addMarkers(~gm_lng, ~gm_lat, popup = ~content) %>%
+  addMarkers(~gmaps_lng, ~gmaps_lat, popup = ~content) %>%
   addProviderTiles(providers$Esri.NatGeoWorldMap) %>% # Esri.WorldImagery
   addMiniMap(tiles = providers$Esri.NatGeoWorldMap, toggleDisplay = TRUE) 
 ```

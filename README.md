@@ -12,7 +12,7 @@ Swiss Programme for Research on Global Issues for Development
 
 ### Data dictionary 🚧
 
-#### `grants`
+#### `projects`
 
 > Subset of `P3_GrantExport.csv` from
 > [P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx).
@@ -27,31 +27,27 @@ Swiss Programme for Research on Global Issues for Development
 | approved\_amount    | integer   | Grant size in CHF               |
 | running             | boolean   | Inform whether grant is running |
 
-#### affiliation-role
+#### `people`
 
 | Variable          | Type      | Description          |
 |:------------------|:----------|:---------------------|
 | project\_number   | character | P3 grant id          |
 | person\_id\_snsf  | character | P3 person id         |
 | role              | factor    | [Project as](role)   |
-| institute\_number | character | P3 institute number  |
 | institute\_name   | character | [Details](instname)  |
 | institute\_place  | character | [Details](instpalce) |
+| institute\_id\_p3 | character | P3 institute ID      |
 
-#### affiliation-gmaps
+#### `gmaps`
 
-| Variable           | Type      | Description            |
-|:-------------------|:----------|:-----------------------|
-| institute\_number  | character | P3 institute number    |
-| institute\_address | character | P3 institute address   |
-| gmaps\_id          | character | Google maps id         |
-| gmaps\_lat         | numeric   | Latitude               |
-| gmaps\_lng         | numeric   | Longitude              |
-| gmaps\_plus        | character | Google maps plus code  |
-| gmaps\_addr        | character | Address on google maps |
-| gmaps\_name        | character | Name on google maps    |
-| gmaps\_types       | character | Types on google maps   |
-| gmaps\_status      | character | Status on google maps  |
+| Variable      | Type      | Description         |
+|:--------------|:----------|:--------------------|
+| institute\_id | character | P3 institute number |
+| gmaps\_id     | character | Google maps id      |
+| gmaps\_lat    | numeric   | Latitude            |
+| gmaps\_lng    | numeric   | Longitude           |
+| gmaps\_name   | character | Name on google maps |
+| gmaps\_addr   | character | Name on google maps |
 
 ## Simplified Tree
 
@@ -59,11 +55,10 @@ Swiss Programme for Research on Global Issues for Development
     ├── DESCRIPTION
     ├── LICENSE
     ├── install.R
-    ├── data-raw
-    │   ├── gm-data.csv
-    │   ├── r4d-affiliations.csv
-    │   ├── r4d-grants-in-p3.csv
-    │   └── r4d-people-in-p3.csv
+    ├── data
+    │   ├── gmaps.csv
+    │   ├── people.csv
+    │   └── projects.csv
     ├── docs
     │   └── index.html
     ├── inst

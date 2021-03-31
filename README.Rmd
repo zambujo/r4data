@@ -21,7 +21,7 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 
 ### Data dictionary 🚧
 
-#### `grants`
+#### `projects`
 
 > Subset of `P3_GrantExport.csv` from [P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx).
 
@@ -33,37 +33,33 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 |start_date         |date      |`%b %Y`                           |
 |end_date           |date      |`%b %Y`                           |
 |approved_amount    |integer   |Grant size in CHF                 |
-|running           |boolean   |Inform whether grant is running |
+|running            |boolean   |Inform whether grant is running   |
 
-#### affiliation-role
+#### `people`
 
-|Variable         |Type      |Description                         |
-|:----------------|:---------|:-----------------------------------|
-|project_number   |character |P3 grant id                         |
-|person_id_snsf   |character |P3 person id                        |
-|role             |factor    |[Project as](role)                  |
-|institute_number |character |P3 institute number                 |
-|institute_name   |character |[Details](instname)                 |
-|institute_place  |character |[Details](instpalce)                |
+|Variable         |Type      |Description            |
+|:----------------|:---------|:----------------------|
+|project_number   |character |P3 grant id            |
+|person_id_snsf   |character |P3 person id           |
+|role             |factor    |[Project as](role)     |
+|institute_name   |character |[Details](instname)    |
+|institute_place  |character |[Details](instpalce)   |
+|institute_id_p3  |character |P3 institute ID        |
 
 [role]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Projects%20as%20responsible%20Applicant "Example"
 [instname]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Institute%20Name "Institute name"
 [instplace]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Institute%20Place "Institute place"
 
-#### affiliation-gmaps
+#### `gmaps`
 
-|Variable          |Type      |Description                         |
-|:-----------------|:---------|:-----------------------------------|
-|institute_number  |character |P3 institute number                |
-|institute_address |character |P3 institute address               |
-|gmaps_id          |character |Google maps id                     |
-|gmaps_lat         |numeric   |Latitude               |
-|gmaps_lng         |numeric   |Longitude              |
-|gmaps_plus         |character   |Google maps plus code |
-|gmaps_addr         |character   |Address on google maps |
-|gmaps_name         |character   |Name on google maps  |
-|gmaps_types         |character   |Types on google maps  |
-|gmaps_status         |character   |Status on google maps  |
+|Variable          |Type      |Description              |
+|:-----------------|:---------|:------------------------|
+|institute_id      |character |P3 institute number      |
+|gmaps_id          |character |Google maps id           |
+|gmaps_lat         |numeric   |Latitude                 |
+|gmaps_lng         |numeric   |Longitude                |
+|gmaps_name        |character |Name on google maps      |
+|gmaps_addr        |character |Name on google maps      |
 
 ## Simplified Tree
  
@@ -72,11 +68,10 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 ├── DESCRIPTION
 ├── LICENSE
 ├── install.R
-├── data-raw
-│   ├── gm-data.csv
-│   ├── r4d-affiliations.csv
-│   ├── r4d-grants-in-p3.csv
-│   └── r4d-people-in-p3.csv
+├── data
+│   ├── gmaps.csv
+│   ├── people.csv
+│   └── projects.csv
 ├── docs
 │   └── index.html
 ├── inst
