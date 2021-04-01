@@ -2,9 +2,12 @@
 title: "Gathering r4d data"
 ---
 
+🚧 Attention: Work-in-progress. 🚧
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(lubridate)
 library(here)
 library(janitor)
 library(yaml)
@@ -50,7 +53,8 @@ projects <- projects_raw %>%
          funding_instrument,
          start_date,
          end_date,
-         approved_amount) %>%
+         approved_amount,
+         keywords) %>%
   mutate(
     start_date = dmy(start_date),
     end_date = dmy(end_date),
@@ -165,9 +169,7 @@ people <- people_raw %>%
 
 write_csv(people, here("data", "people.csv"))
 
-# tests :)
-# people %>% anti_join(p3_project_details, by = c("person_id_snsf" = "person_id_p3"))
-# p3_project_details %>% anti_join(people, by = c("person_id_p3" = "person_id_snsf"))
+
 ```
 
 ```{r, eval=FALSE}
@@ -179,6 +181,17 @@ more <- semi_join(collab, r4d, "project_number")
 # more %>% count(group_person, sort = TRUE) %>% print(n = 50)
 # more %>% filter(str_detect(group_person, "CO-APPLICANT"))
 ```
+
+
+```{r load-p3-details, eval=FALSE}
+p3_project_details <- read_csv(here("data-raw", "p3-grant-details.csv"))
+p3_institute_details <- read_csv(here("data-raw", "p3-institute-details.csv"))
+
+# tests :)
+# people %>% anti_join(p3_project_details, by = c("person_id_snsf" = "person_id_p3"))
+# p3_project_details %>% anti_join(people, by = c("person_id_p3" = "person_id_snsf"))
+```
+
 
 Preparing institute data for Google maps querying.
 

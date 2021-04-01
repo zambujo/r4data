@@ -68,12 +68,29 @@ denorm <- people %>%
 
 # display ------ 
 
-leaflet(data = denorm, width = "100%") %>%
+mapbox_access_token <- Sys.getenv("MAPBOX_KEY")
+tcu_map <- paste0(
+  'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=', 
+  mapbox_access_token)
+tcu_satellite <- paste0(
+  'https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/{z}/{x}/{y}?access_token=', 
+  mapbox_access_token)
+map_attr <- 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
+
+leaflet(data = denorm, width = "100%") %>% 
   # setView(8.5, 47, 7) %>%
-  setView(2, 20, 3) %>%
-  addTiles() %>%
+  # addProviderTiles(providers$Esri.NatGeoWorldMap) # Esri.WorldImagery
+  setView(2, 20, 3.5) %>%
   addMarkers(~gmaps_lng, ~gmaps_lat, popup = ~content) %>%
-  addProviderTiles(providers$Esri.NatGeoWorldMap) %>% # Esri.WorldImagery
-  addMiniMap(tiles = providers$Esri.NatGeoWorldMap, toggleDisplay = TRUE) 
+  # addTiles() %>%
+  # addProviderTiles(providers$Esri.NatGeoWorldMap, group = "Map") %>%
+  # addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
+  addTiles(urlTemplate = tcu_map, attribution = map_attr, group = "Map") %>%
+  addTiles(urlTemplate = tcu_satellite, attribution = map_attr, group = "Satellite") %>%
+  addLayersControl(
+    baseGroups = c("Map", "Satellite"),
+    options = layersControlOptions(collapsed = FALSE)) %>%
+  addMiniMap(tiles = providers$Esri.WorldGrayCanvas, toggleDisplay = TRUE)
+
 ```
 
