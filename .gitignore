@@ -7,6 +7,7 @@
 
 # User-specific files
 .Ruserdata
+.Rprofile
 
 # Example code in package build process
 *-Ex.R
@@ -43,5 +44,5 @@ vignettes/*.pdf
 README.Rmd
 data-raw/
 about/
-
+renv/
 # RT https://github.com/github/gitignore/blob/master/R.gitignore
