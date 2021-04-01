@@ -46,7 +46,7 @@ institutes_in_project <- people %>%
     p3_link = glue("<a href='{institute_slug}'>{institute_name}</a>")) %>%
   group_by(project_number) %>%
   summarise(
-    institute_list = str_c(unique(p3_link), collapse = "</li><br/><li>"),
+    institute_list = str_c(unique(p3_link), collapse = "</li><li>"),
     .groups = "drop")
 
 # data denormalization
@@ -61,10 +61,10 @@ denorm <- people %>%
       "📍 <b>{gmaps_name}</b><br/>",
       "<a href='{project_slug}'>{project_title}</a><br/>",
       "{status} {start_date}-{end_date}<br/><br/>",
-      "Participants<br/><br/>",
-      "<ul><li>",
+      "<button data-toggle='collapse' data-target='#content'>Participants</button>",
+      "<div id='content' class='collapse'><br/><ul><li>",
       "{institute_list}",
-      "</li></ul>"))
+      "</li></ul></div>"))
 
 # display ------ 
 
