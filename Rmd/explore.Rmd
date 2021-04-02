@@ -30,11 +30,7 @@ gmaps <- read_csv(here("data", "gmaps.csv")) # google maps coordinate data
 # logic -----
 
 projects <- projects %>%
-  mutate(
-    status = if_else(running,
-                     "<a href='#' title='running'>🚩</a>",
-                     "<a href='#' title='finished'>🏁</a>"),
-    project_slug = glue("http://p3.snf.ch/project-{project_number}"))
+  mutate(project_slug = glue("http://p3.snf.ch/project-{project_number}"))
 
 people <- people %>%
   mutate(institute_slug = glue("http://p3.snf.ch/institute-{institute_id_p3}"))
@@ -43,7 +39,7 @@ people <- people %>%
 institutes_in_project <- people %>%
   filter(!is.na(institute_id_p3)) %>%
   mutate(
-    p3_link = glue("<a href='{institute_slug}'>{institute_name}</a>")) %>%
+    p3_link = glue("<a href='{institute_slug}' target='_blank' rel='noopener noreferrer'>{institute_name}</a>")) %>%
   group_by(project_number) %>%
   summarise(
     institute_list = str_c(unique(p3_link), collapse = "</li><li>"),
@@ -57,17 +53,25 @@ denorm <- people %>%
   filter(!is.na(gmaps_id)) %>%
   distinct(gmaps_id, .keep_all = TRUE) %>%
   mutate(
+    k_amount = as.numeric(approved_amount),
+    k_amount = round(k_amount / 1000),
     funding_instrument = recode(
       funding_instrument,
       `r4d (Swiss Programme for Research on Global Issues for Development)` = "r4d"),
     content = glue(
-      "📍 <b>{gmaps_name}</b><br/>",
-      "<a href='{project_slug}'>{project_title}</a><br/>",
-      "{status} {start_date}-{end_date}<br/><br/>",
-      "<button data-toggle='collapse' data-target='#content'>Participants</button>",
-      "<div id='content' class='collapse'><br/><ul><li>",
+      "<span class='label label-info'>{funding_instrument}</span> <b>{gmaps_name}</b>",
+      "<hr/><a href='{project_slug}' target='_blank' rel='noopener noreferrer'>{project_title}</a><br/>",
+      "<div><br/><button data-toggle='collapse' data-target='#participants'>Participants</button> ",
+      "<button data-toggle='collapse' data-target='#details'>Details</button></div>",
+      "<div id='participants' class='collapse'><hr/>",
+      "<ul><li>",
       "{institute_list}",
-      "</li></ul></div>"))
+      "</li></ul></div>",
+      "<div id='details' class='collapse'><hr/>",
+      "Start <span class='label label-default'>{start_date}</span> ",
+      "End <span class='label label-default'>{end_date}</span> ",
+      "Amount <span class='label label-default'>{k_amount} kchf</span>",
+      "</div>"))
 
 denorm_df <- split(denorm, pull(denorm, running))
 
@@ -87,19 +91,19 @@ leaflet(width = "100%") %>%
     lat=~gmaps_lat, 
     icon=gray_markers,
     popup=~content,
-    group="finished") %>%
+    group="inactive") %>%
   addMarkers(
     data=pluck(denorm_df, 2),
     lng=~gmaps_lng,
     lat=~gmaps_lat,
     popup=~content,
-    group="running") %>%
+    group="active") %>%
   addTiles() %>%
   addProviderTiles(providers$Esri.NatGeoWorldMap, group = "Map") %>%
   addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
   addLayersControl(
     baseGroups = c("Map", "Satellite"),
-    overlayGroups = c("finished", "running"),
+    overlayGroups = c("active", "inactive"),
     options = layersControlOptions(collapsed = TRUE)) %>%
   addMiniMap(tiles = providers$Esri.WorldGrayCanvas, toggleDisplay = TRUE)
 ```
