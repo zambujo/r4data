@@ -83,6 +83,12 @@ gray_markers <-  awesomeIcons(
   markerColor = rep("gray", nrow(pluck(denorm_df, 1))),
   iconColor = "white")
 
+blue_markers <-  awesomeIcons(
+  icon = "fa-circle",
+  library = "fa",
+  markerColor = rep("blue", nrow(pluck(denorm_df, 2))),
+  iconColor = "white")
+
 leaflet(width = "100%") %>% 
   setView(2, 20, 3.5) %>%
   addAwesomeMarkers(
@@ -92,10 +98,11 @@ leaflet(width = "100%") %>%
     icon=gray_markers,
     popup=~content,
     group="inactive") %>%
-  addMarkers(
+  addAwesomeMarkers(
     data=pluck(denorm_df, 2),
     lng=~gmaps_lng,
-    lat=~gmaps_lat,
+    lat=~gmaps_lat, 
+    icon=blue_markers,
     popup=~content,
     group="active") %>%
   addTiles() %>%
