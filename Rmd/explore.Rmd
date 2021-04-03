@@ -77,41 +77,40 @@ denorm_df <- split(denorm, pull(denorm, running))
 
 # display ------ 
 
-gray_markers <-  awesomeIcons(
+inactive_markers <-  awesomeIcons(
   icon = "fa-circle",
   library = "fa",
-  markerColor = rep("gray", nrow(pluck(denorm_df, 1))),
-  iconColor = "white")
+  markerColor = rep("lightgray", nrow(pluck(denorm_df, 1))))
 
-blue_markers <-  awesomeIcons(
+active_markers <-  awesomeIcons(
   icon = "fa-circle",
   library = "fa",
-  markerColor = rep("blue", nrow(pluck(denorm_df, 2))),
-  iconColor = "white")
+  markerColor = rep("orange", nrow(pluck(denorm_df, 2))))
 
 leaflet(width = "100%") %>% 
-  setView(2, 20, 3.5) %>%
+  setView(2, 20, 3) %>%
   addAwesomeMarkers(
     data=pluck(denorm_df, 1),
     lng=~gmaps_lng,
     lat=~gmaps_lat, 
-    icon=gray_markers,
+    icon=inactive_markers,
     popup=~content,
-    group="inactive") %>%
+    group="<span style='font-weight:bold;color:gray;'>inactive") %>%
   addAwesomeMarkers(
     data=pluck(denorm_df, 2),
     lng=~gmaps_lng,
     lat=~gmaps_lat, 
-    icon=blue_markers,
+    icon=active_markers,
     popup=~content,
-    group="active") %>%
+    group="<span style='font-weight:bold;color:orange;'>active") %>%
   addTiles() %>%
   addProviderTiles(providers$Esri.NatGeoWorldMap, group = "Map") %>%
   addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
   addLayersControl(
     baseGroups = c("Map", "Satellite"),
-    overlayGroups = c("active", "inactive"),
-    options = layersControlOptions(collapsed = TRUE)) %>%
+    overlayGroups = c("<span style='font-weight:bold;color:orange;'>active",
+                      "<span style='font-weight:bold;color:gray;'>inactive"),
+    options = layersControlOptions(collapsed = FALSE)) %>%
   addMiniMap(tiles = providers$Esri.WorldGrayCanvas, toggleDisplay = TRUE)
 ```
 
