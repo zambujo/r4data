@@ -60,16 +60,16 @@ denorm <- people %>%
       `r4d (Swiss Programme for Research on Global Issues for Development)` = "r4d"),
     content = glue(
       "<span class='label label-info'>{funding_instrument}</span> <b>{gmaps_name}</b>",
-      "<hr/><a href='{project_slug}' target='_blank' rel='noopener noreferrer'>{project_title}</a><br/>",
-      "<div><br/><button data-toggle='collapse' data-target='#participants'>Participants</button> ",
+      "<hr/><a href='{project_slug}' target='_blank' rel='noopener noreferrer'>{project_title}</a><br/><br/>",
+      "<div><button data-toggle='collapse' data-target='#participants'>Participants</button>&emsp;",
       "<button data-toggle='collapse' data-target='#details'>Details</button></div>",
       "<div id='participants' class='collapse'><hr/>",
       "<ul><li>",
       "{institute_list}",
       "</li></ul></div>",
       "<div id='details' class='collapse'><hr/>",
-      "Start <span class='label label-default'>{start_date}</span> ",
-      "End <span class='label label-default'>{end_date}</span> ",
+      "Start <span class='label label-default'>{start_date}</span>&emsp;&ensp;",
+      "End <span class='label label-default'>{end_date}</span>&emsp;&ensp;",
       "Amount <span class='label label-default'>{k_amount} kchf</span>",
       "</div>"))
 
