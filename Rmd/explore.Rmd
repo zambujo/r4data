@@ -1,11 +1,12 @@
 ---
-title: "Research for development"
+title: Research for development
 output: 
   flexdashboard::flex_dashboard:
     theme: lumen
     self_contained: false
-    social: menu
     source_code: https://git.io/JqCOd
+    navbar:
+      - { title: "r4d.ch", href: "http://www.r4d.ch", align: right }
 ---
 
 ```{r setup, include=FALSE}
