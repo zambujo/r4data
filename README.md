@@ -10,6 +10,10 @@ The goal of this project is to try to map the institutes involved in the
 Swiss Programme for Research on Global Issues for Development
 ([r4d](http://www.r4d.ch/)) on the world map.
 
+### Schema
+
+![](./data/schema.svg)
+
 ### Data dictionary 🚧
 
 #### `projects`
@@ -26,6 +30,8 @@ Swiss Programme for Research on Global Issues for Development
 | end\_date           | date      | `%b %Y`                         |
 | approved\_amount    | integer   | Grant size in CHF               |
 | running             | boolean   | Inform whether grant is running |
+| institution         | character | coordinating institution        |
+| university          | character | coordinating university         |
 
 #### `people`
 
@@ -56,9 +62,11 @@ Swiss Programme for Research on Global Issues for Development
     ├── LICENSE
     ├── install.R
     ├── data
+    │   ├── disciplines.csv
     │   ├── gmaps.csv
     │   ├── people.csv
-    │   └── projects.csv
+    │   ├── projects.csv
+    │   └── schema.svg
     ├── docs
     │   └── index.html
     ├── inst

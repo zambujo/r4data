@@ -18,6 +18,9 @@ knitr::opts_chunk$set(
 
 The goal of this project is to try to map the institutes involved in the Swiss Programme for Research on Global Issues for Development ([r4d](http://www.r4d.ch/)) on the world map.
 
+### Schema
+
+![](./data/schema.svg)
 
 ### Data dictionary 🚧
 
@@ -34,6 +37,8 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 |end_date           |date      |`%b %Y`                           |
 |approved_amount    |integer   |Grant size in CHF                 |
 |running            |boolean   |Inform whether grant is running   |
+|institution        |character |coordinating institution          |
+|university         |character |coordinating university           |
 
 #### `people`
 
@@ -69,9 +74,11 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 ├── LICENSE
 ├── install.R
 ├── data
+│   ├── disciplines.csv
 │   ├── gmaps.csv
 │   ├── people.csv
-│   └── projects.csv
+│   ├── projects.csv
+│   └── schema.svg
 ├── docs
 │   └── index.html
 ├── inst
