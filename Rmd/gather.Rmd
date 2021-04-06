@@ -54,6 +54,8 @@ projects <- projects_raw %>%
          start_date,
          end_date,
          approved_amount,
+         institution,
+         university,
          keywords) %>%
   mutate(
     start_date = dmy(start_date),
@@ -69,6 +71,24 @@ projects <- projects_raw %>%
 
 write_csv(projects, here("data", "projects.csv"))
 ```
+
+```{r, disciplines, eval=FALSE}
+projects <- read_csv(here("data", "projects.csv")) # p3 project data on r4d
+disciplines <-  projects_raw %>%
+  semi_join(mutate(projects, project_number = as.character(project_number)),
+                   by = "project_number")  %>%
+  select(project_number, discipline_name_hierarchy, discipline_name) %>%
+  unite(col = "disciplines", starts_with("discipline_"), sep = ";") %>%
+  mutate(disciplines = str_split(disciplines, ";")) %>%
+  unnest(disciplines)
+
+test_count <- disciplines %>% count(project_number)
+if (all(pull(test_count, n) == 3)) {
+  disciplines <- disciplines %>% mutate(tier = rep(1:3, nrow(test_count)))
+  write_csv(disciplines, here("data", "disciplines.csv"))
+}
+```
+
 
 Add detailed institute data missing from the CSV data dumps by scrapping P3.
 
@@ -309,6 +329,16 @@ gmaps %>%
   write_csv(here("data", "gmaps.csv"))
 ```
 
+
+```{r, countries, eval=FALSE}
+gmaps <- read_csv(here("data", "gmaps.csv")) # google maps coordinate data
+gmaps <- gmaps %>%
+  mutate(gmaps_addr_ascii = stringi::stri_trans_general(gmaps_addr, "Latin-ASCII")) %>%
+  extract(gmaps_addr_ascii, "gmaps_country", regex = "(?<=[,] )(\\w+$)")
+write_csv(gmaps, here("data", "gmaps.csv"))
+```
+
+
 Add "difficult" cases separately.
 
 ```{r google-missing, eval=FALSE}
@@ -331,7 +361,6 @@ df_institutes %>%
 
 ```
 
-
 ```{r, eval=FALSE}
 file_name <- here("data-raw", 
                   "r4d_researchers_institutions_countries.xlsx")
@@ -342,9 +371,6 @@ dfs <- sheets %>%
   clean_names()
 # only 45 projects
 ```
-
-
-
 
 
 ```{r, eval=FALSE}

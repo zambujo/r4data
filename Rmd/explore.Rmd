@@ -60,7 +60,7 @@ denorm <- people %>%
       funding_instrument,
       `r4d (Swiss Programme for Research on Global Issues for Development)` = "r4d"),
     content = glue(
-      "📍<b>{gmaps_name}</b>",
+      "📍<b>{gmaps_name}</b>, {gmaps_country}",
       "<hr/><span class='label label-info'>{funding_instrument}</span> ",
       "<a href='{project_slug}' target='_blank' rel='noopener noreferrer'>",
       "{project_title}</a><br/><br/>",
