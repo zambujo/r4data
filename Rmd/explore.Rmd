@@ -60,8 +60,10 @@ denorm <- people %>%
       funding_instrument,
       `r4d (Swiss Programme for Research on Global Issues for Development)` = "r4d"),
     content = glue(
-      "<span class='label label-info'>{funding_instrument}</span> <b>{gmaps_name}</b>",
-      "<hr/><a href='{project_slug}' target='_blank' rel='noopener noreferrer'>{project_title}</a><br/><br/>",
+      "📍<b>{gmaps_name}</b>",
+      "<hr/><span class='label label-info'>{funding_instrument}</span> ",
+      "<a href='{project_slug}' target='_blank' rel='noopener noreferrer'>",
+      "{project_title}</a><br/><br/>",
       "<div><button data-toggle='collapse' data-target='#participants'>Participants</button>&emsp;",
       "<button data-toggle='collapse' data-target='#details'>Details</button></div>",
       "<div id='participants' class='collapse'><hr/>",
@@ -69,7 +71,7 @@ denorm <- people %>%
       "{institute_list}",
       "</li></ul></div>",
       "<div id='details' class='collapse'><hr/>",
-      "Start <span class='label label-default'>{start_date}</span>&emsp;&ensp;",
+      "Start <span class='label label-default'>{start_date}</span>&emsp;",
       "End <span class='label label-default'>{end_date}</span>&emsp;&ensp;",
       "Amount <span class='label label-default'>{k_amount} kchf</span>",
       "</div>"))
@@ -96,7 +98,7 @@ leaflet(width = "100%") %>%
     lat=~gmaps_lat, 
     icon=inactive_markers,
     popup=~content,
-    group="<span style='font-weight:bold;color:gray;'>inactive") %>%
+    group="<span style='font-weight:bold;color:lightgray;'>inactive") %>%
   addAwesomeMarkers(
     data=pluck(denorm_df, 2),
     lng=~gmaps_lng,
@@ -110,7 +112,7 @@ leaflet(width = "100%") %>%
   addLayersControl(
     baseGroups = c("Map", "Satellite"),
     overlayGroups = c("<span style='font-weight:bold;color:orange;'>active",
-                      "<span style='font-weight:bold;color:gray;'>inactive"),
+                      "<span style='font-weight:bold;color:lightgray;'>inactive"),
     options = layersControlOptions(collapsed = FALSE)) %>%
   addMiniMap(tiles = providers$Esri.WorldGrayCanvas, toggleDisplay = TRUE)
 ```
