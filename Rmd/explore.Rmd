@@ -56,6 +56,7 @@ denorm <- people %>%
   mutate(
     k_amount = as.numeric(approved_amount),
     k_amount = round(k_amount / 1000),
+    k_amount = format(k_amount, big.mark = "'"),
     funding_instrument = recode(
       funding_instrument,
       `r4d (Swiss Programme for Research on Global Issues for Development)` = "r4d"),
@@ -71,9 +72,9 @@ denorm <- people %>%
       "{institute_list}",
       "</li></ul></div>",
       "<div id='details' class='collapse'><hr/>",
-      "Start <span class='label label-default'>{start_date}</span>&emsp;",
-      "End <span class='label label-default'>{end_date}</span>&emsp;&ensp;",
-      "Amount <span class='label label-default'>{k_amount} kchf</span>",
+      "<span class='label label-default'>start</span> {start_date}&emsp;",
+      "<span class='label label-default'>end</span> {end_date}&emsp;&ensp;",
+      "<span class='label label-default'>kchf</span> {k_amount}",
       "</div>"))
 
 denorm_df <- split(denorm, pull(denorm, running))
@@ -93,19 +94,19 @@ active_markers <-  awesomeIcons(
 leaflet(width = "100%") %>% 
   setView(2, 20, 3) %>%
   addAwesomeMarkers(
-    data=pluck(denorm_df, 1),
-    lng=~gmaps_lng,
-    lat=~gmaps_lat, 
-    icon=inactive_markers,
-    popup=~content,
-    group="<span style='font-weight:bold;color:lightgray;'>inactive") %>%
+    data = pluck(denorm_df, 1),
+    lng = ~gmaps_lng,
+    lat = ~gmaps_lat, 
+    icon = inactive_markers,
+    popup = ~content,
+    group = "<span style='font-weight:bold;color:lightgray;'>inactive") %>%
   addAwesomeMarkers(
-    data=pluck(denorm_df, 2),
-    lng=~gmaps_lng,
-    lat=~gmaps_lat, 
-    icon=active_markers,
-    popup=~content,
-    group="<span style='font-weight:bold;color:orange;'>active") %>%
+    data = pluck(denorm_df, 2),
+    lng = ~gmaps_lng,
+    lat = ~gmaps_lat, 
+    icon = active_markers,
+    popup = ~content,
+    group = "<span style='font-weight:bold;color:orange;'>active") %>%
   addTiles() %>%
   addProviderTiles(providers$Esri.NatGeoWorldMap, group = "Map") %>%
   addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
@@ -116,33 +117,3 @@ leaflet(width = "100%") %>%
     options = layersControlOptions(collapsed = FALSE)) %>%
   addMiniMap(tiles = providers$Esri.WorldGrayCanvas, toggleDisplay = TRUE)
 ```
-
-```{r mapbox, include=FALSE, eval=FALSE}
-mapbox_access_token <- Sys.getenv("MAPBOX_KEY")
-tcu_map <- paste0(
-  'https://api.mapbox.com/styles/v1/',
-  'mapbox/streets-v11/',
-  'tiles/{z}/{x}/{y}?access_token=', 
-  mapbox_access_token)
-tcu_satellite <- paste0(
-  'https://api.mapbox.com/styles/v1/',
-  'mapbox/satellite-v9/',
-  'tiles/{z}/{x}/{y}?access_token=', 
-  mapbox_access_token)
-map_attr <- paste0(
-  'Map data &copy; ',
-  '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> ',
-  'contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>')
-
-leaflet(data = denorm, width = "100%") %>% 
-  setView(2, 20, 3.5) %>%
-  addMarkers(~gmaps_lng, ~gmaps_lat, popup = ~content) %>%
-  addTiles(urlTemplate = tcu_map, attribution = map_attr, group = "Map") %>%
-  addTiles(urlTemplate = tcu_satellite, attribution = map_attr, group = "Satellite") %>%
-  addLayersControl(
-    baseGroups = c("Map", "Satellite"),
-    options = layersControlOptions(collapsed = TRUE)) %>%
-  addMiniMap(tiles = providers$Esri.WorldGrayCanvas, toggleDisplay = TRUE)
-
-```
-
