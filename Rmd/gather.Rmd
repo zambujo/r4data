@@ -317,8 +317,11 @@ for(k in 11:nrow(df_institutes)) {
 }
 
 write_csv(gmaps, here("data-raw", "gmaps.csv"))
+```
 
-gmaps %>%
+
+```{r, countries, eval=FALSE}
+read_csv(here("data-raw", "gmaps.csv")) %>%
   select(
     institute_id,
     gmaps_id = gm_id,
@@ -326,20 +329,20 @@ gmaps %>%
     gmaps_lng = gm_lng,
     gmaps_name = gm_name,
     gmaps_addr = gm_addr) %>%
+  # extract country from address
+  mutate(
+    gmaps_addr_ascii = stringi::stri_trans_general(
+      gmaps_addr, 
+      "Latin-ASCII")) %>%
+  extract(
+    gmaps_addr_ascii, 
+    "gmaps_country", 
+    regex = "(?<=[,] )([[:space:][:alpha:].-]+$)") %>%
   write_csv(here("data", "gmaps.csv"))
 ```
 
 
-```{r, countries, eval=FALSE}
-gmaps <- read_csv(here("data", "gmaps.csv")) # google maps coordinate data
-gmaps <- gmaps %>%
-  mutate(gmaps_addr_ascii = stringi::stri_trans_general(gmaps_addr, "Latin-ASCII")) %>%
-  extract(gmaps_addr_ascii, "gmaps_country", regex = "(?<=[,] )(\\w+$)")
-write_csv(gmaps, here("data", "gmaps.csv"))
-```
-
-
-Add "difficult" cases separately.
+Add "difficult" cases separately (TODO).
 
 ```{r google-missing, eval=FALSE}
 # TODO: failsafe for 11 missing values

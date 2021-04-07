@@ -85,7 +85,7 @@ institute_id,gmaps_id,gmaps_lat,gmaps_lng,gmaps_name,gmaps_addr,gmaps_country
 257337,ChIJC1PFCXF7jEcR-GKg8jL_7hc,46.1685443,6.103625699999999,Fondation Eclosion,"Chemin des Aulx 14, 1228 Plan-les-Ouates, Schweiz",Schweiz
 51620,ChIJe_0MgORkjEcRG-_xidibZlk,46.2242697,6.139745,Recherche des Nations Unies pour le développement social,"Avenue de la Paix 8, 1202 Genève, Schweiz",Schweiz
 58847,ChIJi4WVWJ-gmkcRz9p-0FL6ULo,47.3743221,8.550981199999999,Universität Zürich,"Rämistrasse 71, 8006 Zürich, Schweiz",Schweiz
-216945,ChIJKc4k-mvswokRq7qcsQHQ-w8,41.0051783,-73.9071998,"Tree Ring Laboratory, Lamont-Doherty Earth Observatory of Columbia University","115-119 Ludlow Ln, Palisades, NY 10964, Vereinigte Staaten",NA
+216945,ChIJKc4k-mvswokRq7qcsQHQ-w8,41.0051783,-73.9071998,"Tree Ring Laboratory, Lamont-Doherty Earth Observatory of Columbia University","115-119 Ludlow Ln, Palisades, NY 10964, Vereinigte Staaten",Vereinigte Staaten
 238405,ChIJR0n3vpUyhEcRsY_Wk8B0Gs0,46.0300213,8.9205513,"SUPSI - Dipartimento economia aziendale, sanità e sociale (DEASS) - Palazzo E","Via Cantonale 16E, 6928 Manno, Schweiz",Schweiz
 244440,ChIJ94xuUaagmkcRB3Y3tij0YUs,47.37638889999999,8.547628,Eidgenössische Technische Hochschule Zürich,"Rämistrasse 101, 8092 Zürich, Schweiz",Schweiz
 255370,ChIJubx18aoxjEcRKKylyWpyNgk,46.5210895,6.5801606,Université de Lausanne,"1015 Lausanne, Schweiz",Schweiz
@@ -97,11 +97,11 @@ institute_id,gmaps_id,gmaps_lat,gmaps_lng,gmaps_name,gmaps_addr,gmaps_country
 247342,ChIJLRpD2uB6jEcR4iK7T6ydYt4,46.1757046,6.1390892,Geneva School of Business Administration,"Campus Battelle, Rue de la Tambourine 17, 1227 Carouge, Schweiz",Schweiz
 252019,ChIJ1wMIFyrJ2g8RSiKkzBvQSGs,7.350174699999999,-2.3429652,UENR,"Sunyani, Ghana",Ghana
 242672,ChIJHV4_GrLEaS4RJjqG6WqT960,-6.559556199999999,106.728843,Faculty of Human Ecology,"Gedung FEMA W1 - L2., Kampus IPB Dramaga, Jalan Kamper, Babakan, Kec. Dramaga, Bogor, Jawa Barat 16680, Indonesien",Indonesien
-244398,ChIJcS-kdza-Lg4R_EqJB1hzcz4,12.3822415,-1.5031456,National Center Scientific Research And Technological,"Ouagadougou, Burkina Faso",NA
+244398,ChIJcS-kdza-Lg4R_EqJB1hzcz4,12.3822415,-1.5031456,National Center Scientific Research And Technological,"Ouagadougou, Burkina Faso",Burkina Faso
 240705,ChIJw85x27cLkEcRCq6-pPdj3nY,47.380699,8.542866799999999,ETH Zurich: World Food System Center,"Stampfenbachstrasse 52, 8092 Zürich, Schweiz",Schweiz
 255857,ChIJVT-GkL05jkcRBVnXQeFm02E,46.9557933,7.4356788,Centre for Development and Environment,"Mittelstrasse 43, 3012 Bern, Schweiz",Schweiz
 232147,ChIJS0dMY3iZmkcRj2jcQ8bFjyo,47.5033139,8.7267605,ZHAW Angewandte Linguistik,"Theaterstrasse 15C, 8401 Winterthur, Schweiz",Schweiz
-249686,ChIJse51EO2sB4gRLyb8SZW41OU,43.0746139,-89.4276171,USDA Forest Products Laboratory,"1 Gifford Pinchot Dr, Madison, WI 53726, Vereinigte Staaten",NA
+249686,ChIJse51EO2sB4gRLyb8SZW41OU,43.0746139,-89.4276171,USDA Forest Products Laboratory,"1 Gifford Pinchot Dr, Madison, WI 53726, Vereinigte Staaten",Vereinigte Staaten
 249562,ChIJH_TknLpQlQ4R0kTHernFtCE,16.0626374,-16.4258643,Gaston Berger University,"Université Gaston berger, Dakar, Senegal",Senegal
 242757,ChIJJ5vlO-JkjEcRuRHZyflX0XU,46.2209088,6.1436432,Hochschulinstitut für internationale Studien und Entwicklung,"Chemin Eugène-Rigot 2A, 1202 Genève, Schweiz",Schweiz
 255712,ChIJEePlmbsndTERaR6VvasIlys,10.8507786,106.7718784,Ho Chi Minh City University of Technology and Education,"1 Võ Văn Ngân, Linh Chiểu, Thủ Đức, Thành phố Hồ Chí Minh 700000, Vietnam",Vietnam
@@ -118,10 +118,10 @@ institute_id,gmaps_id,gmaps_lat,gmaps_lng,gmaps_name,gmaps_addr,gmaps_country
 246713,ChIJF7XpWJ3HVTcRkBuW8w07EyU,23.7755336,90.41257639999999,BRAC Institute of Educational Development,"113/1 Rd No 2, Dhaka 1212, Bangladesch",Bangladesch
 238601,ChIJS7XqYcmc0ogRyMNQUBvYUKQ,22.9913232,-82.15342509999999,National Center for Animal and Plant Health,"Autopista Nacional 23km 1/2, Carretera, San José de las Lajas, Kuba",Kuba
 242667,ChIJnxw_GaiZP44RB0wTD2QxNPk,4.628487499999999,-74.06466449999999,Päpstliche Universität Xaveriana,"Cra. 7 #No. 40 - 62, Bogotá, Kolumbien",Kolumbien
-250819,ChIJse51EO2sB4gRLyb8SZW41OU,43.0746139,-89.4276171,USDA Forest Products Laboratory,"1 Gifford Pinchot Dr, Madison, WI 53726, Vereinigte Staaten",NA
+250819,ChIJse51EO2sB4gRLyb8SZW41OU,43.0746139,-89.4276171,USDA Forest Products Laboratory,"1 Gifford Pinchot Dr, Madison, WI 53726, Vereinigte Staaten",Vereinigte Staaten
 210229,ChIJjW8OXvca2jERLDuB8HAC6ts,1.299104,103.7708718,NUS Civil and Environmental Engineering,"1 Engineering Drive 2, #07-03 E1A, Singapur 117576",NA
 218534,ChIJCb7wnumhMI4Rz-bc-bU6Ogs,3.3387691,-76.528331,CIDEIM,"Av. La Maria #19-225, Cali, Valle del Cauca, Kolumbien",Kolumbien
-244380,ChIJf19eL2NZ4joRU13iWqE5P24,6.9016603,79.8627581,"Faculty of Arts, University of Colombo","Reid Avenue, Philip Gunewardena Mawatha, Colombo, Sri Lanka",NA
+244380,ChIJf19eL2NZ4joRU13iWqE5P24,6.9016603,79.8627581,"Faculty of Arts, University of Colombo","Reid Avenue, Philip Gunewardena Mawatha, Colombo, Sri Lanka",Sri Lanka
 124343,ChIJ94xuUaagmkcRB3Y3tij0YUs,47.37638889999999,8.547628,Eidgenössische Technische Hochschule Zürich,"Rämistrasse 101, 8092 Zürich, Schweiz",Schweiz
 71,ChIJbeEWl-o5jkcRSTKOWFf0A-g,46.9535203,7.445292699999999,Institut für Pflanzenwissenschaften,"Altenbergrain 21, 3013 Bern, Schweiz",Schweiz
 242424,ChIJr-jr3qehmkcRMfRU__G-l2A,47.4038135,8.6097632,Eawag,"Ueberlandstrasse 133, 8600 Dübendorf, Schweiz",Schweiz
@@ -133,9 +133,9 @@ institute_id,gmaps_id,gmaps_lat,gmaps_lng,gmaps_name,gmaps_addr,gmaps_country
 242551,ChIJCcxvVQkKjkcR1MrKwm6bB2A,46.9905245,6.920239400000001,Institut d'ethnologie,"Rue de Saint-Nicolas 4, 2000 Neuchâtel, Schweiz",Schweiz
 254806,ChIJ94xuUaagmkcRB3Y3tij0YUs,47.37638889999999,8.547628,Eidgenössische Technische Hochschule Zürich,"Rämistrasse 101, 8092 Zürich, Schweiz",Schweiz
 246771,ChIJfwKQjoGpJBARfxlYycmDgo4,6.413005999999999,2.3450398,Université d'Abomey Calavi,"Godomey, Benin",Benin
-250818,ChIJse51EO2sB4gRLyb8SZW41OU,43.0746139,-89.4276171,USDA Forest Products Laboratory,"1 Gifford Pinchot Dr, Madison, WI 53726, Vereinigte Staaten",NA
+250818,ChIJse51EO2sB4gRLyb8SZW41OU,43.0746139,-89.4276171,USDA Forest Products Laboratory,"1 Gifford Pinchot Dr, Madison, WI 53726, Vereinigte Staaten",Vereinigte Staaten
 227440,ChIJ94xuUaagmkcRB3Y3tij0YUs,47.37638889999999,8.547628,Eidgenössische Technische Hochschule Zürich,"Rämistrasse 101, 8092 Zürich, Schweiz",Schweiz
-247889,ChIJt992czTjoI8RX0LC-sNSO9A,9.9369824,-84.05102839999999,Universidad de Costa Rica,"Ciudad Universitaria Rodrigo Facio Brenes, San José, San Pedro, Costa Rica",NA
+247889,ChIJt992czTjoI8RX0LC-sNSO9A,9.9369824,-84.05102839999999,Universidad de Costa Rica,"Ciudad Universitaria Rodrigo Facio Brenes, San José, San Pedro, Costa Rica",Costa Rica
 230163,ChIJef0p7KagmkcRTYTMxTJk0qc,47.379223,8.548385,Institute Of Terrestrial Ecosystems,"Universitätstrasse 16, 8006 Zürich, Schweiz",Schweiz
 220554,ChIJh5I7JtQvjEcRMH8V58ImG3E,46.5131633,6.6205412,EPFL Laboratoire de Machines hydrauliques,"Bis, Avenue de Cour 33, 1007 Lausanne, Schweiz",Schweiz
 241595,ChIJ94xuUaagmkcRB3Y3tij0YUs,47.37638889999999,8.547628,Eidgenössische Technische Hochschule Zürich,"Rämistrasse 101, 8092 Zürich, Schweiz",Schweiz
@@ -162,7 +162,7 @@ institute_id,gmaps_id,gmaps_lat,gmaps_lng,gmaps_name,gmaps_addr,gmaps_country
 246379,ChIJ9fVz4gkKkEcRt2TKOQ1r3w4,47.3803892,8.5445045,"Departement Geistes-, Sozial- und Staatswissenschaften","Haldeneggsteig 4, 8092 Zürich, Schweiz",Schweiz
 47846,ChIJdzduI4KgmkcRUlSRYAK6Ft4,47.3999033,8.5530496,Institut für Parasitologie Universität ZH,"Winterthurerstrasse 266A, 8057 Zürich, Schweiz",Schweiz
 239612,ChIJt35a54h98CERPMREKzyK8Lw,-18.914032,47.55181169999999,Université d’Antananarivo,"Présidence de l'Université d'Antananarivo: BP 566 Antananarivo, 101, Madagaskar",Madagaskar
-241097,ChIJ9Qn3KFe-Lg4RpW74Rqq9FiI,12.3792999,-1.4864963,Laboratoire Citoyennetés,"Rue Zangoeg-Pelgo, Zogona, Ouagadougou, Burkina Faso",NA
+241097,ChIJ9Qn3KFe-Lg4RpW74Rqq9FiI,12.3792999,-1.4864963,Laboratoire Citoyennetés,"Rue Zangoeg-Pelgo, Zogona, Ouagadougou, Burkina Faso",Burkina Faso
 239601,ChIJj86pNqkxjEcRs2X6awsJEEQ,46.52648050000001,6.579694399999999,Faculty Of Geosciences Environmental And,"1022 Chavannes-près-Renens, Schweiz",Schweiz
 252930,ChIJMQKj8wC5kUcRjBRGaJHolw0,47.55592780000001,7.577431699999999,Schweizerisches Tropen- und Public Health-Institut,"Socinstrasse 57, 4051 Basel, Schweiz",Schweiz
 121316,ChIJ8z_LgtV6jEcRUBSzYX9t4so,46.19540019999999,6.140874500000001,Département d'économie politique,"Boulevard Carl-Vogt 101, 1205 Genève, Schweiz",Schweiz
@@ -193,14 +193,14 @@ institute_id,gmaps_id,gmaps_lat,gmaps_lng,gmaps_name,gmaps_addr,gmaps_country
 230519,ChIJFfpEg90ejkcRjjSH_fhkqCg,47.1586997,7.2762495,"Berner Fachhochschule BFH, Architektur, Holz und Bau","Solothurnstrasse 102, 2500 Biel, Schweiz",Schweiz
 249624,ChIJMQKj8wC5kUcRjBRGaJHolw0,47.55592780000001,7.577431699999999,Schweizerisches Tropen- und Public Health-Institut,"Socinstrasse 57, 4051 Basel, Schweiz",Schweiz
 246117,ChIJ3yKsR1FkjEcRIpuYmmtbIq0,46.199444,6.1451157,Université de Genève,"1205 Geneva, Schweiz",Schweiz
-245870,ChIJzWtxxYfp9WgRGNkb54UpLhA,-5.1564005,145.7946165,New Guinea Binatang Research Centre,"North Coast Road, Nagada Harbour, Madang, Papua-Neuguinea",NA
+245870,ChIJzWtxxYfp9WgRGNkb54UpLhA,-5.1564005,145.7946165,New Guinea Binatang Research Centre,"North Coast Road, Nagada Harbour, Madang, Papua-Neuguinea",Papua-Neuguinea
 239744,ChIJeT3HwvDIBZERxBAZZJEr1PE,-12.0791452,-77.0427131,SENAMHI,"Jirón Cahuide 721, Jesús María 15072, Peru",Peru
 243768,ChIJEZJ7CWiyzR0RE_cTZU_SNvA,-33.9321854,18.8633889,University of Stellenbosch - Department of Botany & Zoology,"Natural Sciences, Merriman Ave, Stellenbosch Central, Stellenbosch, 7600, Südafrika",Sudafrika
-241509,ChIJi_mZcNKVLg4REbcXpfWJ7v0,12.3528862,-1.5564317,INERA,"04 BP: 8645 Ouagadougou 04, rue Guisga, Ouagadougou, Burkina Faso",NA
+241509,ChIJi_mZcNKVLg4REbcXpfWJ7v0,12.3528862,-1.5564317,INERA,"04 BP: 8645 Ouagadougou 04, rue Guisga, Ouagadougou, Burkina Faso",Burkina Faso
 857,ChIJRWRLZXgKkEcRXVFJrWDHxNc,47.39755770000001,8.5489645,Universität Zürich Anatomisches Institut,"Winterthurerstrasse 190, 8057 Zürich, Schweiz",Schweiz
 246704,ChIJFW_Q_9Le5h4R2kN3cpNVfoU,-25.4085626,32.8057645,Centro de investigação de Saúde de Manhiça,"Manhica, Mosambik",Mosambik
 228142,ChIJP6Ls3f0wjEcRcrKTf6s0zLs,46.5190557,6.5667576,École Polytechnique Fédérale de Lausanne,"Route Cantonale, 1015 Lausanne, Schweiz",Schweiz
-244428,ChIJGxX3DkFF4joR2h_kRA9LUOM,6.79667,79.9005901,Department of Town & Country Planning,"Department of Town & Country Planning, Moratuwa 10400, Sri Lanka",NA
+244428,ChIJGxX3DkFF4joR2h_kRA9LUOM,6.79667,79.9005901,Department of Town & Country Planning,"Department of Town & Country Planning, Moratuwa 10400, Sri Lanka",Sri Lanka
 27349,ChIJaQx4mmwujEcR2lGTqqiNJdw,46.5409336,6.648158,Haute École de travail social et de la santé,"Chemin des Abeilles 14, 1010 Lausanne, Schweiz",Schweiz
 249561,ChIJv_GEN_TPixARmmakSIW0kM4,3.843718,11.520898,Catholic University of Central Africa,"Yaounde, Kamerun",Kamerun
 242011,ChIJP6Ls3f0wjEcRcrKTf6s0zLs,46.5190557,6.5667576,École Polytechnique Fédérale de Lausanne,"Route Cantonale, 1015 Lausanne, Schweiz",Schweiz
@@ -220,12 +220,12 @@ institute_id,gmaps_id,gmaps_lat,gmaps_lng,gmaps_name,gmaps_addr,gmaps_country
 241521,ChIJfwKQjoGpJBARfxlYycmDgo4,6.413005999999999,2.3450398,Université d'Abomey Calavi,"Godomey, Benin",Benin
 239679,ChIJ3T15IGUgX5ERdpnGbDTf9lM,-16.5047667,-68.1299168,Universidad Mayor de San Andrés,"J.J.Perez, La Paz, Bolivien",Bolivien
 245860,ChIJY6EHca-BEhcR49HUltzPrBI,4.840920199999999,31.5905049,Universität Juba,"South Sudan Hotel Headquarters, Juba, Südsudan",Sudsudan
-259099,ChIJfwP5aEsDLg4Rr9wZE_rtayk,12.2381543,-2.399531,University KOUDOUGOU,"Avce Maurice Yameogo BP376, Koudougou, Burkina Faso",NA
+259099,ChIJfwP5aEsDLg4Rr9wZE_rtayk,12.2381543,-2.399531,University KOUDOUGOU,"Avce Maurice Yameogo BP376, Koudougou, Burkina Faso",Burkina Faso
 250814,ChIJcym-fSNdWhgRiCrepW_qfjo,-6.8538004,37.6576401,Department of Ecosystems and Conservation,"Kididimo Road, Morogoro, Tansania",Tansania
 243039,ChIJN6Ci6GMZLxgRsQMudnRLGO4,-1.258881,36.748114,Kenya Agricultural And Livestock Research Organisation (Kalro) - Ruiru,"Gitothua Primary School, Ruiru, Kenia",Kenia
 249587,ChIJsbD3n76MQBkRb4X9NTxwOQ0,-15.4242143,28.3142318,Jhpiego Zambia Country Office,"8 Ngumbo Rd, Lusaka, Sambia",Sambia
 255714,ChIJ8df7ds_rwTARV5lL6h1sTfI,16.8019413,96.1348105,Enviromental Care Community and Security Institute (ECCSi),"Yangon, Myanmar",Myanmar
-241626,ChIJaSgoy8T9NA4RfbumelH_8g8,11.1816785,-4.363765799999999,INSTITUT SUPERIEUR DES SCIENCES DE LA SANTE (IN.S.SA),"Bobo-Dioulasso, Burkina Faso",NA
+241626,ChIJaSgoy8T9NA4RfbumelH_8g8,11.1816785,-4.363765799999999,INSTITUT SUPERIEUR DES SCIENCES DE LA SANTE (IN.S.SA),"Bobo-Dioulasso, Burkina Faso",Burkina Faso
 218544,ChIJ0e2h-KI5jkcRCEd4mxarBDU,46.9519098,7.4285831,Institut für Zellbiologie,"Baltzerstrasse 4, 3012 Bern, Schweiz",Schweiz
 239191,ChIJOcDvifHH5zsRTonFxaTO_Wg,19.1334302,72.9132679,Indian Institute of Technology Bombay,"Main Gate Rd, IIT Area, Powai, Mumbai, Maharashtra 400076, Indien",Indien
 247359,ChIJd1FQ9kUqHRURYNn30kByzFk,31.9591925,35.1820071,Birzeit University,"West bank, Palestine, Birzeit",Birzeit
@@ -243,7 +243,7 @@ institute_id,gmaps_id,gmaps_lat,gmaps_lng,gmaps_name,gmaps_addr,gmaps_country
 247340,ChIJ5xcx0eGjRBARAfXSipnjxkk,6.438167,7.506223200000001,Women's International League For Peace and Freedom Nigeria,"2 Chaka Cres, Ogui, Enugu, Nigeria",Nigeria
 254738,ChIJsxOziaihmkcRJ_Rm4i2SByk,47.402242,8.612047,Empa,"Ueberlandstrasse 129, 8600 Dübendorf, Schweiz",Schweiz
 233922,ChIJ70OV94HswQ8RLEA3OjMOlR0,5.3470499,-3.985291599999999,Universität Félix Houphouët-Boigny,"Abidjan, Côte d’Ivoire",NA
-249556,ChIJ-WfqF0i-Lg4RCv2Salx-RHs,12.3787928,-1.4996863,Université de Ouagadougou,"03 BP 7021, Ouagadougou, Burkina Faso",NA
+249556,ChIJ-WfqF0i-Lg4RCv2Salx-RHs,12.3787928,-1.4996863,Université de Ouagadougou,"03 BP 7021, Ouagadougou, Burkina Faso",Burkina Faso
 249670,ChIJm7DDM8CTll0R9VoKKag-09I,47.886605,106.909373,Mongolian University of Life Sciences,"Khoroo 11, Ulaanbaatar, Ulaanbaatar 17024, Mongolei",Mongolei
 242661,ChIJG4ExhZDEaS4RpchmvndiPOA,-6.552355599999999,106.7529327,CIFOR (Center for International Forestry Research),"Jl. Raya Cifor, RT.03/RW.05, Situgede, Kec. Bogor Bar., Kota Bogor, Jawa Barat 16115, Indonesien",Indonesien
 244372,ChIJUw2NiEIX6zkRKNBREdMbyMo,27.6474505,85.3350834,Kathmandu University School of Education,"Lalitpur 44700, Nepal",Nepal
@@ -256,9 +256,9 @@ institute_id,gmaps_id,gmaps_lat,gmaps_lng,gmaps_name,gmaps_addr,gmaps_country
 249681,ChIJG9Z0Cwlp04gRzv4q4MKDz3I,22.818856,-81.0136399,Estación Experimental de Pastos y Forrajes Indio Hatuey,"Central España Republicana, CP 44280, Kuba",Kuba
 249703,ChIJhwQTvUqD0ogRQPgq2I_TqXg,22.9984812,-82.14880939999999,Agrarian University of Havana,Kuba,NA
 255710,ChIJ0ynowZKeBZER5ZfLRStoQNA,-12.0239773,-77.0565049,Universidad Peruana Cayetano Heredia,"Av. Honorio Delgado 430, San Martín de Porres 15102, Peru",Peru
-245872,ChIJ6UnKV9Lm9WgRJ1OLJ3K7aDA,-5.2326616,145.7936061,Modilon General Hospital,"Modilon Rd, Madang, Papua-Neuguinea",NA
+245872,ChIJ6UnKV9Lm9WgRJ1OLJ3K7aDA,-5.2326616,145.7936061,Modilon General Hospital,"Modilon Rd, Madang, Papua-Neuguinea",Papua-Neuguinea
 255672,ChIJ39CW17K5kUcRn6r5WS_KklA,47.5539357,7.595189099999999,Basel Area Business & Innovation,"Dufourstrasse 11, 4010 Basel, Schweiz",Schweiz
-230503,ChIJ_ce3EJVzWGgRW-GdXqHN32A,-6.080174599999999,145.3827238,PNG Institute of Medical Research,"Homate Street, Goroka, Papua-Neuguinea",NA
+230503,ChIJ_ce3EJVzWGgRW-GdXqHN32A,-6.080174599999999,145.3827238,PNG Institute of Medical Research,"Homate Street, Goroka, Papua-Neuguinea",Papua-Neuguinea
 247343,ChIJszWw5zpwVwERcnRSxXAhxR8,-23.5592595,-46.6538541,FGV EAESP - Center of Excellence in Retail (GVcev),"Av. 9 de julho, 2029 Edifício John F. Kennedy - Bela Vista, São Paulo - SP, 01313-902, Brasilien",Brasilien
 240700,ChIJ2emhDSIKjkcReKPo2lQ3bW0,46.9983213,6.9408856,Haute école de gestion Arc (HEG Arc),"Espace de l'Europe 21, 2000 Neuchâtel, Schweiz",Schweiz
 255125,ChIJJ5vlO-JkjEcRuRHZyflX0XU,46.2209088,6.1436432,Hochschulinstitut für internationale Studien und Entwicklung,"Chemin Eugène-Rigot 2A, 1202 Genève, Schweiz",Schweiz
@@ -271,7 +271,7 @@ institute_id,gmaps_id,gmaps_lat,gmaps_lng,gmaps_name,gmaps_addr,gmaps_country
 249581,ChIJt35a54h98CERPMREKzyK8Lw,-18.914032,47.55181169999999,Université d’Antananarivo,"Présidence de l'Université d'Antananarivo: BP 566 Antananarivo, 101, Madagaskar",Madagaskar
 99008,ChIJL9-YaGKH8CER-YO5ix32mr4,-18.9098905,47.555881,Ecole Supérieure des Sciences Agronomiques,"Antananarivo, Madagaskar",Madagaskar
 241078,ChIJeZ5x_rU9lR4RuvhwvtOyY50,-26.1928836,28.0304733,Witwatersrand-Universität,"1 Jan Smuts Ave, Braamfontein, Johannesburg, 2000, Südafrika",Sudafrika
-243806,ChIJJ5YaOGxZ4joRlXG7MMpAgKw,6.915341,79.85988239999999,Institute For Health Policy,"Colombo 00700, Sri Lanka",NA
+243806,ChIJJ5YaOGxZ4joRlXG7MMpAgKw,6.915341,79.85988239999999,Institute For Health Policy,"Colombo 00700, Sri Lanka",Sri Lanka
 232184,ChIJ_f0iT9ZgwUcR3hLa7n9k6Tk,50.87759500000001,4.706050299999999,LINC - Instituut Criminologie,"Herbert Hooverplein 10, 3000 Leuven, Belgien",Belgien
 254198,ChIJd62qV20Y6zkR4NsPacjTGWo,27.6812901,85.2827531,"Department of Economics, Tribhuvan University, Nepal","Kirtipur 44600, Nepal",Nepal
 218520,ChIJSSfrsHl-8CER37AJx5diMIM,-18.9330468,47.5245536,Centre National de Recherches sur l'Environnement,"Rasoanaivo Cherles, Antananarivo, Madagaskar",Madagaskar
@@ -301,17 +301,17 @@ institute_id,gmaps_id,gmaps_lat,gmaps_lng,gmaps_name,gmaps_addr,gmaps_country
 245509,ChIJp1NwgyTcjkcRyy0R3xVAkIA,46.2267984,7.3612921,EPFL Valais,"Rue de l'Industrie 17, 1950 Sion, Schweiz",Schweiz
 249588,ChIJGRkbSrz0QBkREVbTZ9jZLO0,-15.4091224,28.3196763,CIDRZ Head Office Zambia,"CIDRZ Head Office,, Lusaka, Sambia",Sambia
 243804,ChIJ3xeTeXQeDTkRBnfEX76z9mI,28.5214425,77.1680238,Child Health Foundation,"SPYM Centre,111/9, Vasant Kunj, opp. Sector B4, New Delhi, Delhi 110070, Indien",Indien
-239730,ChIJq6rqH_nWNg4RRctJu9grbkw,12.7285324,-3.8590852,Nouna Health Research Center,"Rue Namory Kéita, Nouna, Burkina Faso",NA
+239730,ChIJq6rqH_nWNg4RRctJu9grbkw,12.7285324,-3.8590852,Nouna Health Research Center,"Rue Namory Kéita, Nouna, Burkina Faso",Burkina Faso
 247197,ChIJ94xuUaagmkcRB3Y3tij0YUs,47.37638889999999,8.547628,Eidgenössische Technische Hochschule Zürich,"Rämistrasse 101, 8092 Zürich, Schweiz",Schweiz
 228591,ChIJMQKj8wC5kUcRjBRGaJHolw0,47.55592780000001,7.577431699999999,Schweizerisches Tropen- und Public Health-Institut,"Socinstrasse 57, 4051 Basel, Schweiz",Schweiz
 246127,ChIJJ5vlO-JkjEcRuRHZyflX0XU,46.2209088,6.1436432,Hochschulinstitut für internationale Studien und Entwicklung,"Chemin Eugène-Rigot 2A, 1202 Genève, Schweiz",Schweiz
-241624,ChIJaSgoy8T9NA4RfbumelH_8g8,11.1816785,-4.363765799999999,INSTITUT SUPERIEUR DES SCIENCES DE LA SANTE (IN.S.SA),"Bobo-Dioulasso, Burkina Faso",NA
+241624,ChIJaSgoy8T9NA4RfbumelH_8g8,11.1816785,-4.363765799999999,INSTITUT SUPERIEUR DES SCIENCES DE LA SANTE (IN.S.SA),"Bobo-Dioulasso, Burkina Faso",Burkina Faso
 231018,ChIJUdaPx3CZmkcRyrYw9-bnp_k,47.4998714,8.7203021,ZHAW Zürcher Hochschule für Angewandte Wissenschaften,"Gertrudstrasse 15, 8400 Winterthur, Schweiz",Schweiz
 253770,ChIJZaArBQoKkEcRFgaMQmuibZw,47.381712,8.544163,"Department of Management, Technology, and Economics, ETH Zurich","Weinbergstrasse 56/58, 8006 Zürich, Schweiz",Schweiz
 240683,ChIJV2J9KrZHkEcRH1IKjqoKSH4,47.516939,8.025083,FiBL - Forschungsinstitut für biologischen Landbau,"Ackerstrasse 113, 5070 Frick, Schweiz",Schweiz
 253594,ChIJs8zWSTQ5jkcRueqyDSJQzzE,46.953556,7.4402212,Forschungsstelle Digitale Nachhaltigkeit,"Schützenmattstrasse 14, 3012 Bern, Schweiz",Schweiz
 256806,ChIJwwabNpgthEcRCUtLfZifj2E,46.0107081,8.9581559,USI Università della Svizzera italiana,"Via Giuseppe Buffi 13, 6900 Lugano, Schweiz",Schweiz
-255285,ChIJYetAahJU_joRoSC5wqyGX0Y,9.684889,80.0211626,University of Jaffna Faculty of Science யாழ்ப்பாண பல்கலைக்கழகம் விஞ்ஞான பீடம்,"Jaffna 40000, Sri Lanka",NA
+255285,ChIJYetAahJU_joRoSC5wqyGX0Y,9.684889,80.0211626,University of Jaffna Faculty of Science யாழ்ப்பாண பல்கலைக்கழகம் விஞ்ஞான பீடம்,"Jaffna 40000, Sri Lanka",Sri Lanka
 212598,ChIJMXhdZGMujEcRXOTHw742qMk,46.5426916,6.6641675,Département de biochimie,"Département de biochimie, 1066 Epalinges, Schweiz",Schweiz
 256886,ChIJWYBsXtXswTARCLcvvATeDew,16.8185116,96.1952673,"Great Golden Glory Co.,Ltd.","23rd Quarter, Khayapin Street, Thuwunna Yangon MM 11072, Thuwunna Bridge, Yangon, Myanmar",Myanmar
 240201,ChIJCflhUV2rNTER4yviDFCvr00,21.023033,105.805437,Foreign Trade University,"91 Chùa Láng, Láng Thượng, Đống Đa, Hà Nội, Vietnam",Vietnam
@@ -320,7 +320,7 @@ institute_id,gmaps_id,gmaps_lat,gmaps_lng,gmaps_name,gmaps_addr,gmaps_country
 246778,ChIJmxuPRYac3w8RSaXx1bUnRio,5.6544922,-0.1844072,"Institute of Statistical, Social and Economic Research(ISSER)","P.O BoX LG 74 legon- Accra, Botanical Gardens Rd, Accra, Ghana",Ghana
 239617,ChIJ9SaEW01Yei4RHbmWmkquUHo,-7.7648806,110.3774899,Indonesian Consortium for Religious Studies (ICRS),"Gedung Pasca Sarjana UGM, 3rd - 4th Floor, JL. Teknika Utara, Pogung, Kocoran, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281, Indonesien",Indonesien
 5945,ChIJXdRAhdV6jEcR1uCJ8Xblpc0,46.1946822,6.139558,Geneva School of Economics and Management (GSEM),"Uni Mail, Boulevard du Pont d'Arve 40, 1205 Genève, Schweiz",Schweiz
-239665,ChIJq6qqqt5o4zoR-0ctKIhrR7U,7.254942199999999,80.59739019999999,University of Peradeniya,"Galaha Rd, 20400, Sri Lanka",NA
+239665,ChIJq6qqqt5o4zoR-0ctKIhrR7U,7.254942199999999,80.59739019999999,University of Peradeniya,"Galaha Rd, 20400, Sri Lanka",Sri Lanka
 256147,ChIJib40xPojAzERRpTd1sXk__c,13.0020925,101.4435544,Vidyasirimedhi Institute of Science and Technology,"555 หมู่ 1, Pa Yup Nai, Wang Chan District, Rayong 21210, Thailand",Thailand
 242775,ChIJEZJ7CWiyzR0RE_cTZU_SNvA,-33.9321854,18.8633889,University of Stellenbosch - Department of Botany & Zoology,"Natural Sciences, Merriman Ave, Stellenbosch Central, Stellenbosch, 7600, Südafrika",Sudafrika
 191,ChIJae1-lc16jEcR5VaQnlVvHlg,46.1935501,6.1512121,Medical School,"Rue Michel-Servet 1, 1206 Genève, Schweiz",Schweiz

@@ -10,10 +10,6 @@ The goal of this project is to try to map the institutes involved in the
 Swiss Programme for Research on Global Issues for Development
 ([r4d](http://www.r4d.ch/)) on the world map.
 
-### Schema
-
-![](./data/schema.svg)
-
 ### Data dictionary 🚧
 
 #### `projects`
@@ -54,6 +50,18 @@ Swiss Programme for Research on Global Issues for Development
 | gmaps\_lng    | numeric   | Longitude           |
 | gmaps\_name   | character | Name on google maps |
 | gmaps\_addr   | character | Name on google maps |
+
+#### `disciplines`
+
+| Variable        | Type      | Description          |
+|:----------------|:----------|:---------------------|
+| project\_number | character | P3 grant id          |
+| disciplines     | character | P3 discipline name   |
+| tier            | integer   | Discipline hierarchy |
+
+### Schema
+
+![](./data/schema.svg)
 
 ## Simplified Tree
 
