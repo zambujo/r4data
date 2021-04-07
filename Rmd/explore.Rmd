@@ -80,6 +80,22 @@ denorm_df <- split(denorm, pull(denorm, running))
 
 # display ------ 
 
+mapbox_access_token <- Sys.getenv("MAPBOX_KEY")
+tcu_map <- paste0(
+  'https://api.mapbox.com/styles/v1/',
+  'mapbox/streets-v11/',
+  'tiles/{z}/{x}/{y}?access_token=', 
+  mapbox_access_token)
+tcu_satellite <- paste0(
+  'https://api.mapbox.com/styles/v1/',
+  'mapbox/satellite-v9/',
+  'tiles/{z}/{x}/{y}?access_token=', 
+  mapbox_access_token)
+map_attr <- paste0(
+  'Map data &copy; ',
+  '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> ',
+  'contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>')
+
 inactive_markers <-  awesomeIcons(
   icon = "fa-circle",
   library = "fa",
@@ -106,43 +122,13 @@ leaflet(width = "100%") %>%
     icon=active_markers,
     popup=~content,
     group="<span style='font-weight:bold;color:orange;'>active") %>%
-  addTiles() %>%
-  addProviderTiles(providers$Esri.NatGeoWorldMap, group = "Map") %>%
-  addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
+  addTiles(urlTemplate = tcu_map, attribution = map_attr, group = "Map") %>%
+  addTiles(urlTemplate = tcu_satellite, attribution = map_attr, group = "Satellite") %>%
   addLayersControl(
     baseGroups = c("Map", "Satellite"),
     overlayGroups = c("<span style='font-weight:bold;color:orange;'>active",
                       "<span style='font-weight:bold;color:lightgray;'>inactive"),
     options = layersControlOptions(collapsed = FALSE)) %>%
   addMiniMap(tiles = providers$Esri.WorldGrayCanvas, toggleDisplay = TRUE)
-```
-
-```{r mapbox, include=FALSE, eval=FALSE}
-mapbox_access_token <- Sys.getenv("MAPBOX_KEY")
-tcu_map <- paste0(
-  'https://api.mapbox.com/styles/v1/',
-  'mapbox/streets-v11/',
-  'tiles/{z}/{x}/{y}?access_token=', 
-  mapbox_access_token)
-tcu_satellite <- paste0(
-  'https://api.mapbox.com/styles/v1/',
-  'mapbox/satellite-v9/',
-  'tiles/{z}/{x}/{y}?access_token=', 
-  mapbox_access_token)
-map_attr <- paste0(
-  'Map data &copy; ',
-  '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> ',
-  'contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>')
-
-leaflet(data = denorm, width = "100%") %>% 
-  setView(2, 20, 3.5) %>%
-  addMarkers(~gmaps_lng, ~gmaps_lat, popup = ~content) %>%
-  addTiles(urlTemplate = tcu_map, attribution = map_attr, group = "Map") %>%
-  addTiles(urlTemplate = tcu_satellite, attribution = map_attr, group = "Satellite") %>%
-  addLayersControl(
-    baseGroups = c("Map", "Satellite"),
-    options = layersControlOptions(collapsed = TRUE)) %>%
-  addMiniMap(tiles = providers$Esri.WorldGrayCanvas, toggleDisplay = TRUE)
-
 ```
 
