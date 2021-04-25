@@ -4,9 +4,12 @@ output:
   flexdashboard::flex_dashboard:
     theme: lumen
     self_contained: false
+    lib_dir: "../docs/libs"
     source_code: https://git.io/JqCOd
     navbar:
       - { title: "r4d.ch", href: "http://www.r4d.ch", align: right }
+params:
+  inst_id: NA
 ---
 
 ```{r setup, include=FALSE}
@@ -40,7 +43,7 @@ people <- people %>%
 institutes_in_project <- people %>%
   filter(!is.na(institute_id_p3)) %>%
   mutate(
-    p3_link = glue("<a href='{institute_slug}' target='_blank' rel='noopener noreferrer'>{institute_name}</a>")) %>%
+    p3_link = glue("<a href='./{institute_id_p3}.html'>{institute_name}</a>")) %>% # "<a href='{institute_slug}' target='_blank' rel='noopener noreferrer'>{institute_name}</a>"
   group_by(project_number) %>%
   summarise(
     institute_list = str_c(unique(p3_link), collapse = "</li><li>"),
@@ -91,8 +94,7 @@ active_markers <-  awesomeIcons(
   library = "fa",
   markerColor = rep("orange", nrow(pluck(denorm_df, 2))))
 
-leaflet(width = "100%") %>% 
-  setView(2, 20, 3) %>%
+world_map <- leaflet(width = "100%") %>% 
   addAwesomeMarkers(
     data = pluck(denorm_df, 1),
     lng = ~gmaps_lng,
@@ -116,4 +118,17 @@ leaflet(width = "100%") %>%
                       "<span style='font-weight:bold;color:lightgray;'>inactive"),
     options = layersControlOptions(collapsed = FALSE)) %>%
   addMiniMap(tiles = providers$Esri.WorldGrayCanvas, toggleDisplay = TRUE)
+
+if (params$inst_id %in% pull(denorm, institute_id_p3)) {
+  zoom_in <- denorm %>% 
+    filter(institute_id_p3 == params$inst_id) %>% 
+    select(gmaps_lat, gmaps_lng)
+  setView(world_map, 
+          pluck(zoom_in, "gmaps_lng", 1),
+          pluck(zoom_in, "gmaps_lat", 1),
+          zoom = 11)
+} else {
+  setView(world_map, 2, 20, 3)
+}
+
 ```
