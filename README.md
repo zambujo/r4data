@@ -12,12 +12,12 @@ Swiss Programme for Research on Global Issues for Development
 
 ### Data dictionary 🚧
 
-#### `projects`
+#### `projects.csv`
 
 > Subset of `P3_GrantExport.csv` from
 > [P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx).
 
-| Variable            | Type      | Description                     |
+| Attribute           | Type      | Description                     |
 |:--------------------|:----------|:--------------------------------|
 | project\_number     | character | P3 grant id                     |
 | project\_title      | character | P3 grant title                  |
@@ -29,9 +29,9 @@ Swiss Programme for Research on Global Issues for Development
 | institution         | character | coordinating institution        |
 | university          | character | coordinating university         |
 
-#### `people`
+#### `people.csv`
 
-| Variable          | Type      | Description          |
+| Attribute         | Type      | Description          |
 |:------------------|:----------|:---------------------|
 | project\_number   | character | P3 grant id          |
 | person\_id\_snsf  | character | P3 person id         |
@@ -40,9 +40,9 @@ Swiss Programme for Research on Global Issues for Development
 | institute\_place  | character | [Details](instpalce) |
 | institute\_id\_p3 | character | P3 institute ID      |
 
-#### `gmaps`
+#### `gmaps.csv`
 
-| Variable      | Type      | Description         |
+| Attribute     | Type      | Description         |
 |:--------------|:----------|:--------------------|
 | institute\_id | character | P3 institute number |
 | gmaps\_id     | character | Google maps id      |
@@ -51,9 +51,9 @@ Swiss Programme for Research on Global Issues for Development
 | gmaps\_name   | character | Name on google maps |
 | gmaps\_addr   | character | Name on google maps |
 
-#### `disciplines`
+#### `disciplines.csv`
 
-| Variable        | Type      | Description          |
+| Attribute       | Type      | Description          |
 |:----------------|:----------|:---------------------|
 | project\_number | character | P3 grant id          |
 | disciplines     | character | P3 discipline name   |
@@ -84,6 +84,11 @@ Swiss Programme for Research on Global Issues for Development
     └── Rmd
         ├── explore.Rmd
         └── gather.Rmd
+
+## Explore the data
+
+<iframe src="https://flatgithub.com/zambujo/r4data" style="height: 90vh;" width="100%">
+</iframe>
 
 ## License
 

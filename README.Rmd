@@ -20,11 +20,12 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 
 ### Data dictionary 🚧
 
-#### `projects`
+#### `projects.csv`
 
 > Subset of `P3_GrantExport.csv` from [P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx).
 
-|Variable           |Type      |Description                       |
+
+|Attribute           |Type      |Description                       |
 |:------------------|:---------|:---------------------------------|
 |project_number     |character |P3 grant id                       |
 |project_title      |character |P3 grant title                    |
@@ -36,9 +37,9 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 |institution        |character |coordinating institution          |
 |university         |character |coordinating university           |
 
-#### `people`
+#### `people.csv`
 
-|Variable         |Type      |Description            |
+|Attribute         |Type      |Description            |
 |:----------------|:---------|:----------------------|
 |project_number   |character |P3 grant id            |
 |person_id_snsf   |character |P3 person id           |
@@ -47,9 +48,9 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 |institute_place  |character |[Details](instpalce)   |
 |institute_id_p3  |character |P3 institute ID        |
 
-#### `gmaps`
+#### `gmaps.csv`
 
-|Variable          |Type      |Description              |
+|Attribute          |Type      |Description              |
 |:-----------------|:---------|:------------------------|
 |institute_id      |character |P3 institute number      |
 |gmaps_id          |character |Google maps id           |
@@ -58,9 +59,9 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 |gmaps_name        |character |Name on google maps      |
 |gmaps_addr        |character |Name on google maps      |
 
-#### `disciplines`
+#### `disciplines.csv`
 
-|Variable          |Type      |Description              |
+|Attribute          |Type      |Description              |
 |:-----------------|:---------|:------------------------|
 |project_number    |character |P3 grant id              |
 |disciplines       |character |P3 discipline name       |
@@ -98,6 +99,10 @@ The goal of this project is to try to map the institutes involved in the Swiss P
     └── gather.Rmd
 
 ```
+
+## Explore the data
+
+<iframe src='https://flatgithub.com/zambujo/r4data' style='height: 90vh;' width='100%'></iframe>
 
 ## License
 
