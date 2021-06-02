@@ -85,11 +85,6 @@ Swiss Programme for Research on Global Issues for Development
         ├── explore.Rmd
         └── gather.Rmd
 
-## Explore the data
-
-<iframe src="https://flatgithub.com/zambujo/r4data" style="height: 90vh;" width="100%">
-</iframe>
-
 ## License
 
 Distributed under the MIT License.

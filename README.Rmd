@@ -100,10 +100,6 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 
 ```
 
-## Explore the data
-
-<iframe src='https://flatgithub.com/zambujo/r4data' style='height: 90vh;' width='100%'></iframe>
-
 ## License
 
 Distributed under the MIT License.
