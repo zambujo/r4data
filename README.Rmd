@@ -71,6 +71,10 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 [instname]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Institute%20Name "Institute name"
 [instplace]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Institute%20Place "Institute place"
 
+
+Explore the [raw data](https://flatgithub.com/zambujo/r4data).
+
+
 ### Schema
 
 ![](./data/schema.svg)

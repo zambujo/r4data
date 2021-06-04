@@ -59,6 +59,8 @@ Swiss Programme for Research on Global Issues for Development
 | disciplines     | character | P3 discipline name   |
 | tier            | integer   | Discipline hierarchy |
 
+Explore the [raw data](https://flatgithub.com/zambujo/r4data).
+
 ### Schema
 
 ![](./data/schema.svg)
