@@ -18,14 +18,13 @@ knitr::opts_chunk$set(
 
 The goal of this project is to try to map the institutes involved in the Swiss Programme for Research on Global Issues for Development ([r4d](http://www.r4d.ch/)) on the world map.
 
-### Data dictionary 🚧
+### Old schema
 
 #### `projects.csv`
 
 > Subset of `P3_GrantExport.csv` from [P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx).
 
-
-|Attribute           |Type      |Description                       |
+|Attribute           |Type      |Description                      |
 |:------------------|:---------|:---------------------------------|
 |project_number     |character |P3 grant id                       |
 |project_title      |character |P3 grant title                    |
@@ -39,7 +38,7 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 
 #### `people.csv`
 
-|Attribute         |Type      |Description            |
+|Attribute         |Type      |Description           |
 |:----------------|:---------|:----------------------|
 |project_number   |character |P3 grant id            |
 |person_id_snsf   |character |P3 person id           |
@@ -50,7 +49,7 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 
 #### `gmaps.csv`
 
-|Attribute          |Type      |Description              |
+|Attribute          |Type      |Description             |
 |:-----------------|:---------|:------------------------|
 |institute_id      |character |P3 institute number      |
 |gmaps_id          |character |Google maps id           |
@@ -61,16 +60,70 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 
 #### `disciplines.csv`
 
-|Attribute          |Type      |Description              |
+|Attribute          |Type      |Description             |
 |:-----------------|:---------|:------------------------|
 |project_number    |character |P3 grant id              |
 |disciplines       |character |P3 discipline name       |
 |tier              |integer   |Discipline hierarchy     |
 
+### New schema
+
+#### `disciplines.csv`
+
+|Attribute          |Type      |Description             |
+|:-----------------|:---------|:------------------------|
+|disciplines_id    |character |P3 grant id              |
+|disciplines_name  |character |P3 discipline name       |
+|tier              |integer   |Discipline hierarchy     |
+
+#### `funders.csv`
+
+|Attribute          |Type      |Description             |
+|:-----------------|:---------|:------------------------|
+|funder_id         |integer   |P3 grant id              |
+|funders_name      |character |??                       |
+|snsf              |integer   |??                       |
+|role              |character |[Project as](role)       |
+
+
+#### `projects.csv`
+
+|Attribute           |Type      |Description                       |
+|:-------------------|:---------|:---------------------------------|
+|project_id          |integer   |P3 grant id                       |
+|project_name        |character |P3 grant title                    |
+|contact_person      |character |PI first and last names           |
+|email               |character |??                                |
+|start_date          |date      |`%b %Y`                           |
+|end_date            |date      |`%b %Y`                           |
+|approved_amount     |integer   |Grant size in CHF                 |
+|project_description |character |`r4d`, `SPIRIT`, etc. (instrument)|
+|transdisciplinary   |boolean   |P3 grant title                    |
+|projects_disciplines_id        |character |list of P3 discipline ids |
+|tag_id        |character |list generated keyword ids |
+|projects_funder_id  |character   |list of funders
+|projects_organizations_id |character  |list of organisations  |
+
+#### `organizations.csv`
+
+|Attribute           |Type      |Description                       |
+|:-------------------|:---------|:---------------------------------|
+|organizations_id    |character |P3 institute number (gmap.inst_id)|
+|organizations_name  |character |[Details](instname)    |
+|lat                 |numeric   |Latitude       (gmap)  |
+|lng                 |numeric   |Longitude      (gmap)  |
+|gmaps_id            |character |Google maps id           |
+|address             |character |Name on google maps      |
+|country             |character |gmaps_coutry                      |
+|website             |character |to be collected                   |
+|organizations_disciplines_id |character  |list of disciplines related to org |
+|organizations_funder_id      |character  |list of linked funders  |
+|partner_organizations_id     |character  |list of linked orgs  |
+|organizations_project_id     |character  |list of linked projects  |
+
 [role]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Projects%20as%20responsible%20Applicant "Example"
 [instname]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Institute%20Name "Institute name"
 [instplace]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Institute%20Place "Institute place"
-
 
 Explore the [raw data](https://flatgithub.com/zambujo/r4data).
 
