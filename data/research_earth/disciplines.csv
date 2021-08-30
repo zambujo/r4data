@@ -1,0 +1,53 @@
+disciplines_id,disciplines_name,tier
+10000,Humanities and Social Sciences,1
+10104,"Education and learning sciences, subject-specific education",3
+10105,Psychology,2
+10200,"Linguistics and literature, philosophy",2
+10201,Sociology,2
+10202,Political science,3
+10203,Economics,2
+10206,Social geography and ecology,3
+10403,Ethnology,2
+10503,Other languages and literature,3
+10602,Health,3
+10605,Applied psychology,3
+20000,"Mathematics, Natural- and Engineering Sciences",1
+20300,Chemistry,2
+20301,Physical Chemistry,3
+20500,Engineering Sciences,2
+20502,Mechanical Engineering,3
+20505,Material Sciences,3
+20506,Information Technology,3
+20510,Forest Engineering,3
+20511,Other disciplines of Engineering Sciences,3
+20700,Environmental Sciences,2
+20701,Pedology,3
+20704,"Climatology. Atmospherical Chemistry, Aeronomy",3
+20709,Other disciplines of Environmental Sciences,3
+20800,Earth Sciences,2
+20802,Geophysics,3
+30000,Biology and Medicine,1
+30100,Basic Biological Research,2
+30101,Biochemistry,3
+30103,"Cellular Biology, Cytology",3
+30104,Genetics,3
+30107,Experimental Microbiology,3
+30200,General Biology,2
+30205,Agricultural and Forestry Sciences,3
+30206,Environmental Research,3
+30207,Ecology,3
+30209,Animal Breeding,3
+30300,Basic Medical Sciences,2
+30306,"Pharmacology, Pharmacy",3
+30307,Medical Microbiology,3
+30400,Experimental Medicine,2
+30401,Experimental Cancer Research,3
+30700,Clinical Medicine,2
+30712,Tropical Medicine,3
+30800,Preventive Medicine (Epidemiology/Early Diagnosis/Prevention),2
+30807,Metabolic Disorders,3
+30808,Infectious Diseases,3
+30812,Methods of Epidemiology and Preventive Medicine,3
+30900,Social Medicine,2
+30911,Public Health and Health Services,3
+30912,Medical Statistics,3

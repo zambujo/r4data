@@ -102,7 +102,7 @@ tags %>%
   select(tags_id, tags_name) %>%
   write_csv(here("data", "research_earth", "tags.csv"))
 
-# helper for linking projects to the tags table
+# lookup table for linking projects to the tags table
 projects_tag_id <-
   projects_tags %>%
   left_join(tags, by = c("tags")) %>%
@@ -110,6 +110,7 @@ projects_tag_id <-
   summarize(tag_id = str_c(tags_id, collapse = ","))
 ```
 
+### Create disciplines table
 
 ```{r, disciplines, eval=FALSE}
 projects <- read_csv(here("data", "projects.csv")) # p3 project data on r4d
@@ -128,6 +129,53 @@ if (all(pull(test_count, n) == 3)) {
 }
 ```
 
+### Create disciplines table for research earth
+
+```{r, disciplines-re, eval=FALSE}
+
+disciplines_names_numbers <- 
+projects_raw %>%
+  distinct(discipline_name, discipline_number) %>%
+  arrange(discipline_name) %>%
+  print(n = 159)
+
+ref_disciplines <-
+  disciplines %>%
+  distinct(disciplines, tier) %>%
+  rename(discipline_name = disciplines) %>%
+  left_join(disciplines_names_numbers, by = "discipline_name") %>%
+  # clean legacy name inconsistencies in the P3 data
+  mutate(discipline_clean = if_else(is.na(discipline_number),
+                                   str_extract(
+                                     discipline_name, 
+                                     "[[:alpha:]]+(?=,)"),
+                                   discipline_name)) %>%
+  select(discipline_name, discipline_clean, tier) %>%
+  left_join(
+    disciplines_names_numbers, 
+    by = c("discipline_clean" = "discipline_name")) %>%
+  arrange(discipline_number, tier)
+
+ref_disciplines %>%
+  select(
+    disciplines_id = discipline_number,
+    disciplines_name = discipline_clean,
+    tier) %>%
+  distinct(disciplines_id, .keep_all = TRUE) %>%
+  write_csv(here("data", "research_earth", "disciplines.csv"))
+
+# lookup table for linking projects to the disciplines table
+projects_disciplines_id <-
+  disciplines %>%
+  select(project__id = project_number, disciplines) %>%
+  left_join(
+    ref_disciplines, 
+    by = c("disciplines" = "discipline_name")) %>%
+  distinct(project__id, discipline_number) %>%
+  group_by(project__id) %>%
+  summarize(disciplines_id = str_c(discipline_number, collapse = ","))
+
+```
 
 Add detailed institute data missing from the CSV data dumps by scrapping P3.
 
