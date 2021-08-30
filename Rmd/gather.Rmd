@@ -14,10 +14,12 @@ library(yaml)
 library(glue)
 library(readxl)
 p3_files <- read_yaml(here("inst", "extdata", "p3-tables.yml"))
+# wrapper function to download the CSV files from the P3 website
 download_table_from_p3 <- function(csv_table, dest_folder = "data-raw") {
   url_table <- glue("http://p3.snf.ch/P3Export/{csv_table}") %>%
     download.file(here(dest_folder, csv_table))
 }
+# specific for P3 CSV files
 read_p3_file <- function(file_name, loc = "data-raw") {
   here(loc, file_name) %>% 
   read_delim(";", escape_double = FALSE, col_types = cols(.default = "c")) %>%
@@ -71,6 +73,43 @@ projects <- projects_raw %>%
 
 write_csv(projects, here("data", "projects.csv"))
 ```
+
+### Create tags table for research earth
+
+```{r tags, eval=FALSE}
+projects_tags <- 
+  projects %>%
+  select(
+    project__id = project_number,
+    tags = keywords) %>%
+  arrange(project__id) %>%
+  mutate(tags = str_split(tags, "; ")) %>%
+  unnest(tags) %>%
+  mutate(tags = str_split(tags, ", ")) %>%
+  unnest(tags)
+
+tags <- 
+  projects_tags %>%
+  mutate(tags_low = str_to_lower(tags)) %>%
+  distinct(tags_low, .keep_all = TRUE) %>%
+  mutate(tags_name = if_else(tags == tags_low,
+                        str_to_title(tags),
+                        tags)) %>%
+  mutate(tags_id = row_number()) %>%
+  select(-project__id)
+
+tags %>%
+  select(tags_id, tags_name) %>%
+  write_csv(here("data", "research_earth", "tags.csv"))
+
+# helper for linking projects to the tags table
+projects_tag_id <-
+  projects_tags %>%
+  left_join(tags, by = c("tags")) %>%
+  group_by(project__id) %>%
+  summarize(tag_id = str_c(tags_id, collapse = ","))
+```
+
 
 ```{r, disciplines, eval=FALSE}
 projects <- read_csv(here("data", "projects.csv")) # p3 project data on r4d

@@ -1,0 +1,521 @@
+tags_id,tags_name
+1,Social Conflict
+2,Armed Violence
+3,Peacebuilding
+4,Gender
+5,Dry forest
+6,Soil fertility
+7,Madagascar
+8,Slash-and-burn cultivation
+9,Tropical agriculture
+10,Rural houshold
+11,Ecosystem services
+12,Resilience
+13,Change
+14,Biodiversity
+15,Landscape
+16,Policy
+17,Livelihoods
+18,socio-ecological systems (SES)
+19,Innovation Uptake
+20,Biomass Energy
+21,Decision Support
+22,Geo-Information Science
+23,Life Cycle Assessment
+24,Cross-Scale Approach
+25,Developing Countries
+26,Electronic Algorithms
+27,Fever
+28,Host Biomarkers
+29,Malaria
+30,Pneumonia
+31,Oximetry
+32,Children
+33,Integrated Management
+34,Fenton
+35,Pharmaceuticals
+36,Electrochemical treatment
+37,Advanced oxidation process
+38,Utrasounds
+39,Hospital wastewaters
+40,Transitional Justice
+41,Collective Memory
+42,Communal Violence
+43,Social Change
+44,Peace Process
+45,Collective Resilience
+46,Ethnic Mobilization
+47,Ethnic Conflict
+48,Inequality
+49,Exclusion
+50,Ethnic Politics
+51,Compost
+52,Food security
+53,Fish feed
+54,Aquaculture
+55,Black soldier fly
+56,Geostatistics
+57,Demographic Health Surveys
+58,Mapping
+59,Mortality
+60,Malaria Indicator Surveys
+61,Gaussian process
+62,Bayesian methods
+63,Markov chain Monte Carlo
+64,Spatio-Temporal Process
+65,Africa
+66,Millennium Development Goals
+67,Risk Assessment
+68,Soil Pollution
+69,Bioavailability
+70,Environmental Exposure
+71,Persistent Organic Pollutants
+72,Homogenization
+73,Extreme Events
+74,Andes
+75,Climate Data
+76,Affordable Housing
+77,Tannin-based adhesives
+78,Agricultural waste
+79,Building material
+80,Coconut husk
+81,Fibre Board
+82,Insulation board
+83,Discrimination through inappropriate technologies 
+84,Poverty reduction
+85,Technology
+86,Stigma
+87,Technology transfer
+88,Assistive Technology
+89,Technology appropriation
+90,Disability
+91,Participatory development
+92,Anthropology
+93,Skill and competence enhancement
+94,Uganda
+95,Communication
+96,Rehabilitation
+97,Transport
+98,Wages
+99,Employment
+100,Trade
+101,Labor Markets
+102,Unemployment
+103,Skills
+104,Export-led agriculture
+105,Rural employment
+106,Feminisation of agriculture
+107,Feminisation of labour
+108,Agricultural transition
+109,Non-traditional agricultural exports NTAE
+110,High-value crops
+111,Asset building
+112,Sociology
+113,Labour
+114,Investment
+115,Economics and Econometrics
+116,Law
+117,Global Value Chains
+118,Options
+119,Soil-Management
+120,Value-Chain
+121,Innovation-Platform
+122,Yam
+123,Coupled Social and Environmental Models
+124,Impact pathways
+125,Oil Palm
+126,Participatory Modelling
+127,Natural Resources
+128,Social-Ecological Resilience
+129,Right To Food
+130,Food Sustainability
+131,Sustainable Governance
+132,Global Change
+133,Human Rights
+134,Environmental Integrity
+135,Kenya
+136,Bolivia
+137,Land Commercialisation
+138,Agrarian Transformation
+139,Woody invasive alien plant species
+140,Rural livelihoods
+141,Integrated weed management
+142,Sustainable land management
+143,East Africa
+144,Termites
+145,Smallholder farmers
+146,Proteins
+147,Insects as animal feed
+148,Fly production
+149,Indigenous poultry farming
+150,Socio-ecological systems
+151,Bayesian modelling
+152,Multi-stakeholder learning
+153,Land use decision-making
+154,Adaptive land governance
+155,Telecoupling
+156,Trade-offs in ecosystem service flows
+157,Communication for development
+158,Organic resource management
+159,Participatory research
+160,Soil fertility 
+161,Adoption of technology
+162,Soil governance
+163,Farmers
+164,Institution building
+165,Media
+166,Noncommunicable diseases
+167,Health systems
+168,Neglected Tropical Diseases
+169,Universal Health Coverage
+170,Primary Health Care
+171,Social Health Protection
+172,Health Financing
+173,Health System Governance
+174,Development
+175,Work disability
+176,Healthcare
+177,Health
+178,NCDs
+179,Poverty
+180,Ivory Coast
+181,Justice
+182,Knowledge
+183,Peace
+184,South Sudan
+185,Synergies
+186,Côte d'Ivoire
+187,Mozambique
+188,UNAIDS 90-90-90 targets
+189,Resource-Limited Setting
+190,Antiretroviral Therapy
+191,HIV
+192,Sub-Sahara Africa
+193,Southern Africa
+194,Lesotho
+195,Genebank
+196,Genome-Wide Association Study
+197,Natural Diversity
+198,Broad-Spectrum Disease Resistance
+199,Rice
+200,Weak sustainability
+201,Resource-dependent economies
+202,Company community conflicts
+203,Social Accountability
+204,Extractive industries
+205,Mobile technology for development
+206,Resource curse
+207,Resource governance
+208,Transparency
+209,Burkina Faso
+210,Capital approach
+211,Resource Impact Dashboard (RID)
+212,ICT4D
+213,Biotechnology
+214,Technology innovation
+215,Rural development
+216,Sustainable ressource management
+217,Sensor Observations
+218,Open Standard
+219,Open Software
+220,Internet Of Things
+221,Monitoring System
+222,Open Hardware
+223,Open Data
+224,Istsos
+225,Community Involvement
+226,Prevention
+227,Mother To Child Transmission
+228,Infant Development
+229,Neonates
+230,Sexually Transmitted Infections
+231,Rural Areas
+232,Support And Training
+233,Education
+234,Professional Communities
+235,Social Media
+236,Social Networking
+237,Professional Isolation
+238,Connectedness
+239,Global Health
+240,Mobile Phones
+241,Desision support system
+242,Geographical information system
+243,Uncertainties analysis
+244,Energy system
+245,Emission inventory
+246,Air quality modeling
+247,Integrated assessment
+248,Multiobjective Optimization
+249,Air quality measurement
+250,Process desing
+251,Response
+252,Zoonoses
+253,Maya medicine
+254,One health
+255,Biomedical
+256,Guatemala
+257,Surveillance
+258,Maya
+259,Adjuvants
+260,H5N1
+261,Vaccine
+262,Influenza
+263,Pandemic
+264,New Global Power
+265,Developmental State
+266,China
+267,Cameroon
+268,Governance
+269,Cooperation
+270,Post Washington Consensus
+271,Periductal Liver Fibrosis
+272,Opisthorchis viverrini
+273,Clonorchis sinensis
+274,Risk Factors
+275,Tumour Markers
+276,Hepatobiliary Morbidity
+277,Asian liver fluke
+278,Lao PDR
+279,Opisthorchis felineus
+280,Cholangiocarcinoma
+281,Biobank
+282,Forest Policies
+283,Forestry Industry
+284,Forest Transition
+285,Community Forest Management
+286,Tropical Landscape Ecology
+287,Forest Ecosystem Services
+288,Vegetation Disturbance And Succession
+289,Invasive Species
+290,Acacia And Rubber Plantations
+291,Political Ecology
+292,Non-Timber Forest Products
+293,Payments For Environmental Services
+294,Externalities
+295,Health impact assessment
+296,Natural resource extraction
+297,Public health
+298,Resource Impact Dashboard
+299,Sustainable development goals
+300,Industry Training
+301,Sustainability Of Development Interventions
+302,Vocational Education And Training
+303,Impact Of Training
+304,Development finance
+305,Illicit Financial Flows
+306,Natural Resource Governance
+307,Commodity Trading
+308,Ghana
+309,Laos
+310,Peru
+311,South Africa
+312,Sierra Leone
+313,ASEAN
+314,Trade And Transfer Mispricing
+315,Tax And Investment Regimes
+316,Youth Labour Market
+317,Formal Employment System
+318,Employer Engagement
+319,Formal Education System
+320,Informal Education System
+321,Gainful Employment
+322,Informal Employment System 
+323,Social Institutions
+324,Grievances
+325,Informal labor markets
+326,Policy implications
+327,Action Research
+328,Community Empowerment
+329,Feminization of labour
+330,High-value crops for export
+331,Gender relations
+332,Asset-building
+333,Feminization of agriculture
+334,Value Chains
+335,Political economy of rural labour markets
+336,Entrepreneurship
+337,Decent work
+338,Career counseling
+339,Educational guidance
+340,Vocational psychology
+341,Empowerment
+342,Citizenship
+343,Football
+344,Public Space
+345,Cameroun
+346,Senegal
+347,Screening
+348,HIV/AIDS
+349,Cervical Cancer
+350,India
+351,Urban Governance
+352,Waste Management
+353,South-South Partnership
+354,South Asia
+355,Nepal
+356,Sri Lanka
+357,Social Acceptability
+358,Nutrient Recycling
+359,Biomass
+360,Greenhouse Gas Emission
+361,Organic Fertilizer
+362,Biochar
+363,Plant Pathology
+364,Anaerobic Digestion
+365,Carbon Sequestration
+366,Inclusive Public Health
+367,Indigenous Health
+368,Ethnomedicine
+369,Sustainable Health Systems
+370,Transdisciplinarity
+371,Culture Revitalization
+372,Latin America
+373,Medical Anthropology
+374,Amazonian Linguistics
+375,Ethnopsychology
+376,Least developed countries
+377,Mountains
+378,Human wellbeing
+379,Paris Agreement
+380,Climate change
+381,Greenhouse gas emissions
+382,Renewable energy
+383,Geothermal energy
+384,Geoscience
+385,Geothermal exploration
+386,Geophysical prospecting
+387,Reservoir charaterisation
+388,Capacity building
+389,Agroforestry by-products
+390,Condensed tannins
+391,Wood adhesives
+392,Sustainable forestry
+393,Wood based panels
+394,Forestry policies
+395,Wood preservatives
+396,Biomass extraction
+397,Pilot extraction plant
+398,Market entry analysis
+399,Environmental Safety
+400,Biocontrol
+401,Pesticide Residues
+402,Potato Cultivation
+403,Pest Management
+404,Food Safety
+405,Fire blight
+406,Forest ecosystems
+407,Fruit orchards
+408,Endangered species
+409,Apple germplasm
+410,Central Asia
+411,Conservation biology
+412,Bacterial pathogens
+413,Yams
+414,Innovations
+415,Acceptability
+416,Innovation Platforms
+417,Organizations Of Change
+418,Sustainability 
+419,South America
+420,Environmental performance
+421,Food systems
+422,Poverty and inequality
+423,Invasive alien species
+424,Woody Plant Species
+425,Rural Livelihood
+426,Nepal 
+427,Behavioral anomalies
+428,Private transport
+429,Market failures
+430,Policy evaluation
+431,Energy-efficiency gap
+432,Randomized controlled trials
+433,Motorcycles
+434,Gut microbiota
+435,Honey bees
+436,Evolution
+437,Shotgun metagenomics
+438,Insect-microbe symbiosis
+439,Cutaneous leishmaniasis
+440,Drug Resistance
+441,Neutrophils
+442,Anti-Microbial
+443,Metabolic health
+444,Microbiome
+445,Obesity
+446,Non-caloric sweeteners
+447,Menopausal transition
+448,RNA sequencing
+449,Scanning electron microscopy
+450,Adaptation
+451,Zika virus
+452,Yellow fever
+453,Recombinant proteins
+454,Epigenetic analysis
+455,Immunogold electron microscopy
+456,Aedes
+457,Chikungunya
+458,Transmission electron microscopy
+459,Participatory Approach
+460,Agroforestry
+461,Conservation Agriculture
+462,Serious Games
+463,Togo
+464,Social Factors
+465,Energy System Modeling
+466,Sustainability
+467,Interdisciplinary Modeling
+468,Lipid-Derived Electrophilic Signals
+469,Genetic Code Expansion
+470,Stress Response
+471,Translation
+472,RNA polymerase
+473,Alpha-Proteobacteria
+474,Promoters
+475,Orientia tsutsugamushi
+476,Rickettsia
+477,TrcR
+478,Caulobacter crescentus
+479,RNA-Seq
+480,Transcription
+481,Obligate Intracellular Bacteria
+482,Critique
+483,MENA
+484,Political History
+485,Area Studies
+486,Feminism
+487,Resource extraction projects
+488,Sustainable development
+489,Rainforest Disturbance And Succession
+490,Acacia Plantations
+491,Household And Community Forest Tenure
+492,Payments For Forest Ecosystem Services
+493,Social Inclusion
+494,Taxation and investment regimes
+495,Multi-stakeholder governance
+496,Opioid Maintenance Therapy
+497,Common Mental Disorders
+498,Smartphone-Based Treatment
+499,Transdiagnostic Treatment
+500,Soil 
+501,Organic 
+502,Conventional 
+503,Tea
+504,Nitrogen
+505,Losses
+506,Efficiency
+507,15N
+508,FLASH radiotherapy
+509,Medullobastoma
+510,Neurognition
+511,Estrogen receptor
+512,Breast cancer
+513,Nitric Oxide
+514,Hydrogen Sulfide
+515,Tumor Immunology
+516,Materials
+517,Membranes
+518,Bio-Inspiration
+519,Polymers
+520,Nanostructures
