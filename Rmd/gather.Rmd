@@ -16,7 +16,7 @@ library(readxl)
 p3_files <- read_yaml(here("inst", "extdata", "p3-tables.yml"))
 # wrapper function to download the CSV files from the P3 website
 download_table_from_p3 <- function(csv_table, dest_folder = "data-raw") {
-  url_table <- glue("http://p3.snf.ch/P3Export/{csv_table}") %>%
+  url_table <- glue::glue("http://p3.snf.ch/P3Export/{csv_table}") %>%
     download.file(here(dest_folder, csv_table))
 }
 # specific for P3 CSV files
@@ -191,10 +191,10 @@ Add detailed institute data missing from the CSV data dumps by scrapping P3.
 
 ```{r project-details, eval=FALSE}
 scrape_p3_project <- function(project_number) {
-  message(glue("* Scrapping {project_number}"))
+  message(glue::glue("* Scrapping {project_number}"))
   Sys.sleep(.25)
 
-  p3_url <- glue("http://p3.snf.ch/project-{project_number}")
+  p3_url <- glue::glue("http://p3.snf.ch/project-{project_number}")
   html_page <- xml2::read_html(p3_url)
   project_people <- html_page %>%
     rvest::html_nodes(".person-field-0 a") %>%
@@ -247,9 +247,9 @@ projects_organizations_id <-
 
 ```{r institute-details, eval=FALSE}
 scrape_p3_institute <- function(institute_number) {
-  message(glue("* Scrapping /institute-{institute_number}"))
+  message(glue::glue("* Scrapping /institute-{institute_number}"))
   Sys.sleep(.25)
-  p3_url <- glue("http://p3.snf.ch/institute-{institute_number}")
+  p3_url <- glue::glue("http://p3.snf.ch/institute-{institute_number}")
   html_page <- xml2::read_html(p3_url)
   institute_details <-
     html_page %>%
@@ -320,8 +320,8 @@ collab <- read_p3_file(pluck(p3_files, 3))
 
 # 771 more collaborations...
 more <- semi_join(collab, r4d, "project_number")
-# more %>%count(group_person, sort = TRUE) %>%print(n = 50)
-# more %>%filter(str_detect(group_person, "CO-APPLICANT"))
+more %>% count(group_person, sort = TRUE) %>% print(n = 50)
+more %>% filter(str_detect(group_person, "CO-APPLICANT"))
 ```
 
 
@@ -330,8 +330,10 @@ p3_project_details <- read_csv(here("data-raw", "p3-grant-details.csv"))
 p3_institute_details <- read_csv(here("data-raw", "p3-institute-details.csv"))
 
 # tests :)
-# people %>%anti_join(p3_project_details, by = c("person_id_snsf" = "person_id_p3"))
-# p3_project_details %>%anti_join(people, by = c("person_id_p3" = "person_id_snsf"))
+people %>%
+  anti_join(p3_project_details, by = c("person_id_snsf" = "person_id_p3"))
+p3_project_details %>%
+  anti_join(people, by = c("person_id_p3" = "person_id_snsf"))
 ```
 
 
@@ -431,7 +433,7 @@ df_institutes <- people %>%
   mutate(
     institute_name = str_remove_all(institute_name, "[[:punct:]]$"),
     institute_name = str_squish(institute_name),
-    institute = glue("{institute_name}, {institute_place}"),
+    institute = glue::glue("{institute_name}, {institute_place}"),
     institute = str_remove_all(institute, "\\d+"),
     institute = str_squish(institute),
     institute = str_remove_all(institute, "[[:punct:]]$"),
@@ -474,12 +476,12 @@ ntotal <- nrow(df_institutes)
 df_institutes <- df_institutes %>%
   mutate(institute_urlenc = map_chr(institute_ascii, URLencode))
 
-for (k in 1:nrow(df_institutes)) {
+for (k in 1:ntotal) {
   Sys.sleep(.75) # 500ms
-  message(glue("* Quering row {k} of {ntotal}.."))
+  message(glue::glue("* Quering row {k} of {ntotal}.."))
   inst_id <- purrr::pluck(df_institutes, "institute_id_p3", k)
   url_enc <- purrr::pluck(df_institutes, "institute_urlenc", k)
-  url_api <- glue(
+  url_api <- glue::glue(
     "https://maps.googleapis.com/maps/api/",
     "place/findplacefromtext/json?input={url_enc}&",
     "inputtype=textquery&",
@@ -566,7 +568,7 @@ read_csv(here("data-raw", "gmaps.csv")) %>%
 gmaps <- read_csv(here("data", "gmaps.csv"))
 
 # look for organizations and projects
-lookup_organizations_project_id <- p3_project_details %>%
+lookup_org_proj_id <- p3_project_details %>%
   distinct(project_id, institute_id_p3) %>%
   filter(institute_id_p3 != 0) %>%
   group_by(institute_id_p3) %>%
@@ -576,7 +578,7 @@ lookup_organizations_project_id <- p3_project_details %>%
 
 # lookup for organizations and disciplines
 
-lookup_organizations_disciplines_id <- p3_project_details %>%
+lookup_organiz_discip_id <- p3_project_details %>%
   distinct(project_id, institute_id_p3) %>%
   filter(institute_id_p3 != 0) %>%
   mutate(project_id = as.character(project_id)) %>%
@@ -604,7 +606,8 @@ lookup_partners <- partners %>%
   filter(institute_id_p3.x != institute_id_p3.y) %>%
   distinct(institute_id_p3.x, institute_id_p3.y) %>%
   group_by(institute_id_p3.x) %>%
-  summarize(partner_organizations_id = str_c(institute_id_p3.y, collapse = ",")) %>%
+  summarize(partner_organizations_id = str_c(institute_id_p3.y,
+                                             collapse = ",")) %>%
   mutate(institute_id_p3.x = as.character(institute_id_p3.x)) %>%
   rename(organizations_id = institute_id_p3.x)
 
@@ -623,9 +626,9 @@ organizations <- gmaps %>%
     website = "http://research-earth.de",
     organizations_funder_id = "1"
   ) %>%
-  left_join(lookup_organizations_disciplines_id, by = "organizations_id") %>%
+  left_join(lookup_organiz_discip_id, by = "organizations_id") %>%
   left_join(lookup_partners, by = "organizations_id") %>%
-  left_join(lookup_organizations_project_id, by = "organizations_id")
+  left_join(lookup_org_proj_id, by = "organizations_id")
 
 organizations %>%
   select(
@@ -663,10 +666,8 @@ df_institutes %>%
 
 ## DAC Country List
 
-```{r}
-# https://www.oecd.org/development/financing-sustainable-development/development-finance-standards/dacandcrscodelists.htm
-# https://www.oecd.org/dac/financing-sustainable-development/development-finance-standards/DAC-CRS-CODES.xls
-```
+- [link 1](https://www.oecd.org/development/financing-sustainable-development/development-finance-standards/dacandcrscodelists.htm)
+- [link 2](https://www.oecd.org/dac/financing-sustainable-development/development-finance-standards/DAC-CRS-CODES.xls)
 
 ```{r, eval=FALSE}
 file_name <- here(
