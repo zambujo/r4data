@@ -24,113 +24,117 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 
 > Subset of `P3_GrantExport.csv` from [P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx).
 
-|Attribute           |Type      |Description                      |
-|:------------------|:---------|:---------------------------------|
-|project_number     |character |P3 grant id                       |
-|project_title      |character |P3 grant title                    |
-|funding_instrument |factor    |`r4d`, `SPIRIT`, etc.             |
-|start_date         |date      |`%b %Y`                           |
-|end_date           |date      |`%b %Y`                           |
-|approved_amount    |integer   |Grant size in CHF                 |
-|running            |boolean   |Inform whether grant is running   |
-|institution        |character |coordinating institution          |
-|university         |character |coordinating university           |
+|Attribute          |Description                       |
+|:------------------|:---------------------------------|
+|project_number     |P3 grant id                       |
+|project_title      |P3 grant title                    |
+|funding_instrument |`r4d`, `SPIRIT`, etc.             |
+|start_date         |`%b %Y`                           |
+|end_date           |`%b %Y`                           |
+|approved_amount    |Grant size in CHF                 |
+|running            |Inform whether grant is running   |
+|institution        |coordinating institution          |
+|university         |coordinating university           |
 
 #### `people.csv`
 
-|Attribute         |Type      |Description           |
-|:----------------|:---------|:----------------------|
-|project_number   |character |P3 grant id            |
-|person_id_snsf   |character |P3 person id           |
-|role             |factor    |[Project as](role)     |
-|institute_name   |character |[Details](instname)    |
-|institute_place  |character |[Details](instpalce)   |
-|institute_id_p3  |character |P3 institute ID        |
+|Attribute        |Description            |
+|:----------------|:----------------------|
+|project_number   |P3 grant id            |
+|person_id_snsf   |P3 person id           |
+|role             |[Project as](role)     |
+|institute_name   |[Details](instname)    |
+|institute_place  |[Details](instpalce)   |
+|institute_id_p3  |P3 institute ID        |
 
 #### `gmaps.csv`
 
-|Attribute          |Type      |Description             |
-|:-----------------|:---------|:------------------------|
-|institute_id      |character |P3 institute number      |
-|gmaps_id          |character |Google maps id           |
-|gmaps_lat         |numeric   |Latitude                 |
-|gmaps_lng         |numeric   |Longitude                |
-|gmaps_name        |character |Name on google maps      |
-|gmaps_addr        |character |Name on google maps      |
+|Attribute         |Description              |
+|:-----------------|:------------------------|
+|institute_id      |P3 institute number      |
+|gmaps_id          |Google maps id           |
+|gmaps_lat         |Latitude                 |
+|gmaps_lng         |Longitude                |
+|gmaps_name        |Name on google maps      |
+|gmaps_addr        |Name on google maps      |
 
 #### `disciplines.csv`
 
-|Attribute          |Type      |Description             |
-|:-----------------|:---------|:------------------------|
-|project_number    |character |P3 grant id              |
-|disciplines       |character |P3 discipline name       |
-|tier              |integer   |Discipline hierarchy     |
+|Attribute         |Description                    |
+|:-----------------|:------------------------------|
+|project_number    |P3 grant id                    |
+|disciplines       |P3 discipline name             |
+|tier              |Discipline hierarchy           |
 
-### New schema
+### Schema for Research earth
+
+#### `tags.csv`
+
+|Attribute  |Description                       |
+|:----------|:---------------------------------|
+|tags_id    |Keyword unique ID                 |
+|tags_name  |Keyword name                      |
 
 #### `disciplines.csv`
 
-|Attribute          |Type      |Description             |
-|:-----------------|:---------|:------------------------|
-|disciplines_id    |character |P3 grant id              |
-|disciplines_name  |character |P3 discipline name       |
-|tier              |integer   |Discipline hierarchy     |
+|Attribute         |Description                             |
+|:-----------------|:---------------------------------------|
+|disciplines_id    |P3 grant id                             |
+|disciplines_name  |P3 discipline name                      |
+|tier              |Discipline hierarchy                    |
 
 #### `funders.csv`
 
-|Attribute          |Type      |Description             |
-|:-----------------|:---------|:------------------------|
-|funder_id         |integer   |P3 grant id              |
-|funders_name      |character |??                       |
-|snsf              |integer   |??                       |
-|role              |character |[Project as](role)       |
+|Attribute         |Description                                |
+|:-----------------|:------------------------------------------|
+|funder_id         |P3 grant id                                |
+|funders_name      |Family and first names of person in grant  |
+|snsf              |snsf person id                             |
+|role              |[Project as](role)                         |
 
+> **snsf** is mislieading
+> **funders_name** is ambiguous
 
 #### `projects.csv`
 
-|Attribute           |Type      |Description                       |
-|:-------------------|:---------|:---------------------------------|
-|project_id          |integer   |P3 grant id                       |
-|project_name        |character |P3 grant title                    |
-|contact_person      |character |PI first and last names           |
-|email               |character |??                                |
-|start_date          |date      |`%b %Y`                           |
-|end_date            |date      |`%b %Y`                           |
-|approved_amount     |integer   |Grant size in CHF                 |
-|project_description |character |`r4d`, `SPIRIT`, etc. (instrument)|
-|transdisciplinary   |boolean   |P3 grant title                    |
-|projects_disciplines_id        |character |list of P3 discipline ids |
-|tag_id        |character |list generated keyword ids |
-|projects_funder_id  |character   |list of funders
-|projects_organizations_id |character  |list of organisations  |
+|Attribute                 |Description                          |
+|:-------------------------|:------------------------------------|
+|project_id                |P3 grant id                          |
+|project_name              |P3 grant title                       |
+|contact_person            |PI first and last names              |
+|email                     |??                                   |
+|start_date                |`%b-%Y`                              |
+|end_date                  |`%b-%Y`                              |
+|approved_amount           |Grant size in CHF                    |
+|project_description       |`r4d`, `SPIRIT`, etc. (instrument)   |
+|transdisciplinary         |P3 grant title                       |
+|projects_disciplines_id   |list of P3 discipline ids            |
+|tag_id                    |list generated keyword ids           |
+|projects_funder_id        |list of funders                      |
+|projects_organizations_id |list of organisations                |
 
 #### `organizations.csv`
 
-|Attribute           |Type      |Description                       |
-|:-------------------|:---------|:---------------------------------|
-|organizations_id    |character |P3 institute number (gmap.inst_id)|
-|organizations_name  |character |[Details](instname)    |
-|lat                 |numeric   |Latitude       (gmap)  |
-|lng                 |numeric   |Longitude      (gmap)  |
-|gmaps_id            |character |Google maps id           |
-|address             |character |Name on google maps      |
-|country             |character |gmaps_coutry                      |
-|website             |character |to be collected                   |
-|organizations_disciplines_id |character  |list of disciplines related to org |
-|organizations_funder_id      |character  |list of linked funders  |
-|partner_organizations_id     |character  |list of linked orgs  |
-|organizations_project_id     |character  |list of linked projects  |
+|Attribute                    |Description                        |
+|:----------------------------|:----------------------------------|
+|organizations_id             |P3 institute number (gmap.inst_id) |
+|organizations_name           |[Details](instname)                |
+|lat                          |Latitude       (gmap)              |
+|lng                          |Longitude      (gmap)              |
+|gmaps_id                     |Google maps id                     |
+|address                      |Name on google maps                |
+|country                      |gmaps_coutry                       |
+|website                      |to be collected                    |
+|organizations_disciplines_id |list of disciplines related to org |
+|organizations_funder_id      |list of linked funders             |
+|partner_organizations_id     |list of linked orgs                |
+|organizations_project_id     |list of linked projects            |
 
 [role]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Projects%20as%20responsible%20Applicant "Example"
 [instname]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Institute%20Name "Institute name"
 [instplace]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Institute%20Place "Institute place"
 
-Explore the [raw data](https://flatgithub.com/zambujo/r4data).
-
-
-### Schema
-
-![](./data/schema.svg)
+Explore the [raw data](https://flatgithub.com/zambujo/r4data/tree/research-earth).
 
 ## Simplified Tree
  
@@ -139,18 +143,26 @@ Explore the [raw data](https://flatgithub.com/zambujo/r4data).
 ├── DESCRIPTION
 ├── LICENSE
 ├── install.R
-├── data
+├─ data
 │   ├── disciplines.csv
 │   ├── gmaps.csv
 │   ├── people.csv
 │   ├── projects.csv
+│   ├── research_earth
+│   │   ├── disciplines.csv
+│   │   ├── funders.csv
+│   │   ├── organizations.csv
+│   │   ├── projects.csv
+│   │   └── tags.csv
 │   └── schema.svg
 ├── docs
 │   └── index.html
 ├── inst
 │   └── extdata
-│       └── p3-tables.yml
+│       ├── p3-tables.yml
+│       └── screenshot.jpg
 ├── README.md
+├── README.Rmd
 └── Rmd
     ├── explore.Rmd
     └── gather.Rmd

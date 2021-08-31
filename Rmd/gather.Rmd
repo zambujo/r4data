@@ -21,9 +21,9 @@ download_table_from_p3 <- function(csv_table, dest_folder = "data-raw") {
 }
 # specific for P3 CSV files
 read_p3_file <- function(file_name, loc = "data-raw") {
-  here(loc, file_name) %>% 
-  read_delim(";", escape_double = FALSE, col_types = cols(.default = "c")) %>%
-  clean_names()
+  here(loc, file_name) %>%
+    read_delim(";", escape_double = FALSE, col_types = cols(.default = "c")) %>%
+    clean_names()
 }
 ```
 
@@ -48,17 +48,19 @@ people_raw <- read_p3_file(pluck(p3_files, 2))
 Finding 92 projects (77 [r4d.ch](http://www.r4d.ch/r4d-programme/all-projects) and 15 SPIRIT). 62 distinct project titles in [r4d.ch](http://www.r4d.ch/r4d-programme/all-projects) and 15 distinct project titles in SPIRIT.
 
 ```{r projects, eval=FALSE}
-projects <- projects_raw %>% 
-  filter(str_detect(funding_instrument, "r4d|SPIRIT")) %>% # MVP
-  select(project_number, 
-         project_title,
-         funding_instrument,
-         start_date,
-         end_date,
-         approved_amount,
-         institution,
-         university,
-         keywords) %>%
+projects <- projects_raw %>%
+  filter(str_detect(funding_instrument, "r4d|SPIRIT")) %>%
+  select(
+    project_number,
+    project_title,
+    funding_instrument,
+    start_date,
+    end_date,
+    approved_amount,
+    institution,
+    university,
+    keywords
+  ) %>%
   mutate(
     start_date = dmy(start_date),
     end_date = dmy(end_date),
@@ -69,7 +71,8 @@ projects <- projects_raw %>%
     end_date = format(end_date, "%b %Y"),
     approved_amount = as.numeric(approved_amount),
     approved_amount = round(approved_amount),
-    approved_amount = as.integer(approved_amount))
+    approved_amount = as.integer(approved_amount)
+  )
 
 write_csv(projects, here("data", "projects.csv"))
 ```
@@ -77,24 +80,26 @@ write_csv(projects, here("data", "projects.csv"))
 ### Create tags table for research earth
 
 ```{r tags, eval=FALSE}
-projects_tags <- 
+projects_tags <-
   projects %>%
   select(
     project__id = project_number,
-    tags = keywords) %>%
+    tags = keywords
+  ) %>%
   arrange(project__id) %>%
   mutate(tags = str_split(tags, "; ")) %>%
   unnest(tags) %>%
   mutate(tags = str_split(tags, ", ")) %>%
   unnest(tags)
 
-tags <- 
+tags <-
   projects_tags %>%
   mutate(tags_low = str_to_lower(tags)) %>%
   distinct(tags_low, .keep_all = TRUE) %>%
   mutate(tags_name = if_else(tags == tags_low,
-                        str_to_title(tags),
-                        tags)) %>%
+    str_to_title(tags),
+    tags
+  )) %>%
   mutate(tags_id = row_number()) %>%
   select(-project__id)
 
@@ -114,9 +119,10 @@ projects_tag_id <-
 
 ```{r, disciplines, eval=FALSE}
 projects <- read_csv(here("data", "projects.csv")) # p3 project data on r4d
-disciplines <-  projects_raw %>%
+disciplines <- projects_raw %>%
   semi_join(mutate(projects, project_number = as.character(project_number)),
-                   by = "project_number")  %>%
+    by = "project_number"
+  ) %>%
   select(project_number, discipline_name_hierarchy, discipline_name) %>%
   unite(col = "disciplines", starts_with("discipline_"), sep = ";") %>%
   mutate(disciplines = str_split(disciplines, ";")) %>%
@@ -132,7 +138,7 @@ if (all(pull(test_count, n) == 3)) {
 ### Create disciplines table for research earth
 
 ```{r, disciplines-re, eval=FALSE}
-disciplines_names_numbers <- 
+disciplines_names_numbers <-
   projects_raw %>%
   distinct(discipline_name, discipline_number) %>%
   arrange(discipline_name)
@@ -144,21 +150,25 @@ ref_disciplines <-
   left_join(disciplines_names_numbers, by = "discipline_name") %>%
   # clean legacy name inconsistencies in the P3 data
   mutate(discipline_clean = if_else(is.na(discipline_number),
-                                   str_extract(
-                                     discipline_name, 
-                                     "[[:alpha:]]+(?=,)"),
-                                   discipline_name)) %>%
+    str_extract(
+      discipline_name,
+      "[[:alpha:]]+(?=,)"
+    ),
+    discipline_name
+  )) %>%
   select(discipline_name, discipline_clean, tier) %>%
   left_join(
-    disciplines_names_numbers, 
-    by = c("discipline_clean" = "discipline_name")) %>%
+    disciplines_names_numbers,
+    by = c("discipline_clean" = "discipline_name")
+  ) %>%
   arrange(discipline_number, tier)
 
 ref_disciplines %>%
   select(
     disciplines_id = discipline_number,
     disciplines_name = discipline_clean,
-    tier) %>%
+    tier
+  ) %>%
   distinct(disciplines_id, .keep_all = TRUE) %>%
   write_csv(here("data", "research_earth", "disciplines.csv"))
 
@@ -166,13 +176,13 @@ ref_disciplines %>%
 projects_disciplines_id <-
   disciplines %>%
   select(
-    project__id = project_number, 
-    discipline_name = disciplines) %>%
+    project__id = project_number,
+    discipline_name = disciplines
+  ) %>%
   left_join(ref_disciplines, by = "discipline_name") %>%
   distinct(project__id, discipline_number) %>%
   group_by(project__id) %>%
   summarize(disciplines_id = str_c(discipline_number, collapse = ","))
-
 ```
 
 
@@ -183,13 +193,13 @@ Add detailed institute data missing from the CSV data dumps by scrapping P3.
 scrape_p3_project <- function(project_number) {
   message(glue("* Scrapping {project_number}"))
   Sys.sleep(.25)
-  
+
   p3_url <- glue("http://p3.snf.ch/project-{project_number}")
   html_page <- xml2::read_html(p3_url)
   project_people <- html_page %>%
     rvest::html_nodes(".person-field-0 a") %>%
     rvest::html_attr("href")
-  
+
   project_people <- html_page %>%
     rvest::html_nodes(".person-field-0 a") %>%
     rvest::html_attr("href")
@@ -199,21 +209,24 @@ scrape_p3_project <- function(project_number) {
 
   tibble(
     people_p3slug = project_people,
-    institute_p3slug = project_institutes) %>%
-    extract(people_p3slug, 
-            "person_id_p3", 
-            regex = "(\\d+)", 
-            remove=FALSE) %>%
-    extract(institute_p3slug, 
-            "institute_id_p3", 
-            regex = "(\\d+)", 
-            remove=FALSE) %>%
+    institute_p3slug = project_institutes
+  ) %>%
+    extract(people_p3slug,
+      "person_id_p3",
+      regex = "(\\d+)",
+      remove = FALSE
+    ) %>%
+    extract(institute_p3slug,
+      "institute_id_p3",
+      regex = "(\\d+)",
+      remove = FALSE
+    ) %>%
     mutate(project_id = project_number) %>%
     select(project_id, everything())
 }
 
-p3_project_details <- projects %>% 
-  pull(project_number) %>% 
+p3_project_details <- projects %>%
+  pull(project_number) %>%
   map_df(scrape_p3_project)
 
 write_csv(p3_project_details, here("data-raw", "p3-grant-details.csv"))
@@ -223,13 +236,13 @@ p3_project_details <- read_csv(here("data-raw", "p3-grant-details.csv"))
 projects_organizations_id <-
   p3_project_details %>%
   select(
-    project__id = project_id, 
-    institute_id_p3) %>%
+    project__id = project_id,
+    institute_id_p3
+  ) %>%
   mutate(project__id = as.character(project__id)) %>%
   filter(institute_id_p3 != "0") %>%
   group_by(project__id) %>%
   summarize(organizations_id = str_c(institute_id_p3, collapse = ","))
-
 ```
 
 ```{r institute-details, eval=FALSE}
@@ -238,7 +251,7 @@ scrape_p3_institute <- function(institute_number) {
   Sys.sleep(.25)
   p3_url <- glue("http://p3.snf.ch/institute-{institute_number}")
   html_page <- xml2::read_html(p3_url)
-  institute_details <- 
+  institute_details <-
     html_page %>%
     rvest::html_nodes(".institute td") %>%
     rvest::html_text() %>%
@@ -265,32 +278,40 @@ write_csv(p3_institute_details, here("data-raw", "p3-institute-details.csv"))
 ```{r people, eval=FALSE}
 people <- people_raw %>%
   pivot_longer(
-    starts_with("projects"), 
-    names_to = "role", 
+    starts_with("projects"),
+    names_to = "role",
     values_to = "project_number",
-    values_drop_na = TRUE) %>%
+    values_drop_na = TRUE
+  ) %>%
   mutate(project_number = str_split(project_number, ";")) %>%
   unnest(project_number) %>%
   mutate(project_number = as.numeric(project_number)) %>%
   semi_join(projects, "project_number") %>%
-  select(project_number,
-         person_id_snsf,
-         role,
-         institute_name,
-         institute_place) %>%
+  select(
+    project_number,
+    person_id_snsf,
+    role,
+    institute_name,
+    institute_place
+  ) %>%
   mutate(person_id_snsf = as.numeric(person_id_snsf)) %>%
-  left_join(select(p3_project_details, 
-                   project_id,
-                   person_id_p3,
-                   institute_id_p3), 
-            by = c("project_number" = "project_id", 
-                   "person_id_snsf" = "person_id_p3")) %>%
+  left_join(select(
+    p3_project_details,
+    project_id,
+    person_id_p3,
+    institute_id_p3
+  ),
+  by = c(
+    "project_number" = "project_id",
+    "person_id_snsf" = "person_id_p3"
+  )
+  ) %>%
   mutate(
     role = str_remove(role, "projects_as_"),
-    institute_id_p3 = na_if(institute_id_p3, "0"))
+    institute_id_p3 = na_if(institute_id_p3, "0")
+  )
 
 write_csv(people, here("data", "people.csv"))
-
 ```
 
 ```{r, eval=FALSE}
@@ -299,8 +320,8 @@ collab <- read_p3_file(pluck(p3_files, 3))
 
 # 771 more collaborations...
 more <- semi_join(collab, r4d, "project_number")
-# more %>% count(group_person, sort = TRUE) %>% print(n = 50)
-# more %>% filter(str_detect(group_person, "CO-APPLICANT"))
+# more %>%count(group_person, sort = TRUE) %>%print(n = 50)
+# more %>%filter(str_detect(group_person, "CO-APPLICANT"))
 ```
 
 
@@ -309,24 +330,27 @@ p3_project_details <- read_csv(here("data-raw", "p3-grant-details.csv"))
 p3_institute_details <- read_csv(here("data-raw", "p3-institute-details.csv"))
 
 # tests :)
-# people %>% anti_join(p3_project_details, by = c("person_id_snsf" = "person_id_p3"))
-# p3_project_details %>% anti_join(people, by = c("person_id_p3" = "person_id_snsf"))
+# people %>%anti_join(p3_project_details, by = c("person_id_snsf" = "person_id_p3"))
+# p3_project_details %>%anti_join(people, by = c("person_id_p3" = "person_id_snsf"))
 ```
 
 
 ### Create projects table for research earth
 ```{r, eval=FALSE}
-transdisciplinarity <- 
+transdisciplinarity <-
   projects_raw %>%
-  select(project__id = project_number,
-       transdisciplinary = all_disciplines) %>%
+  select(
+    project__id = project_number,
+    transdisciplinary = all_disciplines
+  ) %>%
   mutate(project__id = as.numeric(project__id)) %>%
-  semi_join(projects,by = c("project__id" = "project_number")) %>%
+  semi_join(projects, by = c("project__id" = "project_number")) %>%
   mutate(
     project__id = as.character(project__id),
     transdisciplinary = str_detect(transdisciplinary, "/"),
     transdisciplinary = as.character(transdisciplinary),
-    transdisciplinary = str_to_lower(transdisciplinary))
+    transdisciplinary = str_to_lower(transdisciplinary)
+  )
 
 projects_re <-
   projects %>%
@@ -348,11 +372,13 @@ projects_re <-
   left_join(projects_disciplines_id, by = "project__id") %>%
   left_join(projects_tag_id, by = "project__id") %>%
   left_join(
-      select(
-        projects_raw,
-        project__id = project_number,
-        contact_person = responsible_applicant),
-    by = "project__id") %>%
+    select(
+      projects_raw,
+      project__id = project_number,
+      contact_person = responsible_applicant
+    ),
+    by = "project__id"
+  ) %>%
   left_join(transdisciplinarity, by = "project__id") %>%
   left_join(projects_organizations_id, by = "project__id")
 
@@ -373,7 +399,6 @@ projects_re %>%
     projects_organizations_id = organizations_id
   ) %>%
   write_csv(here("data", "research_earth", "projects.csv"))
-
 ```
 
 ### Create funders table for research earth
@@ -384,7 +409,8 @@ people %>%
   distinct(person_id_snsf, .keep_all = TRUE) %>%
   mutate(person_id_snsf = as.character(person_id_snsf)) %>%
   left_join(select(people_raw, person_id_snsf, last_name, first_name),
-            by = "person_id_snsf") %>%
+    by = "person_id_snsf"
+  ) %>%
   unite(funders_name, c("last_name", "first_name"), sep = " ") %>%
   mutate(
     funder_id = 1,
@@ -392,7 +418,6 @@ people %>%
   ) %>%
   select(funder_id, funders_name, snsf = person_id_snsf, role) %>%
   write_csv(here("data", "research_earth", "funders.csv"))
-
 ```
 
 
@@ -415,9 +440,10 @@ df_institutes <- people %>%
     institute_ascii = str_replace_all(institute_ascii, fixed(" -"), ","),
     institute_ascii = str_replace_all(institute_ascii, fixed(" ("), ", "),
     institute_ascii = str_replace_all(institute_ascii, fixed("/"), ", "),
-    institute_ascii = str_replace_all(institute_ascii, fixed(")"), ","))
+    institute_ascii = str_replace_all(institute_ascii, fixed(")"), ",")
+  )
 
-# Write 
+# Write
 write_csv(df_institutes, here("data-raw", "df_institutes.csv"))
 ```
 
@@ -441,45 +467,48 @@ gmaps <- tibble(
   gm_name = as.character(),
   gm_id = as.character(),
   gm_types = as.character(),
-  institute_id = as.character())
+  institute_id = as.character()
+)
 
 ntotal <- nrow(df_institutes)
 df_institutes <- df_institutes %>%
   mutate(institute_urlenc = map_chr(institute_ascii, URLencode))
 
-for(k in 1:nrow(df_institutes)) {
+for (k in 1:nrow(df_institutes)) {
   Sys.sleep(.75) # 500ms
   message(glue("* Quering row {k} of {ntotal}.."))
   inst_id <- purrr::pluck(df_institutes, "institute_id_p3", k)
   url_enc <- purrr::pluck(df_institutes, "institute_urlenc", k)
-  url_api <- glue("https://maps.googleapis.com/maps/api/",
-                  "place/findplacefromtext/json?input={url_enc}&",
-                  "inputtype=textquery&",
-                  "fields=business_status,icon,plus_code,",
-                  "formatted_address,geometry,name,place_id,types&",
-                  "key={api_key}")
+  url_api <- glue(
+    "https://maps.googleapis.com/maps/api/",
+    "place/findplacefromtext/json?input={url_enc}&",
+    "inputtype=textquery&",
+    "fields=business_status,icon,plus_code,",
+    "formatted_address,geometry,name,place_id,types&",
+    "key={api_key}"
+  )
   # api call
   gm_res <- jsonlite::fromJSON(url_api)
   if (purrr::pluck(gm_res, "status") == "OK") {
-    row_status <-  gm_res %>%
+    row_status <- gm_res %>%
       purrr::pluck("candidates", "business_status", 1)
-    row_icon <-  gm_res %>%
+    row_icon <- gm_res %>%
       purrr::pluck("candidates", "icon", 1)
-    row_lat <-  gm_res %>%
+    row_lat <- gm_res %>%
       purrr::pluck("candidates", "geometry", "location", "lat", 1)
-    row_lng <-  gm_res %>%
+    row_lng <- gm_res %>%
       purrr::pluck("candidates", "geometry", "location", "lng", 1)
-    row_plus <-  gm_res %>%
+    row_plus <- gm_res %>%
       purrr::pluck("candidates", "plus_code", 1) %>%
       head(1)
-    row_addr <-  gm_res %>%
+    row_addr <- gm_res %>%
       purrr::pluck("candidates", "formatted_address", 1)
-    row_name <-  gm_res %>%
+    row_name <- gm_res %>%
       purrr::pluck("candidates", "name", 1)
     row_id <- gm_res %>%
       purrr::pluck("candidates", "place_id", 1)
-    row_types <-  gm_res %>%
-      purrr::pluck("candidates", "types", 1) %>% 
+    row_types <- gm_res %>%
+      purrr::pluck("candidates", "types", 1) %>%
       str_c(collapse = ",")
     gmaps <- gmaps %>%
       add_row(
@@ -492,11 +521,13 @@ for(k in 1:nrow(df_institutes)) {
         gm_name = if_else(is_null(row_name), NA_character_, row_name),
         gm_id = if_else(is_null(row_id), NA_character_, row_id),
         gm_types = if_else(is_null(row_types), NA_character_, row_types),
-        institute_id = inst_id)
+        institute_id = inst_id
+      )
+  } else {
+    (
+      message("!!!API KO")
+    )
   }
-  else(
-    message("!!!API KO")
-  )
 }
 
 write_csv(gmaps, here("data-raw", "gmaps.csv"))
@@ -511,16 +542,20 @@ read_csv(here("data-raw", "gmaps.csv")) %>%
     gmaps_lat = gm_lat,
     gmaps_lng = gm_lng,
     gmaps_name = gm_name,
-    gmaps_addr = gm_addr) %>%
+    gmaps_addr = gm_addr
+  ) %>%
   # extract country from address
   mutate(
     gmaps_addr_ascii = stringi::stri_trans_general(
-      gmaps_addr, 
-      "Latin-ASCII")) %>%
+      gmaps_addr,
+      "Latin-ASCII"
+    )
+  ) %>%
   extract(
-    gmaps_addr_ascii, 
-    "gmaps_country", 
-    regex = "(?<=[,] )([[:space:][:alpha:].-]+$)") %>%
+    gmaps_addr_ascii,
+    "gmaps_country",
+    regex = "(?<=[,] )([[:space:][:alpha:].-]+$)"
+  ) %>%
   write_csv(here("data", "gmaps.csv"))
 ```
 
@@ -549,7 +584,8 @@ lookup_organizations_disciplines_id <- p3_project_details %>%
   select(-project_id) %>%
   mutate(
     institute_id_p3 = as.character(institute_id_p3),
-    disciplines_id = str_split(disciplines_id, ",")) %>%
+    disciplines_id = str_split(disciplines_id, ",")
+  ) %>%
   unnest(disciplines_id) %>%
   distinct(institute_id_p3, disciplines_id) %>%
   group_by(institute_id_p3) %>%
@@ -584,8 +620,9 @@ organizations <- gmaps %>%
   ) %>%
   mutate(
     organizations_id = as.character(organizations_id),
-    website = "http://research-earth.de", 
-    organizations_funder_id = "1") %>%
+    website = "http://research-earth.de",
+    organizations_funder_id = "1"
+  ) %>%
   left_join(lookup_organizations_disciplines_id, by = "organizations_id") %>%
   left_join(lookup_partners, by = "organizations_id") %>%
   left_join(lookup_organizations_project_id, by = "organizations_id")
@@ -603,22 +640,19 @@ organizations %>%
     organizations_disciplines_id = disciplines_id,
     organizations_funder_id,
     partner_organizations_id,
-    organizations_project_id) %>%
+    organizations_project_id
+  ) %>%
   write_csv(here("data", "research_earth", "organizations.csv"))
-
 ```
 
-
-
-
-
+---
 
 Add "difficult" cases separately (TODO).
 
 ```{r google-missing, eval=FALSE}
 # TODO: failsafe for 11 missing values
 
-df_institutes %>% 
+df_institutes %>%
   anti_join(gmaps, by = c("institute_id_p3" = "institute_id")) %>%
   pull(institute_ascii)
 ```
@@ -632,16 +666,18 @@ df_institutes %>%
 ```{r}
 # https://www.oecd.org/development/financing-sustainable-development/development-finance-standards/dacandcrscodelists.htm
 # https://www.oecd.org/dac/financing-sustainable-development/development-finance-standards/DAC-CRS-CODES.xls
-
 ```
 
 ```{r, eval=FALSE}
-file_name <- here("data-raw", 
-                  "r4d_researchers_institutions_countries.xlsx")
+file_name <- here(
+  "data-raw",
+  "r4d_researchers_institutions_countries.xlsx"
+)
 sheets <- excel_sheets(path = file_name)
 dfs <- sheets %>%
-  map_df(function(x)
-    readxl::read_excel(file_name, sheet = x) %>% select(1:6)) %>%
+  map_df(function(x) {
+    readxl::read_excel(file_name, sheet = x) %>% select(1:6)
+  }) %>%
   clean_names()
 # only 45 projects
 ```
@@ -654,9 +690,9 @@ html <- str_subset(html, "DocId")
 docid <- str_extract_all(html, '(?<=\\"DocId\\":)[[:digit:]]{4}') %>%
   flatten_chr()
 
-data_list <- html %>% 
+data_list <- html %>%
   str_split(',"') %>%
-  map(~ str_replace_all(.x, '\\\\u002f', '/')) %>%
+  map(~ str_replace_all(.x, "\\\\u002f", "/")) %>%
   map(~ str_remove_all(.x, '\\"')) %>%
   map(str_split_fixed, pattern = ":", n = 2) %>%
   map(~ .x[2:4, 2])
@@ -668,19 +704,20 @@ data_df <- tibble(
 )
 
 
-data_df <- data_df %>% 
+data_df <- data_df %>%
   mutate(title_simple = str_to_lower(title))
 
-grants <- grants %>% 
+grants <- grants %>%
   mutate(title_simple = str_to_lower(project_title))
 
 data_df %>% left_join(grants, "title_simple")
 
-grants %>% filter(project_number == "160906") %>%
+grants %>%
+  filter(project_number == "160906") %>%
   pull(title_simple)
 
-data_df %>% head(1) %>%
+data_df %>%
+  head(1) %>%
   pull(title_simple)
-
 ```
 
