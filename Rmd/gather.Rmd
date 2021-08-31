@@ -525,26 +525,52 @@ read_csv(here("data-raw", "gmaps.csv")) %>%
 ```
 
 
-
 ### Create organizations table for research earth
 
 ```{r, eval=FALSE}
-# organizations_id,
-# organizations_name,
-# lat,
-# lng,
-# gmaps_id,
-# address,
-# country,
-# website,
-# organizations_disciplines_id,
-# organizations_funder_id,
-# partner_organizations_id,
-# organizations_project_id
-
-gmaps_raw <- read_csv(here("data-raw", "gmaps.csv"))
 gmaps <- read_csv(here("data", "gmaps.csv"))
 
+# look for organizations and projects
+lookup_organizations_project_id <- p3_project_details %>%
+  distinct(project_id, institute_id_p3) %>%
+  filter(institute_id_p3 != 0) %>%
+  group_by(institute_id_p3) %>%
+  summarize(organizations_project_id = str_c(project_id, collapse = ",")) %>%
+  mutate(institute_id_p3 = as.character(institute_id_p3)) %>%
+  rename(organizations_id = institute_id_p3)
+
+# lookup for organizations and disciplines
+
+lookup_organizations_disciplines_id <- p3_project_details %>%
+  distinct(project_id, institute_id_p3) %>%
+  filter(institute_id_p3 != 0) %>%
+  mutate(project_id = as.character(project_id)) %>%
+  left_join(projects_disciplines_id, by = c("project_id" = "project__id")) %>%
+  select(-project_id) %>%
+  mutate(
+    institute_id_p3 = as.character(institute_id_p3),
+    disciplines_id = str_split(disciplines_id, ",")) %>%
+  unnest(disciplines_id) %>%
+  distinct(institute_id_p3, disciplines_id) %>%
+  group_by(institute_id_p3) %>%
+  summarize(disciplines_id = str_c(disciplines_id, collapse = ",")) %>%
+  rename(organizations_id = institute_id_p3)
+
+# lookup for partner organisations
+
+partners <- p3_project_details %>%
+  distinct(project_id, institute_id_p3) %>%
+  filter(institute_id_p3 != 0)
+
+lookup_partners <- partners %>%
+  full_join(partners, by = "project_id") %>%
+  select(-project_id) %>%
+  filter(institute_id_p3.x != institute_id_p3.y) %>%
+  distinct(institute_id_p3.x, institute_id_p3.y) %>%
+  group_by(institute_id_p3.x) %>%
+  summarize(partner_organizations_id = str_c(institute_id_p3.y, collapse = ",")) %>%
+  mutate(institute_id_p3.x = as.character(institute_id_p3.x)) %>%
+  rename(organizations_id = institute_id_p3.x)
 
 organizations <- gmaps %>%
   select(
@@ -552,12 +578,33 @@ organizations <- gmaps %>%
     organizations_name = gmaps_name,
     lat = gmaps_lat,
     lng = gmaps_lng,
+    gmaps_id,
     address = gmaps_addr,
     country = gmaps_country,
   ) %>%
   mutate(
     organizations_id = as.character(organizations_id),
-    website = "")
+    website = "http://research-earth.de", 
+    organizations_funder_id = "1") %>%
+  left_join(lookup_organizations_disciplines_id, by = "organizations_id") %>%
+  left_join(lookup_partners, by = "organizations_id") %>%
+  left_join(lookup_organizations_project_id, by = "organizations_id")
+
+organizations %>%
+  select(
+    organizations_id,
+    organizations_name,
+    lat,
+    lng,
+    gmaps_id,
+    address,
+    country,
+    website,
+    organizations_disciplines_id = disciplines_id,
+    organizations_funder_id,
+    partner_organizations_id,
+    organizations_project_id) %>%
+  write_csv(here("data", "research_earth", "organizations.csv"))
 
 ```
 
