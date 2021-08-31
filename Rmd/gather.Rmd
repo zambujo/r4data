@@ -132,12 +132,10 @@ if (all(pull(test_count, n) == 3)) {
 ### Create disciplines table for research earth
 
 ```{r, disciplines-re, eval=FALSE}
-
 disciplines_names_numbers <- 
-projects_raw %>%
+  projects_raw %>%
   distinct(discipline_name, discipline_number) %>%
-  arrange(discipline_name) %>%
-  print(n = 159)
+  arrange(discipline_name)
 
 ref_disciplines <-
   disciplines %>%
@@ -167,15 +165,17 @@ ref_disciplines %>%
 # lookup table for linking projects to the disciplines table
 projects_disciplines_id <-
   disciplines %>%
-  select(project__id = project_number, disciplines) %>%
-  left_join(
-    ref_disciplines, 
-    by = c("disciplines" = "discipline_name")) %>%
+  select(
+    project__id = project_number, 
+    discipline_name = disciplines) %>%
+  left_join(ref_disciplines, by = "discipline_name") %>%
   distinct(project__id, discipline_number) %>%
   group_by(project__id) %>%
   summarize(disciplines_id = str_c(discipline_number, collapse = ","))
 
 ```
+
+
 
 Add detailed institute data missing from the CSV data dumps by scrapping P3.
 
@@ -217,7 +217,82 @@ p3_project_details <- projects %>%
   map_df(scrape_p3_project)
 
 write_csv(p3_project_details, here("data-raw", "p3-grant-details.csv"))
+
+# lookup table for linking projects to the organizations table
+projects_organizations_id <-
+  p3_project_details %>%
+  select(
+    project__id = project_id, 
+    institute_id_p3) %>%
+  mutate(project__id = as.character(project__id)) %>%
+  filter(institute_id_p3 != "0") %>%
+  group_by(project__id) %>%
+  summarize(organizations_id = str_c(institute_id_p3, collapse = ","))
+
 ```
+
+### Create projects table for research earth
+```{r, eval=FALSE}
+transdisciplinarity <- 
+  projects_raw %>%
+  select(project__id = project_number,
+       transdisciplinary = all_disciplines) %>%
+  mutate(project__id = as.numeric(project__id)) %>%
+  semi_join(projects,by = c("project__id" = "project_number")) %>%
+  mutate(
+    project__id = as.character(project__id),
+    transdisciplinary = str_detect(transdisciplinary, "/"),
+    transdisciplinary = as.character(transdisciplinary),
+    transdisciplinary = str_to_lower(transdisciplinary))
+
+projects_re <-
+  projects %>%
+  select(
+    project__id = project_number,
+    project_name = project_title,
+    project_description = funding_instrument,
+    start_date,
+    end_date,
+    approved_amount
+  ) %>%
+  mutate(
+    project__id = as.character(project__id),
+    email = "",
+    projects_funder_id = "",
+    start_date = str_replace(start_date, " 20", "-"),
+    end_date = str_replace(end_date, " 20", "-")
+  ) %>%
+  left_join(projects_disciplines_id, by = "project__id") %>%
+  left_join(projects_tag_id, by = "project__id") %>%
+  left_join(
+      select(
+        projects_raw,
+        project__id = project_number,
+        contact_person = responsible_applicant),
+    by = "project__id") %>%
+  left_join(transdisciplinarity, by = "project__id") %>%
+  left_join(projects_organizations_id, by = "project__id")
+
+projects_re %>%
+  select(
+    project__id,
+    project_name,
+    contact_person,
+    email,
+    start_date,
+    end_date,
+    approved_amount,
+    project_description,
+    transdisciplinary,
+    disciplines_id,
+    tag_id,
+    projects_funder_id,
+    projects_organizations_id = organizations_id
+  ) %>%
+  write_csv(here("data", "research_earth", "projects.csv"))
+
+```
+
 
 ```{r institute-details, eval=FALSE}
 scrape_p3_institute <- function(institute_number) {
