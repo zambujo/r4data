@@ -12,7 +12,7 @@ library(here)
 library(janitor)
 library(yaml)
 library(glue)
-library(readxl)
+library(openxlsx)
 p3_files <- read_yaml(here("inst", "extdata", "p3-tables.yml"))
 # wrapper function to download the CSV files from the P3 website
 download_table_from_p3 <- function(csv_table, dest_folder = "data-raw") {
@@ -27,6 +27,19 @@ read_p3_file <- function(file_name, loc = "data-raw") {
 }
 ```
 
+## Read the new Schema specs
+
+```{r}
+path_to <- "data-raw/schema-specs/"
+files <-
+  here(path_to) %>%
+  dir(pattern = "*.csv")
+specs <-
+  str_c(path_to, files) %>%
+  map(read_csv)
+names(specs) <- files
+openxlsx::write.xlsx(specs, file = "data/specs.xlsx", overwrite = TRUE))
+```
 
 ## Read data from P3
 
@@ -75,6 +88,7 @@ projects <- projects_raw %>%
   )
 
 write_csv(projects, here("data", "projects.csv"))
+
 ```
 
 ### Create tags table for research earth
@@ -184,7 +198,6 @@ projects_disciplines_id <-
   group_by(project__id) %>%
   summarize(disciplines_id = str_c(discipline_number, collapse = ","))
 ```
-
 
 
 Add detailed institute data missing from the CSV data dumps by scrapping P3.
@@ -320,7 +333,9 @@ collab <- read_p3_file(pluck(p3_files, 3))
 
 # 771 more collaborations...
 more <- semi_join(collab, r4d, "project_number")
-more %>% count(group_person, sort = TRUE) %>% print(n = 50)
+more %>%
+  count(group_person, sort = TRUE) %>%
+  print(n = 50)
 more %>% filter(str_detect(group_person, "CO-APPLICANT"))
 ```
 
@@ -479,61 +494,147 @@ df_institutes <- df_institutes %>%
 for (k in 1:ntotal) {
   Sys.sleep(.75) # 500ms
   message(glue::glue("* Quering row {k} of {ntotal}.."))
-  inst_id <- purrr::pluck(df_institutes, "institute_id_p3", k)
+  inst_id <- purrr::pluck(df_institutes, "institute_id_p3", k) %>%
+    as.character()
   url_enc <- purrr::pluck(df_institutes, "institute_urlenc", k)
   url_api <- glue::glue(
     "https://maps.googleapis.com/maps/api/",
-    "place/findplacefromtext/json?input={url_enc}&",
+    "place/findplacefromtext/json?",
+    "input={url_enc}&",
     "inputtype=textquery&",
+    "language=en&",
     "fields=business_status,icon,plus_code,",
     "formatted_address,geometry,name,place_id,types&",
     "key={api_key}"
   )
+
   # api call
   gm_res <- jsonlite::fromJSON(url_api)
   if (purrr::pluck(gm_res, "status") == "OK") {
     row_status <- gm_res %>%
-      purrr::pluck("candidates", "business_status", 1)
+      purrr::pluck(
+        "candidates",
+        "business_status",
+        1,
+        .default = NA)
     row_icon <- gm_res %>%
-      purrr::pluck("candidates", "icon", 1)
+      purrr::pluck(
+        "candidates",
+        "icon",
+        1,
+        .default = NA)
     row_lat <- gm_res %>%
-      purrr::pluck("candidates", "geometry", "location", "lat", 1)
+      purrr::pluck(
+        "candidates",
+        "geometry",
+        "location",
+        "lat",
+        1,
+        .default = NA)
     row_lng <- gm_res %>%
-      purrr::pluck("candidates", "geometry", "location", "lng", 1)
+      purrr::pluck(
+        "candidates",
+        "geometry",
+        "location",
+        "lng",
+        1,
+        .default = NA)
     row_plus <- gm_res %>%
-      purrr::pluck("candidates", "plus_code", 1) %>%
+      purrr::pluck(
+        "candidates",
+        "plus_code",
+        1,
+        .default = NA) %>%
       head(1)
     row_addr <- gm_res %>%
-      purrr::pluck("candidates", "formatted_address", 1)
+      purrr::pluck(
+        "candidates",
+        "formatted_address",
+        1,
+        .default = NA)
     row_name <- gm_res %>%
-      purrr::pluck("candidates", "name", 1)
+      purrr::pluck(
+        "candidates",
+        "name",
+        1,
+        .default = NA)
     row_id <- gm_res %>%
-      purrr::pluck("candidates", "place_id", 1)
+      purrr::pluck(
+        "candidates",
+        "place_id",
+        1,
+        .default = NA)
     row_types <- gm_res %>%
-      purrr::pluck("candidates", "types", 1) %>%
+      purrr::pluck(
+        "candidates",
+        "types",
+        1,
+        .default = NA) %>%
       str_c(collapse = ",")
+    # TODO: add pluck .default = NA to avoid all these if_else()
     gmaps <- gmaps %>%
       add_row(
-        gm_status = if_else(is_null(row_status), NA_character_, row_status),
-        gm_icon = if_else(is_null(row_icon), NA_character_, row_icon),
-        gm_lat = if_else(is_null(row_lat), NA_real_, row_lat),
-        gm_lng = if_else(is_null(row_lng), NA_real_, row_lng),
-        gm_plus = if_else(is_null(row_plus), NA_character_, row_plus),
-        gm_addr = if_else(is_null(row_addr), NA_character_, row_addr),
-        gm_name = if_else(is_null(row_name), NA_character_, row_name),
-        gm_id = if_else(is_null(row_id), NA_character_, row_id),
-        gm_types = if_else(is_null(row_types), NA_character_, row_types),
+        gm_status = row_status,
+        gm_icon = row_icon,
+        gm_lat = row_lat,
+        gm_lng = row_lng,
+        gm_plus = row_plus,
+        gm_addr = row_addr,
+        gm_name = row_name,
+        gm_id = row_id,
+        gm_types = row_types,
         institute_id = inst_id
       )
   } else {
-    (
-      message("!!!API KO")
-    )
+    message("!!!API KO")
   }
 }
 
 write_csv(gmaps, here("data-raw", "gmaps.csv"))
 ```
+
+Retrieve websites for each id
+
+```{r, eval=FALSE}
+gmaps <- read_csv(here("data-raw", "gmaps.csv"))
+ntotal <- nrow(gmaps)
+websites <- tibble(
+  gm_id = as.character(),
+  gm_www = as.character()
+)
+
+for (k in 1:ntotal) {
+  message(glue::glue("* Quering row {k} of {ntotal}.."))
+  Sys.sleep(.75)
+  row_gid <- purrr::pluck(gmaps, "gm_id", k)
+  url_api <- glue::glue(
+    "https://maps.googleapis.com/maps/api/place/details/json?",
+    "fields=website&",
+    "language=en&",
+    "place_id={row_gid}&",
+    "key={api_key}"
+  )
+  gm_res <- jsonlite::fromJSON(url_api)
+  if (purrr::pluck(gm_res, "status") == "OK") {
+    row_www <- gm_res %>%
+      purrr::pluck("result", "website", 1, .default = NA)
+    websites <- websites %>%
+      add_row(
+        gm_id = row_gid,
+        gm_www = row_www
+      )
+  } else {
+    message("!!!API KO")
+  }
+}
+
+gmaps <- gmaps %>%
+  left_join(websites, by = "gm_id")
+
+write_csv(websites, here("data-raw", "websites.csv"))
+write_csv(gmaps, here("data-raw", "gmaps.csv"))
+```
+
 
 
 ```{r, countries, eval=FALSE}
@@ -544,7 +645,8 @@ read_csv(here("data-raw", "gmaps.csv")) %>%
     gmaps_lat = gm_lat,
     gmaps_lng = gm_lng,
     gmaps_name = gm_name,
-    gmaps_addr = gm_addr
+    gmaps_addr = gm_addr,
+    gmaps_www = gm_www
   ) %>%
   # extract country from address
   mutate(
@@ -607,7 +709,8 @@ lookup_partners <- partners %>%
   distinct(institute_id_p3.x, institute_id_p3.y) %>%
   group_by(institute_id_p3.x) %>%
   summarize(partner_organizations_id = str_c(institute_id_p3.y,
-                                             collapse = ",")) %>%
+    collapse = ","
+  )) %>%
   mutate(institute_id_p3.x = as.character(institute_id_p3.x)) %>%
   rename(organizations_id = institute_id_p3.x)
 
@@ -620,10 +723,10 @@ organizations <- gmaps %>%
     gmaps_id,
     address = gmaps_addr,
     country = gmaps_country,
+    website = gmaps_www
   ) %>%
   mutate(
     organizations_id = as.character(organizations_id),
-    website = "http://research-earth.de",
     organizations_funder_id = "1"
   ) %>%
   left_join(lookup_organiz_discip_id, by = "organizations_id") %>%
@@ -648,7 +751,25 @@ organizations %>%
   write_csv(here("data", "research_earth", "organizations.csv"))
 ```
 
+
+
+```{r, eval=FALSE}
+path_to <- "data/research_earth/"
+files <-
+  here(path_to) %>%
+  dir(pattern = "*.csv")
+specs <-
+  str_c(path_to, files) %>%
+  map(read_csv)
+names(specs) <- files
+openxlsx::write.xlsx(specs, file = "data/research-earth.xlsx", overwrite = TRUE)
+```
+
+
 ---
+
+
+
 
 Add "difficult" cases separately (TODO).
 

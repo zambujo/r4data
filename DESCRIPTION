@@ -20,7 +20,8 @@ Depends:
     flexdashboard,
     leaflet,
     rvest,
-    xml2
+    xml2,
+    openxlsx
 Suggests:
     magrittr,
     usethis,

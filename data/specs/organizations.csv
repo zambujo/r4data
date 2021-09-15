@@ -1,0 +1,11 @@
+﻿organizations_id,organizations_name,lat,lng,gmaps_id,address,country,website,organizations_disciplines_id,organizations_funder_id,partner_organizations_id,organizations_project_id
+240197,Hawassa University,7.0510585,38.4970211,ChIJJ8qtEZNPsRcRWjRHGgEFkX0,"Awassa, Äthiopien",Athiopien,http://research-earth.de,5,5,"239727,241507",146777
+230492,Ifakara Health Institute (IHI),-6.7659369,39.2539683,ChIJ6zJ8xDZMXBgR1W72AezkwIw,"Kiko Ave, Dar es Salaam, Tansania",Tansania,http://research-earth.de,"1,2,4","1,2,4","239727,241507",146777
+255913,ECREEE Headquarters,14.9071325,-23.5149586,ChIJ250Fv_GYNQkRmP-3zVjEzl8,"Av. OUA C.P. 288, Praia, Kapverden",Kapverden,http://research-earth.de,"6,8","6,8","239727,241507",146777
+247339,WOMEN’S RIGHT TO EDUCATION PROGRAMME,8.9984456,7.4711008,ChIJVVVVBPIMThAR_bhTyKCGRlw,"Suites D1-D4, 3rd Floor AMWAR Plaza,near Gudu Market Junction Gudu District, Apo Roundabout, Garki, Abuja, Nigeria",Nigeria,http://research-earth.de,9,9,"239727,241507",146777
+255914,Energy Commission,5.5979975,-0.1828841,ChIJqwtORfma3w8RjHLzeKJ1B9Y,"Ghana Airways Ave, Accra, Ghana",Ghana,http://research-earth.de,2,2,"239727,241507",146777
+1081,FiBL - Forschungsinstitut für biologischen Landbau,47.516939,8.025083,ChIJV2J9KrZHkEcRH1IKjqoKSH4,"Ackerstrasse 113, 5070 Frick, Schweiz",Schweiz,http://research-earth.de,3,3,"239727,241507",146777
+238063,Universität Neuenburg,46.9938549,6.9387031,ChIJV1NCwhAKjkcRfAeyqgbpmqs,"Avenue du Premier-Mars 26, 2000 Neuchâtel, Schweiz",Schweiz,http://research-earth.de,7,7,"239727,241507",146777
+239727,CSIR - Water Research Institute,5.595103,-0.1843439,ChIJSUcfsvma3w8RQXxNmHLiDpI,"Accra, Ghana",Ghana,http://research-earth.de,"4,1","4,1",,"146777,146896"
+241507,The International School of IITA Ibadan,7.5014243,3.9099205,ChIJCWkmww_yORARhtE-MSaS-3A,"IITA Entrance Rd, Ibadan, Nigeria",Nigeria,http://research-earth.de,"3,5,7","3,5,7","240197,230492,247339","146777,147278,147210"
+240143,School of Public Health,5.6367874,-0.1826353,ChIJe22ykXmb3w8RDSXT1frkKcc,"Accra, Ghana",Ghana,http://research-earth.de/,"2,3",1,247339,147210

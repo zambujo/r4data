@@ -10,56 +10,7 @@ The goal of this project is to try to map the institutes involved in the
 Swiss Programme for Research on Global Issues for Development
 ([r4d](http://www.r4d.ch/)) on the world map.
 
-### Old schema
-
-#### `projects.csv`
-
-> Subset of `P3_GrantExport.csv` from
-> [P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx).
-
-| Attribute           | Description                     |
-|:--------------------|:--------------------------------|
-| project\_number     | P3 grant id                     |
-| project\_title      | P3 grant title                  |
-| funding\_instrument | `r4d`, `SPIRIT`, etc.           |
-| start\_date         | `%b %Y`                         |
-| end\_date           | `%b %Y`                         |
-| approved\_amount    | Grant size in CHF               |
-| running             | Inform whether grant is running |
-| institution         | coordinating institution        |
-| university          | coordinating university         |
-
-#### `people.csv`
-
-| Attribute         | Description          |
-|:------------------|:---------------------|
-| project\_number   | P3 grant id          |
-| person\_id\_snsf  | P3 person id         |
-| role              | [Project as](role)   |
-| institute\_name   | [Details](instname)  |
-| institute\_place  | [Details](instpalce) |
-| institute\_id\_p3 | P3 institute ID      |
-
-#### `gmaps.csv`
-
-| Attribute     | Description         |
-|:--------------|:--------------------|
-| institute\_id | P3 institute number |
-| gmaps\_id     | Google maps id      |
-| gmaps\_lat    | Latitude            |
-| gmaps\_lng    | Longitude           |
-| gmaps\_name   | Name on google maps |
-| gmaps\_addr   | Name on google maps |
-
-#### `disciplines.csv`
-
-| Attribute       | Description          |
-|:----------------|:---------------------|
-| project\_number | P3 grant id          |
-| disciplines     | P3 discipline name   |
-| tier            | Discipline hierarchy |
-
-### Schema for Research earth
+### Schema specs for research earth
 
 #### `tags.csv`
 

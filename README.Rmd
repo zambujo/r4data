@@ -18,55 +18,7 @@ knitr::opts_chunk$set(
 
 The goal of this project is to try to map the institutes involved in the Swiss Programme for Research on Global Issues for Development ([r4d](http://www.r4d.ch/)) on the world map.
 
-### Old schema
-
-#### `projects.csv`
-
-> Subset of `P3_GrantExport.csv` from [P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx).
-
-|Attribute          |Description                       |
-|:------------------|:---------------------------------|
-|project_number     |P3 grant id                       |
-|project_title      |P3 grant title                    |
-|funding_instrument |`r4d`, `SPIRIT`, etc.             |
-|start_date         |`%b %Y`                           |
-|end_date           |`%b %Y`                           |
-|approved_amount    |Grant size in CHF                 |
-|running            |Inform whether grant is running   |
-|institution        |coordinating institution          |
-|university         |coordinating university           |
-
-#### `people.csv`
-
-|Attribute        |Description            |
-|:----------------|:----------------------|
-|project_number   |P3 grant id            |
-|person_id_snsf   |P3 person id           |
-|role             |[Project as](role)     |
-|institute_name   |[Details](instname)    |
-|institute_place  |[Details](instpalce)   |
-|institute_id_p3  |P3 institute ID        |
-
-#### `gmaps.csv`
-
-|Attribute         |Description              |
-|:-----------------|:------------------------|
-|institute_id      |P3 institute number      |
-|gmaps_id          |Google maps id           |
-|gmaps_lat         |Latitude                 |
-|gmaps_lng         |Longitude                |
-|gmaps_name        |Name on google maps      |
-|gmaps_addr        |Name on google maps      |
-
-#### `disciplines.csv`
-
-|Attribute         |Description                    |
-|:-----------------|:------------------------------|
-|project_number    |P3 grant id                    |
-|disciplines       |P3 discipline name             |
-|tier              |Discipline hierarchy           |
-
-### Schema for Research earth
+### Schema specs for research earth
 
 #### `tags.csv`
 
