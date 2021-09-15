@@ -30,7 +30,7 @@ read_p3_file <- function(file_name, loc = "data-raw") {
 ## Read the new Schema specs
 
 ```{r}
-path_to <- "data-raw/schema-specs/"
+path_to <- "data/specs/"
 files <-
   here(path_to) %>%
   dir(pattern = "*.csv")
@@ -38,7 +38,7 @@ specs <-
   str_c(path_to, files) %>%
   map(read_csv)
 names(specs) <- files
-openxlsx::write.xlsx(specs, file = "data/specs.xlsx", overwrite = TRUE))
+openxlsx::write.xlsx(specs, file = "data/specs.xlsx", overwrite = TRUE)
 ```
 
 ## Read data from P3
@@ -748,6 +748,7 @@ organizations %>%
     partner_organizations_id,
     organizations_project_id
   ) %>%
+  distinct(organizations_id, .keep_all = TRUE) %>%
   write_csv(here("data", "research_earth", "organizations.csv"))
 ```
 
