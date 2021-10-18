@@ -8,7 +8,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "joao.martins@gmx.net",
            comment = c(ORCID = "0000-0001-7961-4280"))
-Description: A compendium for enriching SNSF P3 data on r4d projects. 
+Description: Parsing and enriching SNSF P3 data on r4d projects. 
 License: MIT
 Depends: 
     yaml,
