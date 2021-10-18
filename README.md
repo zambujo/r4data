@@ -6,11 +6,11 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of this project is to try to map the institutes involved in the
-Swiss Programme for Research on Global Issues for Development
+The goal of this project is to show the projects running under the Swiss
+Programme for Research on Global Issues for Development
 ([r4d](http://www.r4d.ch/)) on the world map.
 
-### Data dictionary 🚧
+### Data dictionary
 
 #### `projects.csv`
 
@@ -42,14 +42,16 @@ Swiss Programme for Research on Global Issues for Development
 
 #### `gmaps.csv`
 
-| Attribute     | Type      | Description         |
-|:--------------|:----------|:--------------------|
-| institute\_id | character | P3 institute number |
-| gmaps\_id     | character | Google maps id      |
-| gmaps\_lat    | numeric   | Latitude            |
-| gmaps\_lng    | numeric   | Longitude           |
-| gmaps\_name   | character | Name on google maps |
-| gmaps\_addr   | character | Name on google maps |
+| Attribute      | Type      | Description            |
+|:---------------|:----------|:-----------------------|
+| institute\_id  | character | P3 institute number    |
+| gmaps\_id      | character | Google maps id         |
+| gmaps\_lat     | numeric   | Latitude               |
+| gmaps\_lng     | numeric   | Longitude              |
+| gmaps\_name    | character | Name on google maps    |
+| gmaps\_addr    | character | Address on google maps |
+| gmaps\_www     | character | Webpage on google maps |
+| gmaps\_country | character | Country on google maps |
 
 #### `disciplines.csv`
 

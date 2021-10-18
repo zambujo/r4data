@@ -224,6 +224,9 @@ project_number,disciplines,tier
 190140,Biology and Medicine,1
 190140,Basic Medical Sciences,2
 190140,Medical Microbiology,3
+190277,Biology and Medicine,1
+190277,Preventive Medicine (Epidemiology/Early Diagnosis/Prevention),2
+190277,Metabolic Disorders,3
 191762,Biology and Medicine,1
 191762,Basic Biological Research,2
 191762,"Cellular Biology, Cytology",3
@@ -257,3 +260,18 @@ project_number,disciplines,tier
 194008,Humanities and Social Sciences,1
 194008,"Economics, law",2
 194008,Economics,3
+194093,Humanities and Social Sciences,1
+194093,"Psychology, educational studies",2
+194093,Applied psychology,3
+194252,"Mathematics, Natural- and Engineering Sciences",1
+194252,Environmental Sciences,2
+194252,Pedology,3
+198747,Biology and Medicine,1
+198747,Experimental Medicine,2
+198747,Experimental Cancer Research,3
+198887,Biology and Medicine,1
+198887,Experimental Medicine,2
+198887,Experimental Cancer Research,3
+199067,"Mathematics, Natural- and Engineering Sciences",1
+199067,Engineering Sciences,2
+199067,Material Sciences,3

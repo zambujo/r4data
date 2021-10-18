@@ -39,7 +39,7 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-# Here's where it gets personal
+# Getting personal
 .DS_Store
 README.Rmd
 data-raw/

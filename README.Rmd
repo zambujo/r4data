@@ -16,16 +16,16 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of this project is to try to map the institutes involved in the Swiss Programme for Research on Global Issues for Development ([r4d](http://www.r4d.ch/)) on the world map.
+The goal of this project is to show the projects running under the Swiss Programme for Research on Global Issues for Development ([r4d](http://www.r4d.ch/)) on the world map.
 
-### Data dictionary 🚧
+### Data dictionary
 
 #### `projects.csv`
 
 > Subset of `P3_GrantExport.csv` from [P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx).
 
 
-|Attribute           |Type      |Description                       |
+|Attribute          |Type      |Description                       |
 |:------------------|:---------|:---------------------------------|
 |project_number     |character |P3 grant id                       |
 |project_title      |character |P3 grant title                    |
@@ -39,7 +39,7 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 
 #### `people.csv`
 
-|Attribute         |Type      |Description            |
+|Attribute        |Type      |Description            |
 |:----------------|:---------|:----------------------|
 |project_number   |character |P3 grant id            |
 |person_id_snsf   |character |P3 person id           |
@@ -50,18 +50,20 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 
 #### `gmaps.csv`
 
-|Attribute          |Type      |Description              |
+|Attribute         |Type      |Description              |
 |:-----------------|:---------|:------------------------|
 |institute_id      |character |P3 institute number      |
 |gmaps_id          |character |Google maps id           |
 |gmaps_lat         |numeric   |Latitude                 |
 |gmaps_lng         |numeric   |Longitude                |
 |gmaps_name        |character |Name on google maps      |
-|gmaps_addr        |character |Name on google maps      |
+|gmaps_addr        |character |Address on google maps   |
+|gmaps_www         |character |Webpage on google maps   |
+|gmaps_country     |character |Country on google maps   |
 
 #### `disciplines.csv`
 
-|Attribute          |Type      |Description              |
+|Attribute         |Type      |Description              |
 |:-----------------|:---------|:------------------------|
 |project_number    |character |P3 grant id              |
 |disciplines       |character |P3 discipline name       |
@@ -71,9 +73,7 @@ The goal of this project is to try to map the institutes involved in the Swiss P
 [instname]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Institute%20Name "Institute name"
 [instplace]: http://p3.snf.ch/Pages/DataAndDocumentation.aspx#Institute%20Place "Institute place"
 
-
 Explore the [raw data](https://flatgithub.com/zambujo/r4data).
-
 
 ### Schema
 
