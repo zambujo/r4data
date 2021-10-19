@@ -4,6 +4,8 @@
 # Research programmes for development
 
 <!-- badges: start -->
+
+[![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg)](https://gitmoji.dev)
 <!-- badges: end -->
 
 The goal of this project is to show the projects running under the Swiss
