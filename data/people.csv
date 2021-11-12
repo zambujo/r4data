@@ -91,8 +91,8 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 147330,651222,employee,NA,NA,NA
 177319,542103,responsible_applicant,Swiss TPH Universität Basel,Basel,253398
 171175,623148,employee,Center for Comparative and International Studies (CIS) and Institute for Environmental Decisions (IED),Zürich,236544
-147210,576939,employee,Global Governance CIS ETH Zürich,Zürich,233813
 147210,576939,employee,Département de science politique et relations internationales Université de Genève,Genève 4,233813
+147210,576939,employee,Global Governance CIS ETH Zürich,Zürich,233813
 160923,535553,applicant,Section des Sciences Pharmaceutiques Biopharmacie Université de Genève,Genève 4,247644
 169632,683209,applicant,Departamento de Economía Facultad de Economía y Negocios Universidad Alberto Hurtado,Santiago de Chile,246772
 194005,683209,applicant,Departamento de Economía Facultad de Economía y Negocios Universidad Alberto Hurtado,Santiago de Chile,246772
@@ -126,7 +126,7 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 146791,13605,responsible_applicant,NA,NA,NA
 152019,13605,applicant,NA,NA,NA
 177346,706777,applicant,National Centre for Animal & P. Health CENSA,Havana,249683
-160906,550672,responsible_applicant,Istituto Scienze della Terra DACD SUPSI,Canobbio,230075
+160906,550672,responsible_applicant,"Dipartimento Ambiente, Costruzioni e Design Scuola Universitaria Professionale della Svizzera Italiana",Mendrisio,261465
 169564,572275,responsible_applicant,Graduate Institute Chemin Eugène-Rigot 2A Department of International Relations,Genève 1,244869
 194008,572275,responsible_applicant,Graduate Institute Chemin Eugène-Rigot 2A Department of International Relations,Genève 1,244869
 147718,644744,employee,NA,NA,NA
@@ -141,10 +141,11 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 160923,662200,applicant,Avian Influenza Research Center Universitas Airlangga,Surabaya,244453
 152167,701303,applicant,National University of Laos Faculty of Social Sciences,Vientiane,240146
 177592,701303,applicant,National University of Laos Faculty of Social Sciences,Vientiane,240146
-160366,23677,applicant,Geneva University Hospitals Department of Primary Care Medicine,Genève 4,257165
+160366,23677,applicant,Department of Community Health & Medicine Faculty of Medicine University of Geneva,Genève,262086
 177591,641558,employee,"Gender Centre, International law department The Graduate Institute of International and Development Studies",Genève,255125
 146875,617130,applicant,Practical Action - Eastern Africa,Nairobi,239633
 177386,716885,applicant,ICIMOD International Centre for Integrated Mountain Development,Kathmandu,71203
+194252,800565,employee,NA,NA,NA
 160910,674252,applicant,University of the Western Cape,Bellville,245880
 152224,645562,applicant,Department of Agricultural Economics University of Zambia,Lusaka,241606
 177582,645562,applicant,Department of Agricultural Economics University of Zambia,Lusaka,241606
@@ -180,7 +181,7 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 152017,634069,applicant,Centre Suisse de Recherche Scientifique,Abidjan,82651
 177584,634069,applicant,Centre Suisse de Recherche Scientifique,Abidjan,82651
 160373,594705,employee,"Dipartimento economia aziendale, sanità e sociale (DEASS) SUPSI",Manno,244222
-147286,617328,applicant,Schweizerisches Tropen- und Public Health-Institut,Basel,3448
+147286,617328,applicant,Swiss Tropical and Public Health Institute,Basel,3448
 152033,552602,applicant,COMPAS Comunidad Pluricultural Andino-Amazonica Para la Sustentabilidad,Cochabamba,259072
 177386,552602,applicant,COMPAS Comunidad Pluricultural Andino-Amazonica Para la Sustentabilidad,Cochabamba,259072
 177585,552602,applicant,COMPAS Comunidad Pluricultural Andino-Amazonica Para la Sustentabilidad,Cochabamba,259072
@@ -191,6 +192,7 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 193649,768771,applicant,Dep. Energy and Environmental Engineering School of Engineering University of Natural Resources,Sunyani,252019
 152019,644062,applicant,Department of Communication Sciences Faculty of Human Ecology Bogor Agricultural University (IPB),Bogor,242672
 177587,644062,applicant,Department of Communication Sciences Faculty of Human Ecology Bogor Agricultural University (IPB),Bogor,242672
+171177,800639,employee,NA,NA,NA
 169461,662063,applicant,Institut de Recherche en Sciences dela Santé Centre National de Recherche Scientifique et Technologique,Ouagadougou,244398
 194003,662063,applicant,Institut de Recherche en Sciences dela Santé Centre National de Recherche Scientifique et Technologique,Ouagadougou,244398
 190140,774137,employee,NA,NA,NA
@@ -264,10 +266,10 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 193032,755418,applicant,Geomatic and Ecosystem Modeling/Laboratory o Department of Botany University of Lomé,Lomé,255826
 160373,689363,employee,2rLAB DEASS SUPSI,Manno,253076
 183760,689363,employee,2rLAB DEASS SUPSI,Manno,253076
-190277,730458,responsible_applicant,University of Bern Institute of Social and Preventive Medicine (ISPM),Bern,79308
+190277,730458,responsible_applicant,Institute of Social and Preventive Medicine (ISPM) Universität Bern,Bern,79308
 147836,529895,responsible_applicant,World Trade Institute Universität Bern,Bern,248220
-152154,569859,applicant,Institute of Ethnology University of Neuchâtel,Neuchâtel,242551
-177583,569859,applicant,Institute of Ethnology University of Neuchâtel,Neuchâtel,242551
+152154,569859,applicant,Institut d'Ethnologie Université de Neuchâtel,Neuchâtel,111149
+177583,569859,applicant,Institut d'Ethnologie Université de Neuchâtel,Neuchâtel,111149
 160876,674177,applicant,Swiss Organisation for Health in Africa SolidarMed,Maseru West,244377
 152017,66841,responsible_applicant,ETH Zurich Dep. Umweltsystemwissens Institut für Agrarwissenschaften,Lindau,261195
 177584,66841,responsible_applicant,ETH Zurich Dep. Umweltsystemwissens Institut für Agrarwissenschaften,Lindau,261195
@@ -278,10 +280,10 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 169632,683208,applicant,Faculty of Agriculture University of Abomey-Calavi,Benin,246771
 194005,683208,applicant,Faculty of Agriculture University of Abomey-Calavi,Benin,246771
 177480,706779,applicant,Forest Products Research & Development Inst. Wood Preservation Division,Laguna,250818
-146852,616994,responsible_applicant,"ITES-Ecosystem Management Groupe de Foresterie pour le développement ETH Zürich, CHN F 75.2",Zürich,227440
-193032,616994,responsible_applicant,"ITES-Ecosystem Management Groupe de Foresterie pour le développement ETH Zürich, CHN F 75.2",Zürich,227440
-146791,616994,applicant,"ITES-Ecosystem Management Groupe de Foresterie pour le développement ETH Zürich, CHN F 75.2",Zürich,227440
-177587,616994,applicant,"ITES-Ecosystem Management Groupe de Foresterie pour le développement ETH Zürich, CHN F 75.2",Zürich,227440
+146852,616994,responsible_applicant,Gestion Internationale des Forets Haute école des sciences agronomiques HAFL Haute école spécialisée bernoise BFH,Zollikofen,227440
+193032,616994,responsible_applicant,Gestion Internationale des Forets Haute école des sciences agronomiques HAFL Haute école spécialisée bernoise BFH,Zollikofen,227440
+146791,616994,applicant,Gestion Internationale des Forets Haute école des sciences agronomiques HAFL Haute école spécialisée bernoise BFH,Zollikofen,227440
+177587,616994,applicant,Gestion Internationale des Forets Haute école des sciences agronomiques HAFL Haute école spécialisée bernoise BFH,Zollikofen,227440
 146852,616994,responsible_applicant,Forest Management and Development (ForDev) ITES ETH Zurich,Zürich,227440
 193032,616994,responsible_applicant,Forest Management and Development (ForDev) ITES ETH Zurich,Zürich,227440
 146791,616994,applicant,Forest Management and Development (ForDev) ITES ETH Zurich,Zürich,227440
@@ -352,7 +354,7 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 171176,659851,employee,"Pogramme genre, globalisation et changements  IHEID",Genève 21,242757
 177591,659851,employee,"Pogramme genre, globalisation et changements  IHEID",Genève 21,242757
 160373,716292,employee,"Departement Geistes-, Sozial- und Staatswissenschaften (D-GESS) ETH Zürich",Zürich,246379
-194093,573370,partner,Psychopathologie und Klinische Intervention Psychologisches Institut Universität Zürich,Zürich,220528
+194093,573370,partner,Institut de psychologie Université de Lausanne,Lausanne,257614
 177588,560709,applicant,Zentrum für Entwicklung und Umwelt Universität Bern,Bern,230255
 191762,19483,responsible_applicant,Institut für Parasitologie Universität Bern,Bern,47846
 160910,737932,employee,NA,NA,NA
@@ -382,7 +384,7 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 177585,623671,employee,Centre for Development and Environment University of Bern,Bern,240943
 160910,737509,employee,Institut für Wirtschaftsinformatik Fachhochschule Nordwestschweiz Hochschule für Wirtschaft,Basel,95106
 160923,715978,employee,NA,NA,NA
-160876,567108,applicant,Schweizerisches Tropen- und Public Health-Institut,Basel,3448
+160876,567108,applicant,Swiss Tropical and Public Health Institute,Basel,3448
 147725,661658,employee,Zentrum für Entwicklung und Umwelt Universität Bern,Bern,230255
 171191,661658,employee,Zentrum für Entwicklung und Umwelt Universität Bern,Bern,230255
 147330,707195,employee,NA,NA,NA
@@ -405,8 +407,8 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 147286,617329,applicant,Makerere University,Makerere Main Campus,239729
 152033,659578,employee,Akademie der Naturwissenschaften Schweiz SCNAT,Bern,231596
 146896,709797,employee,Klinik und Poliklinik für Kinderheilkunde Medizinische Universitäts-Kinderklinik Inselspital,Bern,46154
-177481,75310,applicant,"Hochschule für Agrar-, Forst- und Lebensmittelwissenschaften HAFL Berner Fachhochschule BFH",Zollikofen,230309
 160877,20507,responsible_applicant,Institut für Pflanzen- und Mikrobiologie Universität Zürich,Zürich,41533
+177481,75310,applicant,"Hochschule für Agrar-, Forst- und Lebensmittelwissenschaften HAFL Berner Fachhochschule BFH",Zollikofen,230309
 193649,781656,employee,NA,NA,NA
 169632,672232,employee,Research Division Education Systems Swiss Economic Institute Swiss Federal Institute for Technology ETH,Zürich,244279
 152154,110193,responsible_applicant,CABI,Delémont,107132
@@ -417,6 +419,7 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 160929,673931,employee,Global Studies Institute Université de Genève,Genève,251085
 152017,658638,employee,Group of Plant Nutrition Institute of Agricultural Sciences ETH Zurich,Lindau,242770
 177584,658638,employee,Group of Plant Nutrition Institute of Agricultural Sciences ETH Zurich,Lindau,242770
+183759,801385,employee,NA,NA,NA
 146875,60699,applicant,Centre for Training and Integrated Research in ASAL Development CETRAD,Nanyuki,233998
 152033,60699,applicant,Centre for Training and Integrated Research in ASAL Development CETRAD,Nanyuki,233998
 177585,60699,applicant,Centre for Training and Integrated Research in ASAL Development CETRAD,Nanyuki,233998
@@ -489,7 +492,7 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 152019,688130,employee,NA,NA,NA
 177587,688130,employee,NA,NA,NA
 199067,773919,applicant,Petroleum and Petrochemical College  Chulalongkorn University,Bangkok,258274
-160914,505028,responsible_applicant,Industrial Process and Energy Systems Eng. IPESE-IGM-STI EPFL,Lausanne,242011
+160914,505028,responsible_applicant,Industrial Process and Energy Systems Engineering EPFLValais Wallis,Sion,250486
 194006,773974,employee,NA,NA,NA
 152085,681964,employee,NA,NA,NA
 169564,718463,employee,"Centre on Conflict, Development and Peacebuilding (CCDP) IHEID",Genève 1,234336
@@ -539,7 +542,7 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 160867,661981,applicant,University of Juba,Juba,245860
 177295,706374,applicant,Unité de formation et de recherche en lettres et sciences humaines (UFR/LSH) University of Koudougou,Koudougou,259099
 160373,655428,applicant,Ifakara Health Institute,Dar es Salaam,230492
-190277,740544,applicant,University of Bern Institute of Social and Preventive Medicine (ISPM),Bern,79308
+190277,740544,applicant,Institute of Social and Preventive Medicine (ISPM) Universität Bern,Bern,79308
 177386,519234,applicant,"Department of Ecosystems and Conservation College of Forestry, Wildlife and Tourism Sokoine University of Agriculture",Morogoro,250814
 177582,632099,employee,NA,NA,NA
 152224,645563,applicant,Kenya Agricultural & Livestock Research Org KALRO Food Crops Research Centre,Kabete,243039
@@ -585,7 +588,7 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 177592,662724,employee,Zentrum für Entwicklung und Umwelt Geographisches Institut Universität Bern,Bern,252868
 194252,45738,partner,Group of Plant Nutrition Institute of Agricultural Sciences ETH Zurich,Lindau,242770
 160919,29512,applicant,Swiss Tropical and Public Health Institute,Basel,229553
-160930,57587,responsible_applicant,Swiss Tropical and Public Health Institute Department of Epidemiology and Public Health University of Basel,Basel,252930
+160930,57587,responsible_applicant,Swiss Tropical and Public Health Institute,Basel,3448
 160374,681707,employee,NA,NA,NA
 183759,681707,employee,NA,NA,NA
 147836,632639,applicant,Department of Economics University of Ghana,Accra,241077
@@ -759,12 +762,12 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 194252,774096,partner,University of Peradeniya,Peradeniya,234120
 177592,759076,employee,Centre for Development and Environment (CDE) Universität Bern,Bern,242779
 160904,569798,employee,Forschungsinstitut für biologischen Landbau (FiBL),Frick,1081
-198887,607647,applicant,"Dept Oncology, Microbiology, Immunology Faculty of Science and Medicine Université de Fribourg",Fribourg,255836
+198887,607647,applicant,Département de Médecine Université de Fribourg,Fribourg,186
 190140,49769,responsible_applicant,Département de Biochimie Université de Lausanne,Epalinges,212598
 177583,768046,employee,NA,NA,NA
 194252,128782,partner,Group of Plant Nutrition Institute of Agricultural Sciences ETH Zurich,Lindau,242770
-160373,525668,responsible_applicant,Schweizerisches Tropen- und Public Health-Institut,Basel,3448
-183760,525668,responsible_applicant,Schweizerisches Tropen- und Public Health-Institut,Basel,3448
+160373,525668,responsible_applicant,Swiss Tropical and Public Health Institute,Basel,3448
+183760,525668,responsible_applicant,Swiss Tropical and Public Health Institute,Basel,3448
 169470,709352,employee,NA,NA,NA
 160876,661996,applicant,Golden Zaneka Public Co. Ltd.,Yangon,256886
 147836,623725,applicant,Foreign Trade University,Hanoi,240201
@@ -791,7 +794,7 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 147286,114555,applicant,Swiss Tropical and Public Health Institute Department of Epidemiology and Public Health University of Basel,Basel,252930
 160909,662135,applicant,Institute of Medical Research Papua New Guinea,Goroka,230503
 152085,634306,applicant,Centre for Invasion Biology Department of Botany and Zoology University of Stellenbosch,Matieland,242775
-160876,658019,employee,Schweizerisches Tropen- und Public Health-Institut,Basel,3448
+160876,658019,employee,Swiss Tropical and Public Health Institute,Basel,3448
 171177,715428,employee,NA,NA,NA
 177322,57196,responsible_applicant,Institut de géographie et durabilité Faculté des géosciences et de l'environnemen Université de Lausanne,Lausanne,239601
 147286,672999,employee,NA,NA,NA
@@ -799,7 +802,7 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 193925,120996,responsible_applicant,Dépt Microbiologie et Médecine Moléculaire Faculté de Médecine Université de Genève,Genève 4,191
 147210,571708,employee,Internationale Konfliktforschung ETH Zürich,Zürich,236390
 171175,571708,employee,Internationale Konfliktforschung ETH Zürich,Zürich,236390
-147286,72100,responsible_applicant,Schweizerisches Tropen- und Public Health-Institut,Basel,3448
+147286,72100,responsible_applicant,Swiss Tropical and Public Health Institute,Basel,3448
 198747,513461,responsible_applicant,Service de Radio-Oncologie CHUV,Lausanne,57979
 146852,139460,employee,Ökosystem Management Institut für terrestrische Ökosysteme ETHZ,Zürich,224425
 169564,730969,employee,NA,NA,NA
@@ -809,13 +812,13 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 190277,787974,employee,NA,NA,NA
 177480,759411,employee,NA,NA,NA
 152167,699886,employee,NA,NA,NA
-169461,634447,responsible_applicant,Schweizerisches Tropen- und Public Health-Institut,Basel,3448
-194003,634447,responsible_applicant,Schweizerisches Tropen- und Public Health-Institut,Basel,3448
+169461,634447,responsible_applicant,Swiss Tropical and Public Health Institute,Basel,3448
+194003,634447,responsible_applicant,Swiss Tropical and Public Health Institute,Basel,3448
 152085,634477,applicant,CABI Kenya,Nairobi,241649
 177588,634477,applicant,CABI Kenya,Nairobi,241649
 146875,641066,employee,NA,NA,NA
-160373,110941,applicant,Schweizerisches Tropen- und Public Health-Institut,Basel,3448
-183760,110941,applicant,Schweizerisches Tropen- und Public Health-Institut,Basel,3448
+160373,110941,applicant,Swiss Tropical and Public Health Institute,Basel,3448
+183760,110941,applicant,Swiss Tropical and Public Health Institute,Basel,3448
 171175,690441,applicant,Université Felix Houphouet-Boigny,Abidjan,239765
 193649,721543,employee,Eidg. Materialprüfungs- und Forschungsanstalt (EMPA),Dübendorf,1743
 189496,679722,applicant,Terrestrial Environmental Lab School of Science Monash University Malaysia,Bandar Sunway,254529
@@ -831,4 +834,4 @@ project_number,person_id_snsf,role,institute_name,institute_place,institute_id_p
 147725,26373,responsible_applicant,Institut für Sozialanthropologie Philosophisch-historische Fakultät Universität Bern,Bern,5425
 171191,26373,responsible_applicant,Institut für Sozialanthropologie Philosophisch-historische Fakultät Universität Bern,Bern,5425
 152033,704642,employee,NA,NA,NA
-177319,772184,employee,NA,NA,NA
+177319,772184,employee,Swiss TPH Universität Basel,Basel,253398

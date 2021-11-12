@@ -13,6 +13,7 @@ library(janitor)
 library(yaml)
 library(glue)
 library(openxlsx)
+library(readODS)
 p3_files <- read_yaml(here("inst", "extdata", "p3-tables.yml"))
 # wrapper function to download the CSV files from the P3 website
 download_table_from_p3 <- function(csv_table, dest_folder = "data-raw") {
@@ -84,10 +85,18 @@ projects <- projects_raw %>%
     end_date = format(end_date, "%b %Y"),
     approved_amount = as.numeric(approved_amount),
     approved_amount = round(approved_amount),
-    approved_amount = as.integer(approved_amount)
+    approved_amount = as.integer(approved_amount),
+    funding_instrument = str_remove(
+      funding_instrument,
+      " [(]Swiss Programme for Research on Global Issues for Development[)]")
   )
 
 write_csv(projects, here("data", "projects.csv"))
+
+write_ods(
+  projects,
+  here("data-raw", "research-earth.ods"),
+  sheet = "projects-p3")
 ```
 
 ### Create tags table for research earth
@@ -105,6 +114,11 @@ projects_tags <-
   mutate(tags = str_split(tags, ", ")) %>%
   unnest(tags)
 
+projects_tags %>%
+  write_ods(here("data-raw", "research-earth.ods"),
+            sheet = "project-tag-helper",
+            append = TRUE)
+
 tags <-
   projects_tags %>%
   mutate(tags_low = str_to_lower(tags)) %>%
@@ -120,22 +134,34 @@ tags %>%
   select(tags_id, tags_name) %>%
   write_csv(here("data", "research_earth", "tags.csv"))
 
+tags %>%
+  select(tags_id, tags_name) %>%
+  write_ods(here("data-raw", "research-earth.ods"),
+            sheet = "tags",
+            append = TRUE)
+
 # lookup table for linking projects to the tags table
 projects_tag_id <-
   projects_tags %>%
   left_join(tags, by = c("tags")) %>%
   group_by(project__id) %>%
   summarize(tag_id = str_c(tags_id, collapse = ","))
+
+projects_tag_id %>%
+  write_ods(here("data-raw", "research-earth.ods"),
+            sheet = "project-tag_id-helper",
+            append = TRUE)
+
 ```
 
 ### Create disciplines table
 
 ```{r, disciplines, eval=FALSE}
 projects <- read_csv(here("data", "projects.csv")) # p3 project data on r4d
+
 disciplines <- projects_raw %>%
   semi_join(mutate(projects, project_number = as.character(project_number)),
-    by = "project_number"
-  ) %>%
+            by = "project_number") %>%
   select(project_number, discipline_name_hierarchy, discipline_name) %>%
   unite(col = "disciplines", starts_with("discipline_"), sep = ";") %>%
   mutate(disciplines = str_split(disciplines, ";")) %>%
@@ -145,6 +171,7 @@ test_count <- disciplines %>% count(project_number)
 if (all(pull(test_count, n) == 3)) {
   disciplines <- disciplines %>% mutate(tier = rep(1:3, nrow(test_count)))
   write_csv(disciplines, here("data", "disciplines.csv"))
+  
 }
 ```
 
@@ -185,6 +212,17 @@ ref_disciplines %>%
   distinct(disciplines_id, .keep_all = TRUE) %>%
   write_csv(here("data", "research_earth", "disciplines.csv"))
 
+ref_disciplines %>%
+  select(
+    disciplines_id = discipline_number,
+    disciplines_name = discipline_clean,
+    tier
+  ) %>%
+  distinct(disciplines_id, .keep_all = TRUE) %>%
+  write_ods(here("data-raw", "research-earth.ods"),
+            sheet = "disciplines",
+            append = TRUE)
+
 # lookup table for linking projects to the disciplines table
 projects_disciplines_id <-
   disciplines %>%
@@ -196,6 +234,11 @@ projects_disciplines_id <-
   distinct(project__id, discipline_number) %>%
   group_by(project__id) %>%
   summarize(disciplines_id = str_c(discipline_number, collapse = ","))
+
+projects_disciplines_id %>%
+  write_ods(here("data-raw", "research-earth.ods"),
+            sheet = "project-disciplines_id-helper",
+            append = TRUE)
 ```
 
 
@@ -309,8 +352,14 @@ projects_organizations_id <-
   ) %>%
   mutate(project__id = as.character(project__id)) %>%
   filter(institute_id_p3 != "0") %>%
+  distinct() %>%
   group_by(project__id) %>%
   summarize(organizations_id = str_c(institute_id_p3, collapse = ","))
+
+projects_organizations_id %>%
+  write_ods(here("data-raw", "research-earth.ods"),
+            sheet = "project-organizations_id-helper",
+            append = TRUE)
 ```
 
 ```{r institute-details, eval=FALSE}
@@ -341,6 +390,14 @@ p3_institute_details <- p3_project_details %>%
   map_df(scrape_p3_institute)
 
 write_csv(p3_institute_details, here("data-raw", "p3-institute-details.csv"))
+
+p3_institute_details %>%
+  select(institute_id, institute_p3_name) %>%
+  distinct() %>%
+  write_ods(here("data-raw", "research-earth.ods"),
+            sheet = "institute-details-p3",
+            append = TRUE)
+
 ```
 
 ```{r people, eval=FALSE}
@@ -353,7 +410,7 @@ people <- people_raw %>%
   ) %>%
   mutate(project_number = str_split(project_number, ";")) %>%
   unnest(project_number) %>%
-  mutate(project_number = as.numeric(project_number)) %>%
+  # mutate(project_number = as.numeric(project_number)) %>%
   semi_join(projects, "project_number") %>%
   select(
     project_number,
@@ -362,7 +419,7 @@ people <- people_raw %>%
     institute_name,
     institute_place
   ) %>%
-  mutate(person_id_snsf = as.numeric(person_id_snsf)) %>%
+  # mutate(person_id_snsf = as.numeric(person_id_snsf)) %>%
   left_join(select(
     p3_project_details,
     project_id,
@@ -380,6 +437,13 @@ people <- people_raw %>%
   )
 
 write_csv(people, here("data", "people.csv"))
+people %>%
+  relocate(person_id_snsf) %>%
+  distinct(person_id_snsf, project_number, role, .keep_all = TRUE) %>%
+  write_ods(here("data-raw", "research-earth.ods"),
+            sheet = "people-p3",
+            append = TRUE)
+
 ```
 
 ```{r, eval=FALSE}
@@ -415,7 +479,7 @@ transdisciplinarity <-
     project__id = project_number,
     transdisciplinary = all_disciplines
   ) %>%
-  mutate(project__id = as.numeric(project__id)) %>%
+  # mutate(project__id = as.numeric(project__id)) %>%
   semi_join(projects, by = c("project__id" = "project_number")) %>%
   mutate(
     project__id = as.character(project__id),
@@ -437,10 +501,14 @@ projects_re <-
   mutate(
     project__id = as.character(project__id),
     email = "",
-    projects_funder_id = "",
+    email = ifelse(project_description == "SPIRIT", "spirit@snf.ch", email),
+    email = ifelse(project_description == "r4d", "r4d@snf.ch", email),
+    projects_funder_id = "1",
     start_date = str_replace(start_date, " 20", "-"),
     end_date = str_replace(end_date, " 20", "-")
   ) %>%
+  left_join(email_addr, by = c("project__id" = "project_number")) %>%
+  mutate(email = ifelse(!is.na(contact), contact, email)) %>%
   left_join(projects_disciplines_id, by = "project__id") %>%
   left_join(projects_tag_id, by = "project__id") %>%
   left_join(
@@ -471,6 +539,28 @@ projects_re %>%
     projects_organizations_id = organizations_id
   ) %>%
   write_csv(here("data", "research_earth", "projects.csv"))
+
+projects_re %>%
+  select(
+    project__id,
+    project_name,
+    contact_person,
+    email,
+    start_date,
+    end_date,
+    approved_amount,
+    project_description,
+    transdisciplinary,
+    disciplines_id,
+    tag_id,
+    projects_funder_id,
+    projects_organizations_id = organizations_id
+  ) %>%
+  distinct(project__id, .keep_all = TRUE) %>%
+  write_ods(here("data-raw", "research-earth.ods"),
+            sheet = "projects",
+            append = TRUE)
+
 ```
 
 ### Create funders table for research earth
@@ -490,7 +580,19 @@ people %>%
   ) %>%
   select(funder_id, funders_name, snsf = person_id_snsf, role) %>%
   write_csv(here("data", "research_earth", "funders.csv"))
+
+tibble(
+  funder_id = "1",
+  funders_name = "SNSF",
+  snsf = "",
+  role = "") %>%
+  write_ods(here("data-raw", "research-earth.ods"),
+          sheet = "funders",
+          append = TRUE)
+
 ```
+
+
 
 
 Preparing institute data for Google maps querying.
@@ -626,7 +728,6 @@ for (k in 1:ntotal) {
         1,
         .default = NA) %>%
       str_c(collapse = ",")
-    # TODO: add pluck .default = NA to avoid all these if_else()
     gmaps <- gmaps %>%
       add_row(
         gm_status = row_status,
@@ -652,7 +753,8 @@ Retrieve websites for each id
 
 ```{r, eval=FALSE}
 gmaps <- read_csv(here("data-raw", "gmaps.csv"))
-ntotal <- nrow(gmaps)
+gm_ids <- pull(gmaps, gm_id) %>% unique()
+ntotal <- length(gm_ids)
 websites <- tibble(
   gm_id = as.character(),
   gm_www = as.character()
@@ -661,7 +763,7 @@ websites <- tibble(
 for (k in 1:ntotal) {
   message(glue::glue("* Quering row {k} of {ntotal}.."))
   Sys.sleep(.75)
-  row_gid <- purrr::pluck(gmaps, "gm_id", k)
+  row_gid <- gm_ids[k]
   url_api <- glue::glue(
     "https://maps.googleapis.com/maps/api/place/details/json?",
     "fields=website&",
@@ -688,12 +790,18 @@ gmaps <- gmaps %>%
 
 write_csv(websites, here("data-raw", "websites.csv"))
 write_csv(gmaps, here("data-raw", "gmaps.csv"))
+gmaps %>%
+  write_ods(
+    here("data-raw", "research-earth.ods"),
+    sheet = "google-maps-raw",
+    append = TRUE)
 ```
 
 
 
 ```{r, countries, eval=FALSE}
-read_csv(here("data-raw", "gmaps.csv")) %>%
+# read_csv(here("data-raw", "gmaps.csv")) %>%
+gmaps_clean <- gmaps %>%
   select(
     institute_id,
     gmaps_id = gm_id,
@@ -714,8 +822,17 @@ read_csv(here("data-raw", "gmaps.csv")) %>%
     gmaps_addr_ascii,
     "gmaps_country",
     regex = "(?<=[,] )([[:space:][:alpha:].-]+$)"
-  ) %>%
+  )
+
+gmaps_clean %>%
   write_csv(here("data", "gmaps.csv"))
+
+gmaps_clean %>%
+  write_ods(
+    here("data-raw", "research-earth.ods"),
+    sheet = "google-maps-ref",
+    append = TRUE)
+
 ```
 
 
@@ -732,6 +849,12 @@ lookup_org_proj_id <- p3_project_details %>%
   summarize(organizations_project_id = str_c(project_id, collapse = ",")) %>%
   mutate(institute_id_p3 = as.character(institute_id_p3)) %>%
   rename(organizations_id = institute_id_p3)
+
+lookup_org_proj_id %>%
+  write_ods(
+    here("data-raw", "research-earth.ods"),
+    sheet = "organizations-projects-ref",
+    append = TRUE)
 
 # lookup for organizations and disciplines
 
@@ -751,6 +874,12 @@ lookup_organiz_discip_id <- p3_project_details %>%
   summarize(disciplines_id = str_c(disciplines_id, collapse = ",")) %>%
   rename(organizations_id = institute_id_p3)
 
+lookup_organiz_discip_id %>%
+  write_ods(
+    here("data-raw", "research-earth.ods"),
+    sheet = "organizations-disciplines-ref",
+    append = TRUE)
+
 # lookup for partner organisations
 
 partners <- p3_project_details %>%
@@ -769,7 +898,14 @@ lookup_partners <- partners %>%
   mutate(institute_id_p3.x = as.character(institute_id_p3.x)) %>%
   rename(organizations_id = institute_id_p3.x)
 
-organizations <- gmaps %>%
+lookup_partners %>%
+  write_ods(
+    here("data-raw", "research-earth.ods"),
+    sheet = "organizations-organizations-ref",
+    append = TRUE)
+
+
+organizations <- gmaps_clean %>%
   select(
     organizations_id = institute_id,
     organizations_name = gmaps_name,
@@ -788,7 +924,7 @@ organizations <- gmaps %>%
   left_join(lookup_partners, by = "organizations_id") %>%
   left_join(lookup_org_proj_id, by = "organizations_id")
 
-organizations %>%
+organizations_clean <- organizations %>%
   select(
     organizations_id,
     organizations_name,
@@ -803,8 +939,16 @@ organizations %>%
     partner_organizations_id,
     organizations_project_id
   ) %>%
-  distinct(organizations_id, .keep_all = TRUE) %>%
+  distinct(organizations_id, .keep_all = TRUE)
+
+organizations_clean %>%
   write_csv(here("data", "research_earth", "organizations.csv"))
+
+organizations_clean %>%
+  write_ods(
+    here("data-raw", "research-earth.ods"),
+    sheet = "organizations",
+    append = TRUE)
 ```
 
 
