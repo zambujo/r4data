@@ -1,23 +1,25 @@
 ---
-title: "Gathering r4d data"
+title: "🚧 Gathering r4d data 🚧"
+editor_options: 
+  chunk_output_type: console
 ---
 
-🚧 Attention: Work-in-progress. 🚧
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, eval=FALSE}
 library(tidyverse)
 library(lubridate)
 library(here)
 library(janitor)
 library(yaml)
 library(glue)
-library(readxl)
+
+# utils ----
+
 p3_files <- read_yaml(here("inst", "extdata", "p3-tables.yml"))
 download_table_from_p3 <- function(csv_table, dest_folder = "data-raw") {
   url_table <- glue("http://p3.snf.ch/P3Export/{csv_table}") %>%
     download.file(here(dest_folder, csv_table))
 }
+
 read_p3_file <- function(file_name, loc = "data-raw") {
   here(loc, file_name) %>% 
   read_delim(";", escape_double = FALSE, col_types = cols(.default = "c")) %>%
@@ -258,64 +260,148 @@ gmaps <- tibble(
   gm_name = as.character(),
   gm_id = as.character(),
   gm_types = as.character(),
-  institute_id = as.character())
-
+  institute_id = as.character()
+)
 ntotal <- nrow(df_institutes)
 df_institutes <- df_institutes %>%
   mutate(institute_urlenc = map_chr(institute_ascii, URLencode))
-
-for(k in 11:nrow(df_institutes)) {
+for (k in 1:ntotal) {
   Sys.sleep(.75) # 500ms
-  message(glue("* Quering row {k} of {ntotal}.."))
-  inst_id <- purrr::pluck(df_institutes, "institute_id_p3", k)
+  message(glue::glue("* Quering row {k} of {ntotal}.."))
+  inst_id <- purrr::pluck(df_institutes, "institute_id_p3", k) %>%
+    as.character()
   url_enc <- purrr::pluck(df_institutes, "institute_urlenc", k)
-  url_api <- glue("https://maps.googleapis.com/maps/api/",
-                  "place/findplacefromtext/json?input={url_enc}&",
-                  "inputtype=textquery&",
-                  "fields=business_status,icon,plus_code,",
-                  "formatted_address,geometry,name,place_id,types&",
-                  "key={api_key}")
+  url_api <- glue::glue(
+    "https://maps.googleapis.com/maps/api/",
+    "place/findplacefromtext/json?",
+    "input={url_enc}&",
+    "inputtype=textquery&",
+    "language=en&",
+    "fields=business_status,icon,plus_code,",
+    "formatted_address,geometry,name,place_id,types&",
+    "key={api_key}"
+  )
   # api call
   gm_res <- jsonlite::fromJSON(url_api)
   if (purrr::pluck(gm_res, "status") == "OK") {
-    row_status <-  gm_res %>%
-      purrr::pluck("candidates", "business_status", 1)
-    row_icon <-  gm_res %>%
-      purrr::pluck("candidates", "icon", 1)
-    row_lat <-  gm_res %>%
-      purrr::pluck("candidates", "geometry", "location", "lat", 1)
-    row_lng <-  gm_res %>%
-      purrr::pluck("candidates", "geometry", "location", "lng", 1)
-    row_plus <-  gm_res %>%
-      purrr::pluck("candidates", "plus_code", 1) %>%
+    row_status <- gm_res %>%
+      purrr::pluck(
+        "candidates",
+        "business_status",
+        1,
+        .default = NA)
+    row_icon <- gm_res %>%
+      purrr::pluck(
+        "candidates",
+        "icon",
+        1,
+        .default = NA)
+    row_lat <- gm_res %>%
+      purrr::pluck(
+        "candidates",
+        "geometry",
+        "location",
+        "lat",
+        1,
+        .default = NA)
+    row_lng <- gm_res %>%
+      purrr::pluck(
+        "candidates",
+        "geometry",
+        "location",
+        "lng",
+        1,
+        .default = NA)
+    row_plus <- gm_res %>%
+      purrr::pluck(
+        "candidates",
+        "plus_code",
+        1,
+        .default = NA) %>%
       head(1)
-    row_addr <-  gm_res %>%
-      purrr::pluck("candidates", "formatted_address", 1)
-    row_name <-  gm_res %>%
-      purrr::pluck("candidates", "name", 1)
+    row_addr <- gm_res %>%
+      purrr::pluck(
+        "candidates",
+        "formatted_address",
+        1,
+        .default = NA)
+    row_name <- gm_res %>%
+      purrr::pluck(
+        "candidates",
+        "name",
+        1,
+        .default = NA)
     row_id <- gm_res %>%
-      purrr::pluck("candidates", "place_id", 1)
-    row_types <-  gm_res %>%
-      purrr::pluck("candidates", "types", 1) %>% 
+      purrr::pluck(
+        "candidates",
+        "place_id",
+        1,
+        .default = NA)
+    row_types <- gm_res %>%
+      purrr::pluck(
+        "candidates",
+        "types",
+        1,
+        .default = NA) %>%
       str_c(collapse = ",")
+    # TODO: add pluck .default = NA to avoid all these if_else()
     gmaps <- gmaps %>%
       add_row(
-        gm_status = if_else(is_null(row_status), NA_character_, row_status),
-        gm_icon = if_else(is_null(row_icon), NA_character_, row_icon),
-        gm_lat = if_else(is_null(row_lat), NA_real_, row_lat),
-        gm_lng = if_else(is_null(row_lng), NA_real_, row_lng),
-        gm_plus = if_else(is_null(row_plus), NA_character_, row_plus),
-        gm_addr = if_else(is_null(row_addr), NA_character_, row_addr),
-        gm_name = if_else(is_null(row_name), NA_character_, row_name),
-        gm_id = if_else(is_null(row_id), NA_character_, row_id),
-        gm_types = if_else(is_null(row_types), NA_character_, row_types),
-        institute_id = inst_id)
-  }
-  else(
+        gm_status = row_status,
+        gm_icon = row_icon,
+        gm_lat = row_lat,
+        gm_lng = row_lng,
+        gm_plus = row_plus,
+        gm_addr = row_addr,
+        gm_name = row_name,
+        gm_id = row_id,
+        gm_types = row_types,
+        institute_id = inst_id
+      )
+  } else {
     message("!!!API KO")
-  )
+  }
 }
+write_csv(gmaps, here("data-raw", "gmaps.csv"))
+```
 
+
+Retrieve websites for each id
+
+```{r, eval=FALSE}
+gmaps <- read_csv(here("data-raw", "gmaps.csv"))
+ntotal <- nrow(gmaps)
+websites <- tibble(
+  gm_id = as.character(),
+  gm_www = as.character()
+)
+for (k in 1:ntotal) {
+  message(glue::glue("* Quering row {k} of {ntotal}.."))
+  Sys.sleep(.75)
+  row_gid <- purrr::pluck(gmaps, "gm_id", k)
+  url_api <- glue::glue(
+    "https://maps.googleapis.com/maps/api/place/details/json?",
+    "fields=website&",
+    "language=en&",
+    "place_id={row_gid}&",
+    "key={api_key}"
+  )
+  gm_res <- jsonlite::fromJSON(url_api)
+  if (purrr::pluck(gm_res, "status") == "OK") {
+    row_www <- gm_res %>%
+      purrr::pluck("result", "website", 1, .default = NA)
+    websites <- websites %>%
+      add_row(
+        gm_id = row_gid,
+        gm_www = row_www
+      )
+  } else {
+    message("!!!API KO")
+  }
+}
+gmaps <- gmaps %>%
+  left_join(websites, by = "gm_id")
+write_csv(websites, here("data-raw", "websites.csv"))
 write_csv(gmaps, here("data-raw", "gmaps.csv"))
 ```
 
@@ -338,6 +424,7 @@ read_csv(here("data-raw", "gmaps.csv")) %>%
     gmaps_addr_ascii, 
     "gmaps_country", 
     regex = "(?<=[,] )([[:space:][:alpha:].-]+$)") %>%
+  distinct(institute_id, gmaps_id, .keep_all = TRUE) %>%
   write_csv(here("data", "gmaps.csv"))
 ```
 
@@ -345,6 +432,9 @@ read_csv(here("data-raw", "gmaps.csv")) %>%
 Add "difficult" cases separately (TODO).
 
 ```{r google-missing, eval=FALSE}
+gmaps <- read_csv(here("data", "gmaps.csv"))
+
+
 # TODO: failsafe for 11 missing values
 
 df_institutes %>% 
@@ -356,15 +446,12 @@ df_institutes %>%
 # Add websites
 ```
 
-## DAC Country List
-
-```{r}
-# https://www.oecd.org/development/financing-sustainable-development/development-finance-standards/dacandcrscodelists.htm
-# https://www.oecd.org/dac/financing-sustainable-development/development-finance-standards/DAC-CRS-CODES.xls
-
-```
+## DAC Country List (Would-have)
 
 ```{r, eval=FALSE}
+# https://www.oecd.org/development/financing-sustainable-development/development-finance-standards/dacandcrscodelists.htm
+# https://www.oecd.org/dac/financing-sustainable-development/development-finance-standards/DAC-CRS-CODES.xls
+library(readxl)
 file_name <- here("data-raw", 
                   "r4d_researchers_institutions_countries.xlsx")
 sheets <- excel_sheets(path = file_name)

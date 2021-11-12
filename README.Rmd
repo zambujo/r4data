@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Research programmes for development
+# Swiss research programmes for development
 
 <!-- badges: start -->
 [![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg)](https://gitmoji.dev)
@@ -24,7 +24,6 @@ The goal of this project is to show the projects running under the Swiss Program
 #### `projects.csv`
 
 > Subset of `P3_GrantExport.csv` from [P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx).
-
 
 |Attribute          |Type      |Description                       |
 |:------------------|:---------|:---------------------------------|
@@ -76,7 +75,7 @@ The goal of this project is to show the projects running under the Swiss Program
 
 Explore the [raw data](https://flatgithub.com/zambujo/r4data).
 
-### Schema
+### (Pseudo-)Schema
 
 ![](./data/schema.svg)
 

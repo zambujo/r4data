@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Research programmes for development
+# Swiss research programmes for development
 
 <!-- badges: start -->
 
@@ -65,7 +65,7 @@ Programme for Research on Global Issues for Development
 
 Explore the [raw data](https://flatgithub.com/zambujo/r4data).
 
-### Schema
+### (Pseudo-)Schema
 
 ![](./data/schema.svg)
 

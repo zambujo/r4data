@@ -1,0 +1,454 @@
+    library(tidyverse)
+    library(lubridate)
+    library(here)
+    library(janitor)
+    library(yaml)
+    library(glue)
+
+    # utils ----
+
+    p3_files <- read_yaml(here("inst", "extdata", "p3-tables.yml"))
+    download_table_from_p3 <- function(csv_table, dest_folder = "data-raw") {
+      url_table <- glue("http://p3.snf.ch/P3Export/{csv_table}") %>%
+        download.file(here(dest_folder, csv_table))
+    }
+
+    read_p3_file <- function(file_name, loc = "data-raw") {
+      here(loc, file_name) %>% 
+      read_delim(";", escape_double = FALSE, col_types = cols(.default = "c")) %>%
+      clean_names()
+    }
+
+Read data from P3
+-----------------
+
+Downloading raw data from
+[P3](http://p3.snf.ch/Pages/DataAndDocumentation.aspx) into
+[data-raw](./data-raw/).
+
+    walk(p3_files, download_table_from_p3)
+
+Read local P3 files
+-------------------
+
+    projects_raw <- read_p3_file(pluck(p3_files, 1))
+    people_raw <- read_p3_file(pluck(p3_files, 2))
+
+Logic
+-----
+
+Finding 86 projects (77
+[r4d.ch](http://www.r4d.ch/r4d-programme/all-projects) and 9 SPIRIT). 62
+distinct project titles in
+[r4d.ch](http://www.r4d.ch/r4d-programme/all-projects) and 9 distinct
+project titles in SPIRIT.
+
+    projects <- projects_raw %>% 
+      filter(str_detect(funding_instrument, "r4d|SPIRIT")) %>% # MVP
+      select(project_number, 
+             project_title,
+             funding_instrument,
+             start_date,
+             end_date,
+             approved_amount,
+             institution,
+             university,
+             keywords) %>%
+      mutate(
+        start_date = dmy(start_date),
+        end_date = dmy(end_date),
+        running = today() %within% interval(start_date, end_date),
+        start_date = round_date(start_date, unit = "months"),
+        end_date = round_date(end_date, unit = "months"),
+        start_date = format(start_date, "%b %Y"),
+        end_date = format(end_date, "%b %Y"),
+        approved_amount = as.numeric(approved_amount),
+        approved_amount = round(approved_amount),
+        approved_amount = as.integer(approved_amount))
+
+    write_csv(projects, here("data", "projects.csv"))
+
+    projects <- read_csv(here("data", "projects.csv")) # p3 project data on r4d
+    disciplines <-  projects_raw %>%
+      semi_join(mutate(projects, project_number = as.character(project_number)),
+                       by = "project_number")  %>%
+      select(project_number, discipline_name_hierarchy, discipline_name) %>%
+      unite(col = "disciplines", starts_with("discipline_"), sep = ";") %>%
+      mutate(disciplines = str_split(disciplines, ";")) %>%
+      unnest(disciplines)
+
+    test_count <- disciplines %>% count(project_number)
+    if (all(pull(test_count, n) == 3)) {
+      disciplines <- disciplines %>% mutate(tier = rep(1:3, nrow(test_count)))
+      write_csv(disciplines, here("data", "disciplines.csv"))
+    }
+
+Add detailed institute data missing from the CSV data dumps by scrapping
+P3.
+
+    scrape_p3_project <- function(project_number) {
+      message(glue("* Scrapping {project_number}"))
+      Sys.sleep(.25)
+      
+      p3_url <- glue("http://p3.snf.ch/project-{project_number}")
+      html_page <- xml2::read_html(p3_url)
+      project_people <- html_page %>%
+        rvest::html_nodes(".person-field-0 a") %>%
+        rvest::html_attr("href")
+      
+      project_people <- html_page %>%
+        rvest::html_nodes(".person-field-0 a") %>%
+        rvest::html_attr("href")
+      project_institutes <- html_page %>%
+        rvest::html_nodes(".person-field-1 a") %>%
+        rvest::html_attr("href")
+
+      tibble(
+        people_p3slug = project_people,
+        institute_p3slug = project_institutes) %>%
+        extract(people_p3slug, 
+                "person_id_p3", 
+                regex = "(\\d+)", 
+                remove=FALSE) %>%
+        extract(institute_p3slug, 
+                "institute_id_p3", 
+                regex = "(\\d+)", 
+                remove=FALSE) %>%
+        mutate(project_id = project_number) %>%
+        select(project_id, everything())
+    }
+
+    p3_project_details <- projects %>% 
+      pull(project_number) %>% 
+      map_df(scrape_p3_project)
+
+    write_csv(p3_project_details, here("data-raw", "p3-grant-details.csv"))
+
+    scrape_p3_institute <- function(institute_number) {
+      message(glue("* Scrapping /institute-{institute_number}"))
+      Sys.sleep(.25)
+      p3_url <- glue("http://p3.snf.ch/institute-{institute_number}")
+      html_page <- xml2::read_html(p3_url)
+      institute_details <- 
+        html_page %>%
+        rvest::html_nodes(".institute td") %>%
+        rvest::html_text() %>%
+        str_squish() %>%
+        head(2)
+
+      tibble(
+        institute_p3_name = pluck(institute_details, 1),
+        institute_p3_addr = pluck(institute_details, 2)
+      ) %>%
+        mutate(institute_id = institute_number) %>%
+        select(institute_id, everything())
+    }
+
+    p3_institute_details <- p3_project_details %>%
+      filter(institute_id_p3 != "0") %>%
+      distinct(institute_id_p3) %>%
+      pull(institute_id_p3) %>%
+      map_df(scrape_p3_institute)
+
+    write_csv(p3_institute_details, here("data-raw", "p3-institute-details.csv"))
+
+    people <- people_raw %>%
+      pivot_longer(
+        starts_with("projects"), 
+        names_to = "role", 
+        values_to = "project_number",
+        values_drop_na = TRUE) %>%
+      mutate(project_number = str_split(project_number, ";")) %>%
+      unnest(project_number) %>%
+      semi_join(projects, "project_number") %>%
+      select(project_number,
+             person_id_snsf,
+             role,
+             institute_name,
+             institute_place) %>%
+      left_join(select(p3_project_details, 
+                       project_id,
+                       person_id_p3,
+                       institute_id_p3), 
+                by = c("project_number" = "project_id", 
+                       "person_id_snsf" = "person_id_p3")) %>%
+      mutate(
+        role = str_remove(role, "projects_as_"),
+        institute_id_p3 = na_if(institute_id_p3, "0"))
+
+    write_csv(people, here("data", "people.csv"))
+
+    # for completeness
+    collab <- read_p3_file(pluck(p3_files, 3))
+
+    # 771 more collaborations...
+    more <- semi_join(collab, r4d, "project_number")
+    # more %>% count(group_person, sort = TRUE) %>% print(n = 50)
+    # more %>% filter(str_detect(group_person, "CO-APPLICANT"))
+
+    p3_project_details <- read_csv(here("data-raw", "p3-grant-details.csv"))
+    p3_institute_details <- read_csv(here("data-raw", "p3-institute-details.csv"))
+
+    # tests :)
+    # people %>% anti_join(p3_project_details, by = c("person_id_snsf" = "person_id_p3"))
+    # p3_project_details %>% anti_join(people, by = c("person_id_p3" = "person_id_snsf"))
+
+Preparing institute data for Google maps querying.
+
+    df_institutes <- people %>%
+      filter(!is.na(institute_id_p3)) %>%
+      select(institute_id_p3, institute_name, institute_place) %>%
+      distinct(institute_id_p3, .keep_all = TRUE) %>%
+      mutate(
+        institute_name = str_remove_all(institute_name, "[[:punct:]]$"),
+        institute_name = str_squish(institute_name),
+        institute = glue("{institute_name}, {institute_place}"),
+        institute = str_remove_all(institute, "\\d+"),
+        institute = str_squish(institute),
+        institute = str_remove_all(institute, "[[:punct:]]$"),
+        institute = str_squish(institute),
+        institute_ascii = stringi::stri_trans_general(institute, "Latin-ASCII"),
+        institute_ascii = str_replace_all(institute_ascii, fixed(" -"), ","),
+        institute_ascii = str_replace_all(institute_ascii, fixed(" ("), ", "),
+        institute_ascii = str_replace_all(institute_ascii, fixed("/"), ", "),
+        institute_ascii = str_replace_all(institute_ascii, fixed(")"), ","))
+
+    # Write 
+    write_csv(df_institutes, here("data-raw", "df_institutes.csv"))
+
+Query Google Maps
+-----------------
+
+    api_key <- Sys.getenv("GMAPS_API")
+    # https://developers.google.com/maps/documentation/places/web-service/overview
+
+### Places Search
+
+    gmaps <- tibble(
+      gm_status = as.character(),
+      gm_icon = as.character(),
+      gm_lat = as.integer(),
+      gm_lng = as.integer(),
+      gm_plus = as.character(),
+      gm_addr = as.character(),
+      gm_name = as.character(),
+      gm_id = as.character(),
+      gm_types = as.character(),
+      institute_id = as.character()
+    )
+    ntotal <- nrow(df_institutes)
+    df_institutes <- df_institutes %>%
+      mutate(institute_urlenc = map_chr(institute_ascii, URLencode))
+    for (k in 1:ntotal) {
+      Sys.sleep(.75) # 500ms
+      message(glue::glue("* Quering row {k} of {ntotal}.."))
+      inst_id <- purrr::pluck(df_institutes, "institute_id_p3", k) %>%
+        as.character()
+      url_enc <- purrr::pluck(df_institutes, "institute_urlenc", k)
+      url_api <- glue::glue(
+        "https://maps.googleapis.com/maps/api/",
+        "place/findplacefromtext/json?",
+        "input={url_enc}&",
+        "inputtype=textquery&",
+        "language=en&",
+        "fields=business_status,icon,plus_code,",
+        "formatted_address,geometry,name,place_id,types&",
+        "key={api_key}"
+      )
+      # api call
+      gm_res <- jsonlite::fromJSON(url_api)
+      if (purrr::pluck(gm_res, "status") == "OK") {
+        row_status <- gm_res %>%
+          purrr::pluck(
+            "candidates",
+            "business_status",
+            1,
+            .default = NA)
+        row_icon <- gm_res %>%
+          purrr::pluck(
+            "candidates",
+            "icon",
+            1,
+            .default = NA)
+        row_lat <- gm_res %>%
+          purrr::pluck(
+            "candidates",
+            "geometry",
+            "location",
+            "lat",
+            1,
+            .default = NA)
+        row_lng <- gm_res %>%
+          purrr::pluck(
+            "candidates",
+            "geometry",
+            "location",
+            "lng",
+            1,
+            .default = NA)
+        row_plus <- gm_res %>%
+          purrr::pluck(
+            "candidates",
+            "plus_code",
+            1,
+            .default = NA) %>%
+          head(1)
+        row_addr <- gm_res %>%
+          purrr::pluck(
+            "candidates",
+            "formatted_address",
+            1,
+            .default = NA)
+        row_name <- gm_res %>%
+          purrr::pluck(
+            "candidates",
+            "name",
+            1,
+            .default = NA)
+        row_id <- gm_res %>%
+          purrr::pluck(
+            "candidates",
+            "place_id",
+            1,
+            .default = NA)
+        row_types <- gm_res %>%
+          purrr::pluck(
+            "candidates",
+            "types",
+            1,
+            .default = NA) %>%
+          str_c(collapse = ",")
+        # TODO: add pluck .default = NA to avoid all these if_else()
+        gmaps <- gmaps %>%
+          add_row(
+            gm_status = row_status,
+            gm_icon = row_icon,
+            gm_lat = row_lat,
+            gm_lng = row_lng,
+            gm_plus = row_plus,
+            gm_addr = row_addr,
+            gm_name = row_name,
+            gm_id = row_id,
+            gm_types = row_types,
+            institute_id = inst_id
+          )
+      } else {
+        message("!!!API KO")
+      }
+    }
+    write_csv(gmaps, here("data-raw", "gmaps.csv"))
+
+Retrieve websites for each id
+
+    gmaps <- read_csv(here("data-raw", "gmaps.csv"))
+    ntotal <- nrow(gmaps)
+    websites <- tibble(
+      gm_id = as.character(),
+      gm_www = as.character()
+    )
+    for (k in 1:ntotal) {
+      message(glue::glue("* Quering row {k} of {ntotal}.."))
+      Sys.sleep(.75)
+      row_gid <- purrr::pluck(gmaps, "gm_id", k)
+      url_api <- glue::glue(
+        "https://maps.googleapis.com/maps/api/place/details/json?",
+        "fields=website&",
+        "language=en&",
+        "place_id={row_gid}&",
+        "key={api_key}"
+      )
+      gm_res <- jsonlite::fromJSON(url_api)
+      if (purrr::pluck(gm_res, "status") == "OK") {
+        row_www <- gm_res %>%
+          purrr::pluck("result", "website", 1, .default = NA)
+        websites <- websites %>%
+          add_row(
+            gm_id = row_gid,
+            gm_www = row_www
+          )
+      } else {
+        message("!!!API KO")
+      }
+    }
+    gmaps <- gmaps %>%
+      left_join(websites, by = "gm_id")
+    write_csv(websites, here("data-raw", "websites.csv"))
+    write_csv(gmaps, here("data-raw", "gmaps.csv"))
+
+    read_csv(here("data-raw", "gmaps.csv")) %>%
+      select(
+        institute_id,
+        gmaps_id = gm_id,
+        gmaps_lat = gm_lat,
+        gmaps_lng = gm_lng,
+        gmaps_name = gm_name,
+        gmaps_addr = gm_addr) %>%
+      # extract country from address
+      mutate(
+        gmaps_addr_ascii = stringi::stri_trans_general(
+          gmaps_addr, 
+          "Latin-ASCII")) %>%
+      extract(
+        gmaps_addr_ascii, 
+        "gmaps_country", 
+        regex = "(?<=[,] )([[:space:][:alpha:].-]+$)") %>%
+      write_csv(here("data", "gmaps.csv"))
+
+Add “difficult” cases separately (TODO).
+
+    # TODO: failsafe for 11 missing values
+
+    df_institutes %>% 
+      anti_join(gmaps, by = c("institute_id_p3" = "institute_id")) %>%
+      pull(institute_ascii)
+
+    # Add websites
+
+DAC Country List (Would-have)
+-----------------------------
+
+    # https://www.oecd.org/development/financing-sustainable-development/development-finance-standards/dacandcrscodelists.htm
+    # https://www.oecd.org/dac/financing-sustainable-development/development-finance-standards/DAC-CRS-CODES.xls
+    library(readxl)
+    file_name <- here("data-raw", 
+                      "r4d_researchers_institutions_countries.xlsx")
+    sheets <- excel_sheets(path = file_name)
+    dfs <- sheets %>%
+      map_df(function(x)
+        readxl::read_excel(file_name, sheet = x) %>% select(1:6)) %>%
+      clean_names()
+    # only 45 projects
+
+    file_name <- here("about", "r4d.html")
+    html <- read_lines(file_name)
+    html <- str_subset(html, "DocId")
+    docid <- str_extract_all(html, '(?<=\\"DocId\\":)[[:digit:]]{4}') %>%
+      flatten_chr()
+
+    data_list <- html %>% 
+      str_split(',"') %>%
+      map(~ str_replace_all(.x, '\\\\u002f', '/')) %>%
+      map(~ str_remove_all(.x, '\\"')) %>%
+      map(str_split_fixed, pattern = ":", n = 2) %>%
+      map(~ .x[2:4, 2])
+
+    data_df <- tibble(
+      doc_id = map_chr(data_list, ~ .x[1]),
+      title = map_chr(data_list, ~ .x[2]),
+      url = map_chr(data_list, ~ .x[3])
+    )
+
+
+    data_df <- data_df %>% 
+      mutate(title_simple = str_to_lower(title))
+
+    grants <- grants %>% 
+      mutate(title_simple = str_to_lower(project_title))
+
+    data_df %>% left_join(grants, "title_simple")
+
+    grants %>% filter(project_number == "160906") %>%
+      pull(title_simple)
+
+    data_df %>% head(1) %>%
+      pull(title_simple)

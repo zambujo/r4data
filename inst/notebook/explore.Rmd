@@ -1,0 +1,150 @@
+---
+title: Swiss projects on research for development
+output: 
+  flexdashboard::flex_dashboard:
+    theme: lumen
+    self_contained: false
+    source_code: https://git.io/JqCOd
+    navbar:
+      - { title: "r4d.ch", href: "http://www.r4d.ch", align: right }
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+library(here)
+library(glue)
+library(leaflet)
+```
+
+
+```{r, echo = FALSE}
+
+# read -----
+
+projects <- read_csv(here("data", "projects.csv")) # p3 project data on r4d
+people <- read_csv(here("data", "people.csv")) #  p3 people data on r4d
+gmaps <- read_csv(here("data", "gmaps.csv")) # google maps coordinate data
+
+# reconcile people w/ gmaps as reference
+ppl <- people %>%
+  filter(!is.na(institute_id_p3)) %>%
+  left_join(gmaps, by = c("institute_id_p3" = "institute_id")) %>%
+  filter(!is.na(gmaps_id)) %>%
+  select(-person_id_snsf,-role) %>%
+  distinct(project_number, institute_id_p3, .keep_all = TRUE) %>%
+  mutate(
+    institute_slug = glue("http://p3.snf.ch/institute-{institute_id_p3}"),
+    nchar_ori = nchar(institute_name),
+    nchar_ggl = nchar(gmaps_name),
+    short_name = ifelse(nchar_ori <= nchar_ggl,
+                        institute_name,
+                        gmaps_name)) %>%
+  select(-starts_with("nchar"))
+
+# logic -----
+
+projects <- projects %>%
+  mutate(project_slug = glue("http://p3.snf.ch/project-{project_number}"))
+
+# list of participants
+institutes_in_project <- ppl %>%
+  left_join(projects, by = "project_number") %>%
+  mutate(
+    p3_link = glue("<a href='{institute_slug}' ",
+                   "target='_blank' rel='noopener noreferrer'>",
+                   "{short_name}</a>")) %>%
+  arrange(project_number) %>%
+  group_by(project_title) %>%
+  summarise(
+    project_number = head(project_number, 1),
+    institute_list = str_c(unique(p3_link), collapse = "<br/>"),
+    .groups = "drop") %>%
+  select(project_number, institute_list)
+
+# data denormalization
+projects_view <- people %>% 
+  left_join(projects, by = "project_number") %>%
+  inner_join(gmaps, by = c("institute_id_p3" = "institute_id")) %>%
+  left_join(institutes_in_project, by = "project_number") %>%
+  distinct(gmaps_id, .keep_all = TRUE) %>%
+  mutate(
+    k_amount = as.numeric(approved_amount),
+    k_amount = round(k_amount / 1000),
+    k_amount = format(k_amount, big.mark = "'"),
+    funding_instrument = recode(
+      funding_instrument,
+      `r4d (Swiss Programme for Research on Global Issues for Development)` =
+      "r4d"),
+    header = glue("📍<b>{gmaps_name}</b>"),
+    content = glue(
+      "<br/><span class='label label-info'>{funding_instrument}</span> ",
+      "<a href='{project_slug}' target='_blank' rel='noopener noreferrer'>",
+      "<small>{project_title}</small></a><br/>",
+      "<div>",
+      "<button data-toggle='collapse' ",
+      "data-target='#details'><small>Details</small></button>",
+      "<button data-toggle='collapse' ",
+      "data-target='#participants'><small>Participants</small></button>&emsp;",
+      "</small></div>",
+      "<div id='details' class='collapse'><small>",
+      "<span class='label label-default'>start</span> {start_date}&emsp;",
+      "<span class='label label-default'>end</span> {end_date}&emsp;&ensp;",
+      "<span class='label label-default'>kchf</span> {k_amount}",
+      "</small></div>",
+      "<div id='participants' class='collapse'><small>",
+      "{institute_list}",
+      "</small></div>"
+      )) %>%
+  group_by(header) %>%
+  summarise(
+    running = any(running),
+    gmaps_lng = head(gmaps_lng, 1),
+    gmaps_lat = head(gmaps_lat, 1),
+    content = str_c(content, collapse = ""),
+    .groups = "drop") %>%
+  mutate(content = glue("{header}{content}")) %>%
+  select(-header)
+
+projects_view_list <- split(projects_view, pull(projects_view, running))
+
+# display ------
+
+inactive_markers <-  awesomeIcons(
+  icon = "fa-circle",
+  library = "fa",
+  markerColor = rep("lightgray", nrow(pluck(projects_view_list, 1))))
+
+active_markers <-  awesomeIcons(
+  icon = "fa-circle",
+  library = "fa",
+  markerColor = rep("orange", nrow(pluck(projects_view_list, 2))))
+
+leaflet(width = "100%") %>%
+  setView(2, 20, 3) %>%
+  addAwesomeMarkers(
+    data = pluck(projects_view_list, 1),
+    lng = ~gmaps_lng,
+    lat = ~gmaps_lat,
+    icon = inactive_markers,
+    popup = ~content,
+    group = "<span style='font-weight:bold;color:lightgray;'>inactive") %>%
+  addAwesomeMarkers(
+    data = pluck(projects_view_list, 2),
+    lng = ~gmaps_lng,
+    lat = ~gmaps_lat,
+    icon = active_markers,
+    popup = ~content,
+    group = "<span style='font-weight:bold;color:orange;'>active") %>%
+  addTiles() %>%
+  addProviderTiles(providers$Esri.NatGeoWorldMap, group = "Map") %>%
+  addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
+  addLayersControl(
+    baseGroups = c("Map", "Satellite"),
+    overlayGroups = c(
+      "<span style='font-weight:bold;color:orange;'>active",
+      "<span style='font-weight:bold;color:lightgray;'>inactive"),
+    options = layersControlOptions(collapsed = FALSE)) %>%
+  addMiniMap(tiles = providers$Esri.WorldGrayCanvas, toggleDisplay = TRUE)
+```
