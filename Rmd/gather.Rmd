@@ -978,7 +978,11 @@ Add "difficult" cases separately (TODO).
 
 df_institutes %>%
   anti_join(gmaps, by = c("institute_id_p3" = "institute_id")) %>%
-  pull(institute_ascii)
+  select(institute_id_p3, institute_name, institute_place) %>%
+  write_ods(
+    here("data-raw", "research-earth.ods"),
+    sheet = "lost-n-found",
+    append = TRUE)
 ```
 
 ```{r google-details, eval=FALSE}
