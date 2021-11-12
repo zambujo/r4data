@@ -88,7 +88,6 @@ projects <- projects_raw %>%
   )
 
 write_csv(projects, here("data", "projects.csv"))
-
 ```
 
 ### Create tags table for research earth
@@ -200,7 +199,63 @@ projects_disciplines_id <-
 ```
 
 
-Add detailed institute data missing from the CSV data dumps by scrapping P3.
+- Add email addresses from r4d website.
+
+```{r email-addresses, eval=FALSE}
+# list of project urls
+# HACK (bypassing data in javascript script !CDATA)
+html_page <- xml2::read_html("http://www.r4d.ch/r4d-programme/all-projects")
+r4d_urls <- html_page %>%
+  # HACK bypass data in javascript script !CDATA with node:body > text
+  rvest::html_nodes("body") %>%
+  rvest::html_text() %>%
+  str_extract_all("http[:][/][/]www[.]r4d[.]ch[/]modules[/][-/a-z]+") %>%
+  unlist()
+
+# get email for each project
+# https://stackoverflow.com/questions/19341554
+# proj_url <- "http://www.r4d.ch/modules/food-security/gender-and-the-right-to-food"
+get_email <- function(proj_url) {
+  message(proj_url)
+  html_page <- xml2::read_html(proj_url)
+  body_txt <- html_page %>%
+    # HACK bypass data in javascript script body > text
+    rvest::html_nodes("body") %>%
+    rvest::html_text()
+  email <-
+    body_txt %>%
+    str_split("\n") %>%
+    unlist() %>%
+    str_squish() %>%
+    str_subset("@") %>%
+    tail(1)
+  message(email)
+  p3_links <- html_page %>%
+    rvest::html_nodes("ul a") %>%
+    rvest::html_attr("href") %>%
+    str_subset("http[:][/][/]p3[.]snf[.]ch") %>%
+    unique()
+  message(p3_links)
+  df_links <- tibble(p3_url = p3_links) %>%
+    mutate(contact = email)
+  return(df_links)
+}
+
+r4d_emails <- map_df(r4d_urls, get_email)
+
+email_addr <- r4d_emails %>%
+  mutate(
+    p3_url = str_remove(p3_url, "#"),
+    contact = str_to_lower(contact),
+    project_number = str_extract(p3_url, "[0-9]+$")) %>%
+  select(-p3_url) %>%
+  relocate(project_number)
+
+write_csv(email_addr, here::here("data-raw", "email_addresses.csv"))
+```
+
+
+- Add detailed institute data missing from the CSV data dumps by scrapping P3.
 
 ```{r project-details, eval=FALSE}
 scrape_p3_project <- function(project_number) {
