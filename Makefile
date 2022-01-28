@@ -1,4 +1,4 @@
-all: update render
+all: update knit
 
 update:
 	cd inst/bin;\
@@ -7,4 +7,3 @@ update:
 knit:
 	cd inst/bin;\
 	Rscript knit-explore.R;
-
