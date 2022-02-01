@@ -12,6 +12,7 @@ library(janitor)
 library(yaml)
 library(glue)
 
+
 # utils ----
 
 p3_files <- read_yaml(here("inst", "extdata", "p3-tables.yml"))
@@ -25,6 +26,7 @@ read_p3_file <- function(file_name, loc = "data-raw") {
   read_delim(";", escape_double = FALSE, col_types = cols(.default = "c")) %>%
   clean_names()
 }
+
 ```
 
 

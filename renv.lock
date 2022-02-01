@@ -226,6 +226,13 @@
       "Repository": "CRAN",
       "Hash": "a0cbe758a531d054b537d16dff4d58a1"
     },
+    "dotenv": {
+      "Package": "dotenv",
+      "Version": "1.0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "7e1213a65b6190437c644a14ec814ef3"
+    },
     "dplyr": {
       "Package": "dplyr",
       "Version": "1.0.2",
@@ -497,6 +504,13 @@
       "Repository": "CRAN",
       "Hash": "3471fb65971f1a7b2d4ae7848cf2db8d"
     },
+    "logger": {
+      "Package": "logger",
+      "Version": "0.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "67e018a0cdae685cc91a2aec9cd36750"
+    },
     "lubridate": {
       "Package": "lubridate",
       "Version": "1.7.9.2",
@@ -559,13 +573,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "a399e4773075fc2375b71f45fca186c4"
-    },
-    "openxlsx": {
-      "Package": "openxlsx",
-      "Version": "4.2.4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "f1b1ca1254ccb485dccc9c0dc65a2c36"
     },
     "pillar": {
       "Package": "pillar",
@@ -664,13 +671,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "a3ded548110163cf499d63c3932dd499"
-    },
-    "readODS": {
-      "Package": "readODS",
-      "Version": "1.7.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "371b78cba5ce7ff57c4a225bc0f9260d"
     },
     "readr": {
       "Package": "readr",

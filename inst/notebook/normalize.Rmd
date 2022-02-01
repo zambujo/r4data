@@ -1,0 +1,293 @@
+---
+title: "Table normalization"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(tidyverse)
+library(here)
+library(glue)
+library(logger)
+library(jsonlite)
+library(janitor)
+library(dotenv)
+int <- function(x) as.integer(x)
+
+dotenv::load_dot_env(here(".env"))
+geonames_user <- Sys.getenv("GEONAMES_USER")
+```
+
+```{r}
+grants <- read_csv(here("data", "projects.csv"))
+people <- read_csv(here("data", "people.csv"))
+gmaps <- read_csv(here("data", "gmaps.csv"))
+```
+
+
+```{r geonames-helper}
+get_geonames_country <- function(latitude, longitude, user) {
+  geo_url <- glue(
+    "http://api.geonames.org/",
+    "countryCodeJSON?lat={latitude}&lng={longitude}&username={user}"
+  ) %>% URLencode()
+  
+  res <- geo_url %>%
+    read_json() %>%
+    pluck("countryName")
+  
+  if (is.null(res)) res <- NA_character_
+  
+  return(res)
+}
+```
+
+```{r wiki-helper}
+get_wiki <- function(free_txt) {
+  glue("Querying wikipedia for {free_txt}...") %>%
+    log_info()
+  wiki_search_api <- glue(
+    "https://en.wikipedia.org/w/api.php",
+    "?action=query&list=search&srsearch={free_txt}",
+    "&format=json"
+  ) %>%
+    URLencode()
+  best_match <-
+    wiki_search_api %>%
+    read_json() %>%
+    pluck("query", "search", 1, "title")
+  
+  if (is.null(best_match)) {
+    best_match <- NA_character_
+    parse_desc <- NA_character_
+    parse_lat <- NA_real_
+    parse_lng <- NA_real_
+  } else {
+    wiki_title_api <- glue(
+      "https://en.wikipedia.org/w/api.php",
+      "?action=query&prop=coordinates|description&titles={best_match}",
+      "&format=json"
+    ) %>%
+      URLencode()
+    
+    wiki_title <- read_json(wiki_title_api)
+    parse_desc <- wiki_title %>%
+      pluck("query", "pages", 1, "description", .default = NA_character_)
+    parse_lat <- wiki_title %>%
+      pluck("query", "pages", 1, "coordinates", 1, "lat", .default = NA_real_)
+    parse_lng <- wiki_title %>%
+      pluck("query", "pages", 1, "coordinates", 1, "lon", .default = NA_real_)
+  }
+  
+  wiki_properties <- tibble(
+    search = free_txt,
+    wiki_title = best_match,
+    wiki_description = parse_desc,
+    wiki_lat = parse_lat,
+    wiki_lng = parse_lng
+  )
+  return(wiki_properties)
+}
+
+```
+
+
+```{r ror-helper}
+get_ror <- function(host_name, ch = TRUE) {
+  glue("Querying ROR for {host_name}...") %>%
+    log_info()
+
+  ror_search_api <- glue(
+    "http://api.ror.org/organizations?",
+    "query={host_name}",
+    "&page=1"
+  )
+  if (isTRUE(ch)) ror_search_api <- str_c(
+    ror_search_api,
+    "&filter=country.country_code:CH")
+  ror_search_api <- ror_search_api %>%
+    URLencode()
+  top_result <- ror_search_api %>%
+    read_json(simplifyVector = TRUE) %>%
+    pluck("items") %>%
+    head(1) %>%
+    as_tibble()
+  top_ror <- tibble(
+    host = host_name,
+    ror_id =  pull(top_result, id) %>%
+      str_remove(fixed("https://ror.org/")),
+    ror_name = pull(top_result, name),
+    ror_acronym = pull(top_result, acronyms) %>%
+      pluck(1, .default = NA_character_) %>%
+      head(1),
+    ror_type = pull(top_result, types) %>%
+      pluck(1, .default = NA_character_),
+    ror_lat = pull(top_result, addresses) %>%
+      pluck(1, "lat", .default = NA_real_),
+    ror_lng = pull(top_result, addresses) %>%
+      pluck(1, "lng", .default = NA_real_),
+    ror_link = pull(top_result, links) %>%
+      pluck(1, .default = NA_character_) %>%
+      head(1)
+  )
+  return(top_ror)
+}
+```
+
+
+
+```{r cleaning-people}
+institutes <- people %>%
+  filter(!is.na(institute_name)) %>%
+  distinct(institute_name, institute_place, institute_id = institute_id_p3) %>%
+  mutate(
+    institute_id = int(institute_id),
+    institute_place = str_remove_all(institute_place, "\\d"),
+    institute_place = str_squish(institute_place)) %>%
+  arrange(institute_id)
+
+institutes %>% 
+  count(institute_place, sort = TRUE) %>%
+  print(n = 50)
+
+wiki_places <- institutes %>%
+  distinct(institute_place) %>%
+  arrange(institute_place) %>%
+  pull(institute_place) %>%
+  map_df(get_wiki)
+
+```
+
+```{r geonames-reverse}
+# requires a valid geonames username
+geo_wiki_places <- wiki_places %>%
+  filter(!is.na(wiki_lat)) %>%
+  select(-search) %>%
+  distinct(wiki_title, .keep_all = TRUE) %>%
+  mutate(geonames_country = map2_chr(
+    wiki_lat, wiki_lng,
+    get_geonames_country,
+    user = geonames_user))
+```
+
+
+
+```{r cleaning-grants}
+# TODO: add discipline as keyword
+
+# further cleaning
+grants <- grants %>%
+  mutate(
+    # fix project titles
+    project_title = str_replace(
+      project_title,
+      "Gender Dimensions of Social Conflict, ",
+      "Gender Dimensions of Social Conflicts, "),
+    project_title = str_remove(project_title, "-- Prolongation"),
+    project_title = str_remove(project_title, " - PHASE 2"),
+    project_title = str_remove_all(project_title, "[ ][(](.*)[)]"),
+    project_title = str_squish(project_title),
+    project_title = str_to_title(project_title),
+    project_title = str_remove(project_title, "[.]$"),
+    # simplify amount and grant_number (project_number)
+    approved_amount = int(approved_amount),
+    project_number = int(project_number),
+    # clean name of host organization
+    university = str_remove_all(university, "[ ]-(.*)"),
+    university = str_remove_all(university, "[ ][(](.*)[)]"),
+    university = if_else(
+      university == "Non-profit organisations and administration",
+      institution,
+      university),
+    # to help ROR search
+    university = str_replace(
+      university,
+      fixed("Schweizer Institut für Sucht- und Gesundheitsforschung ISGF"),
+      "University of Zurich"
+    ),
+    university = str_replace(university, fixed("EPF Lausanne"), "EPFL"),
+    university = str_replace(university, fixed("Berne"), "Bern"),
+    start_date = str_c("01", start_date, sep = " "),
+    start_date = as.Date(start_date, format = "%d %b %Y"),
+    end_date = str_c("01", end_date, sep = " "),
+    end_date = as.Date(end_date, format = "%d %b %Y"),
+    # simplify keywords
+    keywords = str_to_title(keywords),
+    # simplify funding instrument name
+    funding_instrument = str_remove(funding_instrument, "[ ][(](.*)[)]")) %>%
+  select(
+    grant_id = project_number,
+    title = project_title,
+    programme = funding_instrument,
+    host = university,
+    start = start_date,
+    end = end_date,
+    funding = approved_amount,
+    keywords) %>%
+  arrange(start)
+```
+
+## Project table
+
+```{r projects}
+project_table <- grants %>%
+  group_by(title) %>%
+  summarise(
+    host = head(host, 1), # invalid in one case!
+    programme = head(programme, 1),
+    start = min(start),
+    end = max(end),
+    funding = sum(funding)) %>%
+  mutate(project_id = replicate(n(), system("uuidgen", intern = TRUE))) %>%
+  relocate(project_id)
+```
+
+## Keyword table
+
+```{r keywords}
+keyword_table <- 
+  grants %>%
+  group_by(title) %>%
+  summarise(keywords = str_c(keywords, collapse = "; ")) %>%
+  left_join(project_table, by = "title") %>%
+  select(project_id, keywords) %>%
+  mutate(keywords = str_split(keywords, "; ")) %>%
+  unnest(keywords) %>%
+  mutate(
+    keywords = str_squish(keywords),
+    keywords = str_to_lower(keywords)) %>%
+  distinct(project_id, keywords) %>%
+  relocate(keywords, project_id) %>%
+  arrange(keywords)
+```
+
+## Grant table
+
+```{r grants}
+grant_table <- grants %>%
+  select(grant_id, title) %>%
+  left_join(project_table, by = "title") %>%
+  select(grant_id, project_id)
+```
+
+## Host table
+
+
+```{r wiki-helper, eval=FALSE}
+# search ----
+# url_search <- glue(
+#   "https://en.wikipedia.org/w/rest.php/v1/search/",
+#   "title?q={host_name}",
+#   "&limit=1&format=json") %>%
+#   URLencode()
+# geolocation ----
+# curl https://en.wikipedia.org/w/rest.php/v1/search/page?q=ETH%20Zurich&limit=3&format=json
+```
+
+```{r host-table}
+host_table <- grants %>%
+  distinct(host) %>%
+  pull(host) %>%
+  map_df(get_ror)
+```
+
