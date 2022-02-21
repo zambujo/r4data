@@ -65,7 +65,7 @@ Programme for Research on Global Issues for Development
 
 Explore the [raw data](https://flatgithub.com/zambujo/r4data).
 
-### (Pseudo-)Schema
+### Schema
 
 ![](./data/schema.svg)
 
