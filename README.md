@@ -12,6 +12,8 @@ The goal of this project is to show the projects running under the Swiss
 Programme for Research on Global Issues for Development
 ([r4d](http://www.r4d.ch/)) on the world map.
 
+> [research-earth.ch](https://research-earth.ch/) proof-of-concept
+
 ### Data dictionary
 
 #### `projects.csv`
